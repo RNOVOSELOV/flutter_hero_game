@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spacehero/game_core/game.dart';
+import 'package:spacehero/resources/AppImages.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,20 +14,46 @@ void main() {
       SystemUiMode.manual,
       overlays: [SystemUiOverlay.bottom],
     );
-    runApp(const MyApp());
+    runApp(MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: _buildTheme(Brightness.dark),
+      home: const SafeArea(
+        child: Scaffold(
+          body: MyApp(),
+        ),
+      ),
+    ));
   });
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    initGame (context);
+  }
+
+  void initGame (BuildContext context) {
+    Game.screenHeight = MediaQuery.of(context).size.height;
+    Game.screenWidth = MediaQuery.of(context).size.width;
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: _buildTheme(Brightness.dark),
-      home: const Game(),
-    );
+    return Container(
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage(AppImages.backgroundImage),
+                fit: BoxFit.cover)),
+        child: const Game());
   }
 }
 
