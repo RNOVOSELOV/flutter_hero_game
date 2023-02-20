@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:spacehero/entities/bullet.dart';
 import 'package:spacehero/entities/player.dart';
 import 'package:spacehero/game_core/game.dart';
@@ -20,68 +18,9 @@ class GameScene extends AppScene {
     return Stack(
       children: [
         _player.build(),
-        Positioned(
-          top: 0,
-          left: 0,
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Colors.deepOrange,
-              ),
-            ),
-            width: Game.screenWidth / 2,
-            height: Game.screenHeight,
-            child: GestureDetector(
-              onPanStart: _onPanStart,
-              onPanUpdate: _onPanUpdate,
-              child: const Center(
-                child: Text(
-                  "Rotate rocket area\n\n <--  SWIPE -->",
-                  style: TextStyle(fontSize: 20),
-                ),
-              ),
-            ),
-          ),
-        ),
-        Positioned(
-          top: 0,
-          left: Game.screenWidth / 2,
-          child: Container(
-            decoration: BoxDecoration(
-                border: Border(
-                    bottom: BorderSide(color: Colors.lightGreenAccent),
-                    top: BorderSide(color: Colors.lightGreenAccent),
-                    right: BorderSide(color: Colors.lightGreenAccent))),
-            width: Game.screenWidth / 2,
-            height: Game.screenHeight / 2,
-            child: GestureDetector(
-              onTap: _onTapSpeedArea,
-              child: const Center(
-                child: Text(
-                  "START/STOP tap area",
-                  style: TextStyle(fontSize: 20),
-                ),
-              ),
-            ),
-          ),
-        ),
-        Positioned(
-          top: Game.screenHeight / 2,
-          left: Game.screenWidth / 2,
-          child: Container(
-            width: Game.screenWidth / 2,
-            height: Game.screenHeight / 2,
-            child: GestureDetector(
-              onTap: _onTabGunShoot,
-              child: const Center(
-                child: Text(
-                  "Shot area",
-                  style: TextStyle(fontSize: 20),
-                ),
-              ),
-            ),
-          ),
-        ),
+        RocketRotationArea(onPanStart: onPanStart, onPanEnd: onPanUpdate),
+        RocketSpeedArea(onTap: _onTapSpeedArea),
+        RocketShotArea(onTap: _onTabGunShoot),
         ..._listWidgets,
       ],
     );
@@ -98,11 +37,11 @@ class GameScene extends AppScene {
     }
   }
 
-  void _onPanStart(DragStartDetails details) {
+  void onPanStart(DragStartDetails details) {
     _startGlobalPosition = details.globalPosition.dx;
   }
 
-  void _onPanUpdate(DragUpdateDetails details) {
+  void onPanUpdate(DragUpdateDetails details) {
     double updateGlobalPosition = details.globalPosition.dx;
     if (updateGlobalPosition > _startGlobalPosition) {
       _player.isMovedRight = true;
@@ -123,5 +62,80 @@ class GameScene extends AppScene {
         shootAngle: _player.getAngle,
         shootPositionX: _player.x,
         shootPositionY: _player.y));
+  }
+}
+
+class RocketShotArea extends StatelessWidget {
+  final VoidCallback onTap;
+
+  const RocketShotArea({
+    Key? key,
+    required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: Game.screenHeight / 2,
+      left: Game.screenWidth / 2,
+      child: SizedBox(
+        width: Game.screenWidth / 2,
+        height: Game.screenHeight / 2,
+        child: GestureDetector(
+          onTap: onTap,
+        ),
+      ),
+    );
+  }
+}
+
+class RocketSpeedArea extends StatelessWidget {
+  final VoidCallback onTap;
+
+  const RocketSpeedArea({
+    Key? key,
+    required this.onTap,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: 0,
+      left: Game.screenWidth / 2,
+      child: SizedBox(
+        width: Game.screenWidth / 2,
+        height: Game.screenHeight / 2,
+        child: GestureDetector(
+          onTap: onTap,
+        ),
+      ),
+    );
+  }
+}
+
+class RocketRotationArea extends StatelessWidget {
+  final void Function(DragStartDetails details) onPanStart;
+  final void Function(DragUpdateDetails details) onPanEnd;
+
+  const RocketRotationArea({
+    Key? key,
+    required this.onPanStart,
+    required this.onPanEnd,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: 0,
+      left: 0,
+      child: SizedBox(
+        width: Game.screenWidth / 2,
+        height: Game.screenHeight,
+        child: GestureDetector(
+          onPanStart: onPanStart,
+          onPanUpdate: onPanEnd,
+        ),
+      ),
+    );
   }
 }
