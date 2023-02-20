@@ -17,7 +17,7 @@
 Простая игра из XX века о маленькой ракете, пробивающей себе путь через кольцо астероидов
 
 <p align="center">
-  <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/areas.png" height="420"/>
+  <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/areas.png" height="200"/>
 </p>
 
 ## Развитие проекта
