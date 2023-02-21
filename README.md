@@ -8,7 +8,7 @@
 <br/>
 
 <p align="center">
-  <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/space_armaggedon.gif" height="210" />
+  <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/space_armaggedon.gif" height="280" />
 </p>
 
 
@@ -17,7 +17,7 @@
 Простая игра из XX века о маленькой ракете, пробивающей себе путь через кольцо астероидов
 
 <p align="center">
-  <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/areas.png" height="300"/>
+  <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/areas.png" height="280"/>
 </p>
 
 ## Развитие проекта
