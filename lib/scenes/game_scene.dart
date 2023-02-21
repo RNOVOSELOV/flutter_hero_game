@@ -32,7 +32,7 @@ class GameScene extends AppScene {
     _listWidgets.clear();
     _listBullets.removeWhere((bullet) => !bullet.isVisible);
     for (var bullet in _listBullets) {
-      _listWidgets.add(bullet.build());
+        _listWidgets.add(bullet.build());
       bullet.update();
     }
   }

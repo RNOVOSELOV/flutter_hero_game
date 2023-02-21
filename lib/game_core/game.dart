@@ -1,13 +1,9 @@
-import 'dart:isolate';
 import 'package:flutter/material.dart';
-import 'package:spacehero/game_core/main_loop.dart';
-import 'package:spacehero/scenes/app_scene.dart';
-import 'package:spacehero/scenes/game_scene.dart';
+import 'package:spacehero/game_core/game_block.dart';
+import 'package:spacehero/scenes/game_state.dart';
 
 class Game extends StatefulWidget {
   const Game({Key? key}) : super(key: key);
-
-  static AppScene currentScene = GameScene();
   static double screenWidth = 0;
   static double screenHeight = 0;
 
@@ -16,34 +12,35 @@ class Game extends StatefulWidget {
 }
 
 class _GameState extends State<Game> {
-  final ReceivePort _receivePort = ReceivePort();
-  late final Isolate _isolateLoop;
 
-  void _startIsolateLoop() async {
-    _isolateLoop = await Isolate.spawn(mainLoop, _receivePort.sendPort);
-    _receivePort.listen((message) {
-      Game.currentScene.update();
-      setState(() {});
-    });
-  }
+  late GameBlock block;
 
   @override
   void initState() {
     super.initState();
-    _startIsolateLoop();
-
+    block = GameBlock();
     print("MediaQuery ${Game.screenHeight} ${Game.screenWidth}");
   }
 
   @override
   Widget build(BuildContext context) {
-    return Game.currentScene.buildScene();
+    return StreamBuilder<GameState>(
+      stream: block.observeGameState(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData || snapshot.data == null) {
+          print("empty stream");
+          return const SizedBox.shrink();
+        }
+        final GameState state = snapshot.data!;
+
+        return state.scene.buildScene();
+      },
+    );
   }
 
   @override
   void dispose() {
-    _receivePort.close();
-    _isolateLoop.kill();
+    block.dispose();
     super.dispose();
   }
 }
