@@ -5,8 +5,8 @@ import 'package:spacehero/scenes/app_scene.dart';
 
 class GameScene extends AppScene {
   late Player _player;
-  List<Bullet> _listBullets = [];
-  List<Widget> _listWidgets = [];
+  final List<Bullet> _listBullets = [];
+  final List<Widget> _listWidgets = [];
 
   final double width;
   final double height;
@@ -37,9 +37,7 @@ class GameScene extends AppScene {
           screenHeight: height,
           screenWidth: width,
         ),
-        Stack(
-          children: [..._listWidgets],
-        ),
+        ..._listWidgets,
         _player.build(),
       ],
     );

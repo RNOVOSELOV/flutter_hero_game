@@ -13,18 +13,16 @@ class GameState {
     if (_scenes.containsKey(type)) {
       return _scenes[type]!;
     }
-    // TODO REMOVE WHEN ALL STATES IS ADDED
-    GameState state =
-        GameState._internal(GameScene(width: width, height: height));
+    GameState state;
     switch (type) {
       case GameSceneType.startGameScene:
-        // TODO: Handle this case.
+        state = GameState._internal(GameScene(width: width, height: height));
         break;
       case GameSceneType.gameScene:
         state = GameState._internal(GameScene(width: width, height: height));
         break;
       case GameSceneType.statisticsScene:
-        // TODO: Handle this case.
+        state = GameState._internal(GameScene(width: width, height: height));
         break;
     }
     _scenes[type] = state;

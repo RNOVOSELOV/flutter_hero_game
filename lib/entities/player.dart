@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:spacehero/entities/entity.dart';
-import 'package:spacehero/game_core/game.dart';
 
 class Player extends Entity {
   final double screenWidth;

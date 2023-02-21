@@ -15,10 +15,11 @@ class _GameState extends State<Game> {
   @override
   void initState() {
     super.initState();
+    block = GameBlock();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final screenHeight = MediaQuery.of(context).size.height;
       final screenWidth = MediaQuery.of(context).size.width;
-      block = GameBlock(height: screenHeight, width: screenWidth);
+      block.initBlock(width: screenWidth, height: screenHeight);
     });
   }
 
@@ -32,6 +33,7 @@ class _GameState extends State<Game> {
           return const SizedBox.shrink();
         }
         final GameState state = snapshot.data!;
+        state.getScene.update();
         return state.getScene.buildScene();
       },
     );

@@ -1,21 +1,27 @@
 import 'dart:isolate';
 import 'package:rxdart/rxdart.dart';
-import 'package:spacehero/game_core/main_loop.dart';
+import 'package:spacehero/isolates/main_loop.dart';
 import 'package:spacehero/scenes/game_state.dart';
 
 class GameBlock {
   ReceivePort? _receivePort;
   Isolate? _isolateLoop;
 
-  final double width;
-  final double height;
+  double? width;
+  double? height;
 
   final BehaviorSubject<GameState> stateSubject = BehaviorSubject();
 
   Stream<GameState> observeGameState() => stateSubject;
 
-  GameBlock({required this.width, required this.height}) {
-    stateSubject.add(GameState(type: GameSceneType.gameScene, height: height, width: width));
+  GameBlock();
+
+  void initBlock({required width, required height}) {
+    this.width = width;
+    this.height = height;
+
+    stateSubject.add(
+        GameState(type: GameSceneType.gameScene, height: height, width: width));
     startGame();
   }
 
@@ -24,12 +30,10 @@ class GameBlock {
   }
 
   void _startIsolateLoop() async {
-    final state = stateSubject.value;
     _receivePort = ReceivePort();
     _isolateLoop = await Isolate.spawn(mainLoop, _receivePort!.sendPort);
     _receivePort!.listen((message) {
-      state.getScene.update();
-      stateSubject.add(state);
+      stateSubject.add(GameState(type: GameSceneType.gameScene));
     });
   }
 
