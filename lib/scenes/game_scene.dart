@@ -5,6 +5,8 @@ import 'package:spacehero/scenes/app_scene.dart';
 
 class GameScene extends AppScene {
   late Player _player;
+
+  final List<Widget> _touchAreas = [];
   final List<Bullet> _listBullets = [];
   final List<Widget> _listWidgets = [];
 
@@ -15,28 +17,30 @@ class GameScene extends AppScene {
 
   GameScene({required this.width, required this.height}) {
     _player = Player(screenWidth: width, screenHeight: height);
+
+    _touchAreas.add(RocketRotationArea(
+      onPanStart: onPanStart,
+      onPanEnd: onPanUpdate,
+      screenHeight: height,
+      screenWidth: width,
+    ));
+    _touchAreas.add(RocketShotArea(
+      onTap: _onTabGunShoot,
+      screenHeight: height,
+      screenWidth: width,
+    ));
+    _touchAreas.add(RocketSpeedArea(
+      onTap: _onTapSpeedArea,
+      screenHeight: height,
+      screenWidth: width,
+    ));
   }
 
   @override
   Widget buildScene() {
     return Stack(
       children: [
-        RocketRotationArea(
-          onPanStart: onPanStart,
-          onPanEnd: onPanUpdate,
-          screenHeight: height,
-          screenWidth: width,
-        ),
-        RocketSpeedArea(
-          onTap: _onTapSpeedArea,
-          screenHeight: height,
-          screenWidth: width,
-        ),
-        RocketShotArea(
-          onTap: _onTabGunShoot,
-          screenHeight: height,
-          screenWidth: width,
-        ),
+        ..._touchAreas,
         ..._listWidgets,
         _player.build(),
       ],
