@@ -4,22 +4,22 @@ import 'package:spacehero/scenes/game_state.dart';
 
 class Game extends StatefulWidget {
   const Game({Key? key}) : super(key: key);
-  static double screenWidth = 0;
-  static double screenHeight = 0;
 
   @override
   State<Game> createState() => _GameState();
 }
 
 class _GameState extends State<Game> {
-
   late GameBlock block;
 
   @override
   void initState() {
     super.initState();
-    block = GameBlock();
-    print("MediaQuery ${Game.screenHeight} ${Game.screenWidth}");
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      final screenHeight = MediaQuery.of(context).size.height;
+      final screenWidth = MediaQuery.of(context).size.width;
+      block = GameBlock(height: screenHeight, width: screenWidth);
+    });
   }
 
   @override
@@ -32,8 +32,7 @@ class _GameState extends State<Game> {
           return const SizedBox.shrink();
         }
         final GameState state = snapshot.data!;
-
-        return state.scene.buildScene();
+        return state.getScene.buildScene();
       },
     );
   }

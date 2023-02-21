@@ -8,11 +8,16 @@ class Bullet extends Entity {
   final double shootAngle;
   final double _speed = 6;
 
-  Bullet(
-      {required this.shootAngle,
-      required shootPositionX,
-      required shootPositionY})
-      : super(
+  final double screenWidth;
+  final double screenHeight;
+
+  Bullet({
+    required this.shootAngle,
+    required shootPositionX,
+    required shootPositionY,
+    required this.screenWidth,
+    required this.screenHeight,
+  }) : super(
           spriteName: "bullet",
           x: shootPositionX,
           y: shootPositionY,
@@ -35,7 +40,7 @@ class Bullet extends Entity {
     x += sin(shootAngle) * _speed;
     y -= cos(shootAngle) * _speed;
 
-    if (x > Game.screenWidth || y > Game.screenHeight || x < 0 || y < 0) {
+    if (x > screenWidth || y > screenHeight || x < 0 || y < 0) {
       visible = false;
     }
   }

@@ -7,12 +7,15 @@ class GameBlock {
   ReceivePort? _receivePort;
   Isolate? _isolateLoop;
 
+  final double width;
+  final double height;
+
   final BehaviorSubject<GameState> stateSubject = BehaviorSubject();
 
   Stream<GameState> observeGameState() => stateSubject;
 
-  GameBlock() {
-    stateSubject.add(GameState.gamePage);
+  GameBlock({required this.width, required this.height}) {
+    stateSubject.add(GameState(type: GameSceneType.gameScene, height: height, width: width));
     startGame();
   }
 
@@ -25,7 +28,7 @@ class GameBlock {
     _receivePort = ReceivePort();
     _isolateLoop = await Isolate.spawn(mainLoop, _receivePort!.sendPort);
     _receivePort!.listen((message) {
-      state.scene.update();
+      state.getScene.update();
       stateSubject.add(state);
     });
   }

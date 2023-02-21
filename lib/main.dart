@@ -34,18 +34,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    initGame (context);
-  }
-
-  void initGame (BuildContext context) {
-    Game.screenHeight = MediaQuery.of(context).size.height;
-    Game.screenWidth = MediaQuery.of(context).size.width;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
