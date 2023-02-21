@@ -10,7 +10,7 @@ class Player extends Entity {
   Player({
     required this.screenWidth,
     required this.screenHeight,
-  }) : super(spriteName: "player", x: 50, y: 150);
+  }) : super(spriteName: "player", x: screenWidth/2, y: screenHeight/2);
 
   double _angle = 0;
   double _degree = 0;
