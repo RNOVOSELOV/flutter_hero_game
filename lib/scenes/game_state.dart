@@ -8,8 +8,11 @@ class GameState {
 
   GameState._internal(this._scene);
 
-  factory GameState(
-      {required GameSceneType type, double width = 0, double height = 0}) {
+  factory GameState({
+    required GameSceneType type,
+    double width = 0,
+    double height = 0,
+  }) {
     if (_scenes.containsKey(type)) {
       return _scenes[type]!;
     }

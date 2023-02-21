@@ -25,16 +25,15 @@ class _GameState extends State<Game> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<GameState>(
+    return StreamBuilder<GameSceneType>(
       stream: block.observeGameState(),
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data == null) {
           print("empty stream");
           return const SizedBox.shrink();
         }
-        final GameState state = snapshot.data!;
-        state.getScene.update();
-        return state.getScene.buildScene();
+        final type = snapshot.data!;
+        return GameState(type: type).getScene.buildScene();
       },
     );
   }

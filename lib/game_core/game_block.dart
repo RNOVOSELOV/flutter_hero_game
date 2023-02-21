@@ -10,9 +10,9 @@ class GameBlock {
   double? width;
   double? height;
 
-  final BehaviorSubject<GameState> stateSubject = BehaviorSubject();
+  final BehaviorSubject<GameSceneType> stateSubject = BehaviorSubject();
 
-  Stream<GameState> observeGameState() => stateSubject;
+  Stream<GameSceneType> observeGameState() => stateSubject;
 
   GameBlock();
 
@@ -20,8 +20,7 @@ class GameBlock {
     this.width = width;
     this.height = height;
 
-    stateSubject.add(
-        GameState(type: GameSceneType.gameScene, height: height, width: width));
+    stateSubject.add(GameSceneType.gameScene);
     startGame();
   }
 
@@ -30,10 +29,12 @@ class GameBlock {
   }
 
   void _startIsolateLoop() async {
+    final state = GameState(type: GameSceneType.gameScene, width: width!, height: height!);
     _receivePort = ReceivePort();
     _isolateLoop = await Isolate.spawn(mainLoop, _receivePort!.sendPort);
     _receivePort!.listen((message) {
-      stateSubject.add(GameState(type: GameSceneType.gameScene));
+      state.getScene.update();
+      stateSubject.add(GameSceneType.gameScene);
     });
   }
 
