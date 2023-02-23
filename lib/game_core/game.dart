@@ -14,57 +14,34 @@ class Game extends StatelessWidget {
       stream: bloc.observeGameState(),
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data == null) {
-          print("empty stream");
           return const SizedBox.shrink();
         }
         final type = snapshot.data!;
-        if (type == GameSceneType.startGameScene) {
-          return const StartScreenWidget();
-        }
-        return GameState(type: type).getScene.buildScene();
+        return Stack(
+          children: [
+            Align(
+              alignment: Alignment.topCenter,
+              child: Column(
+                children: [
+                  ElevatedButton (
+                    onPressed: () => bloc.startLongOperation(),
+                    child: Text("Start long operation async"),
+                  ),
+                  ElevatedButton (
+                    onPressed: () => bloc.startIsolateLongOperation(),
+                    child: Text("Start long operation in separated isolate"),
+                  ),
+                  ElevatedButton (
+                    onPressed: () => bloc.startComputerLongOperation(),
+                    child: Text("Start long operation computer"),
+                  ),
+                ],
+              ),
+            ),
+            GameState(type: type).getScene.buildScene(),
+          ],
+        );
       },
-    );
-  }
-}
-
-class StartScreenWidget extends StatelessWidget {
-  const StartScreenWidget({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final bloc = Provider.of<GameBloc>(context, listen: false);
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Text(
-            "SPACE ARMAGEDDON",
-            style: TextStyle(fontSize: 32),
-          ),
-          const SizedBox(
-            height: 16,
-          ),
-          Image.asset(AppImages.rocketImage),
-          const SizedBox(
-            height: 16,
-          ),
-          TextButton(
-              onPressed: () => bloc.startGame(),
-              child: const Text(
-                "NEW GAME",
-                style: TextStyle(fontSize: 22, color: Colors.lightBlueAccent),
-              )),
-          TextButton(
-              onPressed: () {},
-              child: const Text(
-                "BEST RESULTS",
-                style: TextStyle(fontSize: 22, color: Colors.lightBlueAccent),
-              )),
-        ],
-      ),
     );
   }
 }
