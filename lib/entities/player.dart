@@ -41,23 +41,20 @@ class Player extends Entity {
 
   @override
   void move() {
+    if (isMovedLeft) _degree -= 5;
+    if (isMovedRight) _degree += 5;
+    isMovedLeft = false;
+    isMovedRight = false;
+    _angle = (_degree * pi) / 180;
     if (!_isAcceleration) {
       return;
     }
 
-    if (isMovedLeft) _degree -= 5;
-    if (isMovedRight) _degree += 5;
-
-    _angle = (_degree * pi) / 180;
     x += sin(_degree * 0.0175) * _speed;
     y -= cos(_degree * 0.0175) * _speed;
-
     if (x < 0) x = 0;
     if (y < 0) y = 0;
     if (x > screenWidth - 50) x = screenWidth - 50;
     if (y > screenHeight - 50) y = screenHeight - 50;
-
-    isMovedLeft = false;
-    isMovedRight = false;
   }
 }

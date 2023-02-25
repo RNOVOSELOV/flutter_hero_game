@@ -5,7 +5,7 @@ import 'package:spacehero/entities/entity.dart';
 
 class Bullet extends Entity {
   final double shootAngle;
-  final double _speed = 6;
+  final double _speed = 8;
 
   final double screenWidth;
   final double screenHeight;

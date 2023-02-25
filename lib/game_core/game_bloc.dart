@@ -1,15 +1,29 @@
+import 'dart:async';
 import 'dart:isolate';
 import 'package:rxdart/rxdart.dart';
+import 'package:spacehero/game_core/game_core_helpers/game_score_counter.dart';
+import 'package:spacehero/game_core/models/game_info.dart';
 import 'package:spacehero/isolates/main_loop.dart';
-import 'package:spacehero/scenes/game_state.dart';
+import 'package:spacehero/game_core/game_core_helpers/game_state.dart';
 
 class GameBloc {
   ReceivePort? _receivePort;
   Isolate? _isolateLoop;
 
-  final BehaviorSubject<GameSceneType> stateSubject = BehaviorSubject();
+  final stateSubject = BehaviorSubject<GameSceneType>();
+  final scoreValue = BehaviorSubject<int>.seeded(0);
 
-  Stream<GameSceneType> observeGameState() => stateSubject;
+  late final GameScoreCounter scoreCounter;
+
+  Stream<GameInfo> observeGameInfo() =>
+      Rx.combineLatest2<GameSceneType, int, GameInfo>(
+          stateSubject.distinct(), scoreValue, (gsType, value) {
+        GameState(type: gsType).getScene.update();
+        return GameInfo(
+            gsType: gsType,
+            gameIsStarted: scoreCounter.gameIsEnded(),
+            score: value);
+      });
 
   GameBloc();
 
@@ -17,26 +31,32 @@ class GameBloc {
     GameState.screenHeight = height;
     GameState.screenWidth = width;
     stateSubject.add(GameSceneType.startGameScene);
+    _startIsolateLoop();
+    scoreCounter = GameScoreCounter();
   }
 
   void startGame() {
-    _startIsolateLoop();
+    stateSubject.add(GameSceneType.gameScene);
+    scoreCounter.startGame();
   }
 
   void _startIsolateLoop() async {
-    final state = GameState(type: GameSceneType.gameScene);
-    stateSubject.add(GameSceneType.gameScene);
     _receivePort = ReceivePort();
     _isolateLoop = await Isolate.spawn(mainLoop, _receivePort!.sendPort);
     _receivePort!.listen((message) {
-      state.getScene.update();
-      stateSubject.add(GameSceneType.gameScene);
+      final score = scoreCounter.getCurrentScore(message);
+      if (score == 20) {
+        scoreCounter.endGame();
+      }
+      scoreValue.add(score);
     });
   }
 
   void dispose() {
+    stopLoop();
     _receivePort?.close();
-    _isolateLoop?.kill();
+    _isolateLoop?.kill(priority: Isolate.immediate);
     stateSubject.close();
+    scoreValue.close();
   }
 }

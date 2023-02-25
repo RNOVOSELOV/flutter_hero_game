@@ -3,10 +3,11 @@ import 'dart:isolate';
 bool _running = true;
 
 void mainLoop(SendPort sendPort) async {
-  const fps = 50;
+  const fps = 45;
   const second = 1000;
   const updateTime = second / fps;
-  int updates = 0;
+//  int updates = 0;
+  int scores = 0;
 
   Stopwatch loopWatch = Stopwatch();
   loopWatch.start();
@@ -15,20 +16,20 @@ void mainLoop(SendPort sendPort) async {
 
   while (_running) {
     if (loopWatch.elapsedMilliseconds >= updateTime) {
-      updates++;
+//      updates++;
       loopWatch.reset();
-      sendPort.send(true);
+      sendPort.send(scores);
     }
 
     if (timerWatch.elapsedMilliseconds > second) {
 //      print("${DateTime.now()} FPS: $updates");
-      updates = 0;
+//      updates = 0;
+      scores++;
       timerWatch.reset();
     }
-
   }
 }
 
-void stopLoop () {
+void stopLoop() {
   _running = false;
 }

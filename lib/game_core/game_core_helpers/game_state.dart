@@ -1,5 +1,6 @@
 import 'package:spacehero/scenes/app_scene.dart';
 import 'package:spacehero/scenes/game_scene.dart';
+import 'package:spacehero/scenes/start_new_game_scene.dart';
 
 class GameState {
   static final _scenes = <GameSceneType, GameState>{};
@@ -26,7 +27,8 @@ class GameState {
     GameState state;
     switch (type) {
       case GameSceneType.startGameScene:
-        state = GameState._internal(GameScene(width: _width, height: _height));
+        state =
+            GameState._internal(NewGameScene(width: _width, height: _height));
         break;
       case GameSceneType.gameScene:
         state = GameState._internal(GameScene(width: _width, height: _height));

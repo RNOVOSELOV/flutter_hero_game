@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
 abstract class AppScene {
-  Widget buildScene ();
+  Stack buildScene ();
   void update ();
 }

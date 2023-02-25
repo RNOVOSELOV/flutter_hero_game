@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:spacehero/game_core/game_bloc.dart';
+import 'package:spacehero/game_core/models/game_info.dart';
 import 'package:spacehero/resources/app_images.dart';
-import 'package:spacehero/scenes/game_state.dart';
+import 'package:spacehero/game_core/game_core_helpers/game_state.dart';
 
 class Game extends StatelessWidget {
   const Game({Key? key}) : super(key: key);
@@ -10,18 +11,29 @@ class Game extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bloc = Provider.of<GameBloc>(context, listen: false);
-    return StreamBuilder<GameSceneType>(
-      stream: bloc.observeGameState(),
+    return StreamBuilder<GameInfo>(
+      stream: bloc.observeGameInfo(),
       builder: (context, snapshot) {
         if (!snapshot.hasData || snapshot.data == null) {
           print("empty stream");
           return const SizedBox.shrink();
         }
-        final type = snapshot.data!;
-        if (type == GameSceneType.startGameScene) {
-          return const StartScreenWidget();
+        final gameInfo = snapshot.data!;
+        print("GI: $gameInfo");
+        if (gameInfo.gsType == GameSceneType.startGameScene) {
+          return GameState(type: gameInfo.gsType).getScene.buildScene()
+            ..children.add(const StartScreenWidget());
         }
-        return GameState(type: type).getScene.buildScene();
+        final widget = GameState(type: gameInfo.gsType).getScene.buildScene()
+          ..children.add(Positioned(
+              top: 10,
+              left: 10,
+              child: Text(
+                "Score: ${gameInfo.score ?? 0}",
+                style: const TextStyle(fontSize: 20),
+              )));
+        print("${widget.children}");
+        return widget;
       },
     );
   }

@@ -1,4 +1,8 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:spacehero/entities/asteroid.dart';
 import 'package:spacehero/entities/bullet.dart';
 import 'package:spacehero/entities/player.dart';
 import 'package:spacehero/scenes/app_scene.dart';
@@ -8,10 +12,15 @@ class GameScene extends AppScene {
 
   final List<Widget> _touchAreas = [];
   final List<Bullet> _listBullets = [];
+  final List<Asteroid> _listAsteroids = [];
   final List<Widget> _listWidgets = [];
+
+  final random = Random(DateTime.now().millisecondsSinceEpoch);
 
   final double width;
   final double height;
+
+  int _maxAsteroidCount = 0;
 
   double _startGlobalPosition = 0;
 
@@ -34,27 +43,45 @@ class GameScene extends AppScene {
       screenHeight: height,
       screenWidth: width,
     ));
+
+    Timer.periodic(const Duration(seconds: 5), (timer) {
+      _maxAsteroidCount++;
+    });
   }
 
   @override
-  Widget buildScene() {
+  Stack buildScene() {
     return Stack(
       children: [
-        ..._touchAreas,
         ..._listWidgets,
         _player.build(),
+        ..._touchAreas,
       ],
     );
   }
 
   @override
   void update() {
+    if (_listAsteroids.length < _maxAsteroidCount) {
+      _listAsteroids.add(Asteroid(
+          traectoryAngle: random.nextDouble() + random.nextInt(10),
+          screenWidth: width,
+          screenHeight: height,
+          spriteName:
+              AsteroidTypes.values.elementAt(random.nextInt(2)).typeName));
+    }
     _player.update();
     _listWidgets.clear();
     _listBullets.removeWhere((bullet) => !bullet.isVisible);
     for (var bullet in _listBullets) {
       _listWidgets.add(bullet.build());
       bullet.update();
+    }
+
+    _listAsteroids.removeWhere((asteroid) => !asteroid.isVisible);
+    for (var asterod in _listAsteroids) {
+      _listWidgets.add(asterod.build());
+      asterod.update();
     }
   }
 
