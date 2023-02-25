@@ -13,7 +13,7 @@ class GameBloc {
   final stateSubject = BehaviorSubject<GameSceneType>();
   final scoreValue = BehaviorSubject<int>.seeded(0);
 
-  late final GameScoreCounter scoreCounter;
+  late GameScoreCounter scoreCounter;
 
   Stream<GameInfo> observeGameInfo() =>
       Rx.combineLatest2<GameSceneType, int, GameInfo>(
@@ -30,7 +30,7 @@ class GameBloc {
   void initBloc({required width, required height}) {
     GameState.screenHeight = height;
     GameState.screenWidth = width;
-    stateSubject.add(GameSceneType.startGameScene);
+    stateSubject.add(GameSceneType.newGameScene);
     _startIsolateLoop();
     scoreCounter = GameScoreCounter();
   }
@@ -40,6 +40,11 @@ class GameBloc {
     scoreCounter.startGame();
   }
 
+  void openFirstPage () {
+    scoreCounter = GameScoreCounter();
+    stateSubject.add(GameSceneType.newGameScene);
+  }
+
   void _startIsolateLoop() async {
     _receivePort = ReceivePort();
     _isolateLoop = await Isolate.spawn(mainLoop, _receivePort!.sendPort);
@@ -47,6 +52,7 @@ class GameBloc {
       final score = scoreCounter.getCurrentScore(message);
       if (score == 20) {
         scoreCounter.endGame();
+        stateSubject.add(GameSceneType.endGameScene);
       }
       scoreValue.add(score);
     });

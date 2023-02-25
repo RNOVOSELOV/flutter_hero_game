@@ -24,6 +24,9 @@ class GameScene extends AppScene {
 
   double _startGlobalPosition = 0;
 
+  @override
+  get getAsteroidsList => _listAsteroids;
+
   GameScene({required this.width, required this.height}) {
     _player = Player(screenWidth: width, screenHeight: height);
 

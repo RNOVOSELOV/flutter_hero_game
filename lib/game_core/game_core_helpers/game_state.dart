@@ -1,9 +1,11 @@
+import 'package:spacehero/entities/asteroid.dart';
 import 'package:spacehero/scenes/app_scene.dart';
 import 'package:spacehero/scenes/game_scene.dart';
-import 'package:spacehero/scenes/start_new_game_scene.dart';
+import 'package:spacehero/scenes/asteroids_scene.dart';
+import 'package:tuple/tuple.dart';
 
 class GameState {
-  static final _scenes = <GameSceneType, GameState>{};
+  static Tuple2<GameSceneType, GameState>? _lastScene;
 
   static double _width = 0;
   static double _height = 0;
@@ -21,29 +23,39 @@ class GameState {
   factory GameState({
     required GameSceneType type,
   }) {
-    if (_scenes.containsKey(type)) {
-      return _scenes[type]!;
+    if (_lastScene != null && _lastScene!.item1 == type) {
+      return _lastScene!.item2;
     }
     GameState state;
     switch (type) {
-      case GameSceneType.startGameScene:
+      case GameSceneType.newGameScene:
         state =
-            GameState._internal(NewGameScene(width: _width, height: _height));
+            GameState._internal(AsteroidsScene(width: _width, height: _height));
         break;
       case GameSceneType.gameScene:
         state = GameState._internal(GameScene(width: _width, height: _height));
         break;
+      case GameSceneType.endGameScene:
       case GameSceneType.statisticsScene:
-        state = GameState._internal(GameScene(width: _width, height: _height));
+        if (_lastScene != null) {
+          state = GameState._internal(
+              AsteroidsScene.withAsteroids(
+                  _lastScene!.item2.getScene.getAsteroidsList,
+                  width: _width, height: _height));
+        } else {
+          state = GameState._internal(
+              AsteroidsScene(width: _width, height: _height));
+        }
         break;
     }
-    _scenes[type] = state;
+    _lastScene = Tuple2(type, state);
     return state;
   }
 }
 
 enum GameSceneType {
-  startGameScene,
+  newGameScene,
   gameScene,
+  endGameScene,
   statisticsScene,
 }

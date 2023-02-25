@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:spacehero/entities/asteroid.dart';
 import 'package:spacehero/scenes/app_scene.dart';
 
-class NewGameScene extends AppScene {
+class AsteroidsScene extends AppScene {
   final List<Asteroid> _listAsteroids = [];
   final List<Widget> _listWidgets = [];
 
@@ -14,14 +14,18 @@ class NewGameScene extends AppScene {
 
   int _maxAsteroidCount = 0;
 
-  NewGameScene({required this.width, required this.height}) {
+  @override
+  get getAsteroidsList => _listAsteroids;
+
+  AsteroidsScene({required this.width, required this.height}) {
     Timer.periodic(const Duration(seconds: 5), (timer) {
       _maxAsteroidCount++;
     });
   }
 
-  NewGameScene.withAsteroids (List<Asteroid> asteroids, {required this.width, required this.height}) {
+  AsteroidsScene.withAsteroids (List<Asteroid> asteroids, {required this.width, required this.height}) {
     _listAsteroids.addAll(asteroids);
+    _maxAsteroidCount = _listAsteroids.length;
     Timer.periodic(const Duration(seconds: 5), (timer) {
       _maxAsteroidCount++;
     });
