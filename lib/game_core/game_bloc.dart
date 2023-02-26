@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:isolate';
+import 'package:flutter/cupertino.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:spacehero/data/models/game_result.dart';
+import 'package:spacehero/data/repositories/results_repository.dart';
 import 'package:spacehero/game_core/game_core_helpers/game_score_counter.dart';
 import 'package:spacehero/game_core/models/game_info.dart';
 import 'package:spacehero/isolates/main_loop.dart';
@@ -40,9 +43,13 @@ class GameBloc {
     scoreCounter.startGame();
   }
 
-  void openFirstPage () {
+  void openFirstPage() {
     scoreCounter = GameScoreCounter();
     stateSubject.add(GameSceneType.newGameScene);
+  }
+
+  void openStatisticsPage() {
+    stateSubject.add(GameSceneType.statisticsScene);
   }
 
   void _startIsolateLoop() async {
@@ -50,9 +57,11 @@ class GameBloc {
     _isolateLoop = await Isolate.spawn(mainLoop, _receivePort!.sendPort);
     _receivePort!.listen((message) {
       final score = scoreCounter.getCurrentScore(message);
-      if (score == 20) {
+      if (score == 50) {
         scoreCounter.endGame();
         stateSubject.add(GameSceneType.endGameScene);
+        ResultsRepository.getInstance().addItem(
+            Result(score: score, dt: DateTime.now()));
       }
       scoreValue.add(score);
     });
@@ -62,6 +71,7 @@ class GameBloc {
     stopLoop();
     _receivePort?.close();
     _isolateLoop?.kill(priority: Isolate.immediate);
+
     stateSubject.close();
     scoreValue.close();
   }

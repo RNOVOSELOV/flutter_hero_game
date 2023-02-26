@@ -28,13 +28,10 @@ class GameState {
     }
     GameState state;
     switch (type) {
-      case GameSceneType.newGameScene:
-        state =
-            GameState._internal(AsteroidsScene(width: _width, height: _height));
-        break;
       case GameSceneType.gameScene:
         state = GameState._internal(GameScene(width: _width, height: _height));
         break;
+      case GameSceneType.newGameScene:
       case GameSceneType.endGameScene:
       case GameSceneType.statisticsScene:
         if (_lastScene != null) {
