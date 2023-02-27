@@ -12,22 +12,26 @@ class AsteroidsScene extends AppScene {
   final double width;
   final double height;
 
-  int _maxAsteroidCount = 0;
+  int _currentAsteroidCount = 0;
+  static const _maxAsteroidCount = 5;
 
   @override
   get getAsteroidsList => _listAsteroids;
 
   AsteroidsScene({required this.width, required this.height}) {
-    Timer.periodic(const Duration(seconds: 5), (timer) {
-      _maxAsteroidCount++;
+    final timer = Timer.periodic(const Duration(seconds: 5), (timer) {
+      _currentAsteroidCount++;
+      if (_currentAsteroidCount == _maxAsteroidCount && timer.isActive) {
+        timer.cancel();
+      }
     });
   }
 
   AsteroidsScene.withAsteroids (List<Asteroid> asteroids, {required this.width, required this.height}) {
     _listAsteroids.addAll(asteroids);
-    _maxAsteroidCount = _listAsteroids.length;
+    _currentAsteroidCount = _listAsteroids.length;
     Timer.periodic(const Duration(seconds: 5), (timer) {
-      _maxAsteroidCount++;
+      _currentAsteroidCount++;
     });
   }
 
@@ -42,7 +46,7 @@ class AsteroidsScene extends AppScene {
 
   @override
   void update() {
-    if (_listAsteroids.length < _maxAsteroidCount) {
+    if (_listAsteroids.length < _currentAsteroidCount) {
       final random = Random(DateTime.now().millisecondsSinceEpoch);
       _listAsteroids.add(Asteroid(
           traectoryAngle: random.nextDouble() + random.nextInt(10),
