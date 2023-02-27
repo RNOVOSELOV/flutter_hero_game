@@ -141,7 +141,6 @@ class BestResultsWidget extends StatelessWidget {
           if (!snapshot.hasData ||
               snapshot.data == null ||
               snapshot.data!.isEmpty) {
-            print("empty result stream");
           } else {
             title = "BEST RESULTS";
             result = snapshot.data!

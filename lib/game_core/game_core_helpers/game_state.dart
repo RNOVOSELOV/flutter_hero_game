@@ -1,4 +1,3 @@
-import 'package:spacehero/entities/asteroid.dart';
 import 'package:spacehero/scenes/app_scene.dart';
 import 'package:spacehero/scenes/game_scene.dart';
 import 'package:spacehero/scenes/asteroids_scene.dart';

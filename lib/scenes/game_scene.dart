@@ -77,14 +77,14 @@ class GameScene extends AppScene {
     _listWidgets.clear();
     _listBullets.removeWhere((bullet) => !bullet.isVisible);
     for (var bullet in _listBullets) {
-      _listWidgets.add(bullet.build());
       bullet.update();
+      _listWidgets.add(bullet.build());
     }
 
     _listAsteroids.removeWhere((asteroid) => !asteroid.isVisible);
     for (var asterod in _listAsteroids) {
-      _listWidgets.add(asterod.build());
       asterod.update();
+      _listWidgets.add(asterod.build());
     }
   }
 
