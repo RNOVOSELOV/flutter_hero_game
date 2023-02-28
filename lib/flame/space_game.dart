@@ -56,9 +56,7 @@ class SpaceGame extends FlameGame with HasTappables, PanDetector {
   @override
   void update(double dt) {
     super.update(dt);
-    print("dt $dt");
-    _player.move(dt);
-
+    _player.move(); // TODO заменить на изолят
   }
 
   @override

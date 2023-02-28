@@ -7,7 +7,7 @@ import 'package:spacehero/flame/space_game.dart';
 class Player extends SpriteComponent with HasGameRef<SpaceGame> {
   static const _shipSideSize = 50.0;
   static const int _angleCoefficient = 80;
-  static const double _speed = 2;
+  static const double _speed = 3;
 
   @override
   FutureOr<void> onLoad() async {
@@ -27,7 +27,7 @@ class Player extends SpriteComponent with HasGameRef<SpaceGame> {
     }
   }
 
-  void move(double delta) {
+  void move() {
     x += sin(angle) * _speed;
     y -= cos(angle) * _speed;
 
