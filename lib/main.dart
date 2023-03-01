@@ -18,8 +18,8 @@ void main() {
       overlays: [SystemUiOverlay.bottom],
     );
     runApp(GameWidget(game: SpaceGame()));
-    /*
-    runApp(MaterialApp(
+
+/*    runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: _buildTheme(Brightness.dark),
       home: const SafeArea(
@@ -27,7 +27,7 @@ void main() {
           body: MyApp(),
         ),
       ),
-    ));*/
+    )); */
   });
 }
 
