@@ -3,21 +3,20 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:spacehero/elements/abs_entity.dart';
+import 'package:spacehero/elements/asteroid.dart';
+import 'package:spacehero/elements/black_hole.dart';
 import 'package:spacehero/flame/space_game.dart';
 
 class Player extends Entity with HasGameRef<SpaceGame> {
   static const _shipSideSize = 50.0;
-  static const double _speed = 3;
+  static const double _speed = 1;
   static const int _angleCoefficient = 80;
 
-  @override
-  double get angleDirection => angle;
-
-  Player({
-    required super.spriteName,
-    required super.screenWidth,
-    required super.screenHeight,
-  }) {
+  Player(
+      {required super.spriteName,
+      required super.screenWidth,
+      required super.screenHeight,
+      super.placePriority = 4}) {
     initializeCoreVariables(speed: _speed, side: _shipSideSize);
     x = screenWidth / 2;
     y = screenHeight / 4 * 3;
@@ -28,6 +27,18 @@ class Player extends Entity with HasGameRef<SpaceGame> {
     final sResult = await super.onLoad();
     sprite = await gameRef.loadSprite(spriteName);
     return sResult;
+  }
+
+  @override
+  void onCollisionStart(
+      Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollisionStart(intersectionPoints, other);
+    // TODO GAME OVER
+    if (other is Asteroid) {
+      setVisible = false;
+    } else if (other is BlackHole) {
+      setVisible = false;
+    }
   }
 
   void rotate({double? dx}) {

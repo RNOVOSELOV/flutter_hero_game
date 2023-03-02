@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:spacehero/elements/abs_entity.dart';
+import 'package:spacehero/elements/asteroid.dart';
+import 'package:spacehero/elements/black_hole.dart';
 import 'package:spacehero/flame/space_game.dart';
 
 class Bullet extends Entity with HasGameRef<SpaceGame> {
@@ -10,17 +12,14 @@ class Bullet extends Entity with HasGameRef<SpaceGame> {
 
   final double shootAngle;
 
-  @override
-  double get angleDirection => shootAngle;
-
-  Bullet({
-    required super.spriteName,
-    required super.screenWidth,
-    required super.screenHeight,
-    required double startPositionX,
-    required double startPositionY,
-    required this.shootAngle,
-  }) {
+  Bullet(
+      {required super.spriteName,
+      required super.screenWidth,
+      required super.screenHeight,
+      required double startPositionX,
+      required double startPositionY,
+      required this.shootAngle,
+      super.placePriority = 3}) {
     initializeCoreVariables(speed: _bulletSpeed, side: _bulletSideSize);
     x = startPositionX;
     y = startPositionY;
@@ -31,6 +30,15 @@ class Bullet extends Entity with HasGameRef<SpaceGame> {
     final sResult = await super.onLoad();
     sprite = await gameRef.loadSprite(spriteName);
     return sResult;
+  }
+
+  @override
+  void onCollisionStart(
+      Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollisionStart(intersectionPoints, other);
+    if (other is Asteroid || other is BlackHole) {
+      removeEntity();
+    }
   }
 
   void move() {

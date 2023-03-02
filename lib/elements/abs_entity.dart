@@ -1,13 +1,14 @@
 import 'dart:async';
 
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 
-abstract class Entity extends SpriteComponent {
+abstract class Entity extends SpriteComponent with CollisionCallbacks {
   final String spriteName;
   final double screenWidth;
   final double screenHeight;
 
-  late final double _speed;
+  late double _speed;
   late final double _sideSize;
 
   bool _visible = true;
@@ -18,20 +19,25 @@ abstract class Entity extends SpriteComponent {
 
   double get speed => _speed;
 
-  double get sideSize => _sideSize;
+  set setSpeed(double value) => _speed = value;
 
-  double get angleDirection;
+  double get sideSize => _sideSize;
 
   Entity({
     required this.spriteName,
     required this.screenWidth,
     required this.screenHeight,
-  });
+    int placePriority = 1,
+  }) : super(priority: placePriority) {
+    debugMode = true;
+  }
 
   @override
   FutureOr<void> onLoad() {
     final sResult = super.onLoad();
     anchor = Anchor.center;
+    add(CircleHitbox(
+        anchor: Anchor.center, radius: size.x * 0.8 / 2, position: size / 2));
     return sResult;
   }
 

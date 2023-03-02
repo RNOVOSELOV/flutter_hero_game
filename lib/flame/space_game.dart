@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flame/components.dart' hide Timer;
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
-import 'package:flame/text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:spacehero/elements/abs_entity.dart';
@@ -13,16 +12,18 @@ import 'package:spacehero/elements/bullet.dart';
 import 'package:spacehero/flame/input/tap_button.dart';
 import 'package:spacehero/elements/player.dart';
 
-class SpaceGame extends FlameGame with HasTappables, PanDetector {
+class SpaceGame extends FlameGame with HasTappables, PanDetector, HasCollisionDetection {
   final _background = SpriteComponent();
   final TextPaint scoreText = TextPaint(
       style: GoogleFonts.pressStart2p(fontSize: 16, color: Colors.white60));
+  final entities = <Entity>[];
+
   late final TapButton _fireButton;
   late final TapButton _frizzButton;
   late final TapButton _speedButton;
   late final Player _player;
 
-  final entities = <Entity>[];
+
   late final double _screenWidth;
   late final double _screenHeight;
 
@@ -74,6 +75,8 @@ class SpaceGame extends FlameGame with HasTappables, PanDetector {
       const Duration(seconds: 5),
       (_) => _maxAsteroidCount++,
     );
+
+
     Timer.periodic(
       const Duration(seconds: 15),
       (_) => blackHoleManager(),
@@ -90,6 +93,11 @@ class SpaceGame extends FlameGame with HasTappables, PanDetector {
   @override
   void update(double dt) {
     super.update(dt);
+
+    if (!_player.isVisible) {
+      print('Emd game !!!');
+      _player.setVisible = true;
+    }
     removeMarkedEntities();
     manageEntities(dt);
   }
@@ -150,7 +158,7 @@ class SpaceGame extends FlameGame with HasTappables, PanDetector {
         spriteName: 'bullet3.png',
         screenWidth: _screenWidth,
         screenHeight: _screenHeight,
-        shootAngle: _player.angleDirection,
+        shootAngle: _player.angle,
         startPositionX: _player.position.x,
         startPositionY: _player.position.y);
     entities.add(bullet);
