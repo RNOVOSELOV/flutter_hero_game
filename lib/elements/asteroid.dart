@@ -3,15 +3,23 @@ import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:spacehero/elements/abs_entity.dart';
+import 'package:spacehero/elements/entity_initial_info.dart';
 import 'package:spacehero/flame/space_game.dart';
 
 class Asteroid extends Entity with HasGameRef<SpaceGame> {
-  late final int _speed;
-  late final double _asteroidSideSize;
+  static const _minimumAsteroidSpeed = 2;
+  static const _additionalRandomAsteroidSpeed = 3;
+  static const _minimumAsteroidSideSize = 30;
+  static const _additionalRandomAsteroidSideSize = 50;
+
+  // Угол направления движения астороида
   late final double _angleDirection;
+
+  // Угол вращения астероида вокруг собственной оси
   late final double _angleRotationSpeed;
 
-  double get asteroidSideHalfSize => _asteroidSideSize / 2;
+  @override
+  double get angleDirection => _angleDirection;
 
   Asteroid({
     required super.spriteName,
@@ -19,20 +27,22 @@ class Asteroid extends Entity with HasGameRef<SpaceGame> {
     required super.screenHeight,
   }) {
     final random = Random(DateTime.now().microsecond);
-    _speed = random.nextInt(3) + 2;
-    _asteroidSideSize = random.nextInt(50) + 30;
-    _angleRotationSpeed =
-        random.nextDouble() * (random.nextBool() ? (-1) : 1) + _speed / 4;
+    final double generatedSpeed = _minimumAsteroidSpeed +
+        random.nextDouble() * _additionalRandomAsteroidSpeed;
+    final double generatedSideSize = _minimumAsteroidSideSize +
+        random.nextDouble() * _additionalRandomAsteroidSideSize;
+    initializeCoreVariables(speed: generatedSpeed, side: generatedSideSize);
 
-    size = Vector2(_asteroidSideSize, _asteroidSideSize);
-    final asteroidInfo = AsteroidHelper.getRandomStartValue(
+    final asteroidInfo = AsteroidHelper.getAsteroidStartValue(
         maxWidth: screenWidth,
         maxHeight: screenHeight,
         randomAngle: random.nextDouble() * pi,
-        asteroidSide: _asteroidSideSize);
+        asteroidSide: sideSize);
     x = asteroidInfo.x;
     y = asteroidInfo.y;
     _angleDirection = asteroidInfo.angle == null ? 0 : asteroidInfo.angle!;
+    _angleRotationSpeed =
+        random.nextDouble() * (random.nextBool() ? (-1) : 1) + speed / 4;
   }
 
   @override
@@ -43,8 +53,8 @@ class Asteroid extends Entity with HasGameRef<SpaceGame> {
   }
 
   void move() {
-    position.x = position.x + sin(_angleDirection) * _speed;
-    position.y = position.y - cos(_angleDirection) * _speed;
+    position.x = position.x + sin(_angleDirection) * speed;
+    position.y = position.y - cos(_angleDirection) * speed;
   }
 
   void rotate(double dx) {
@@ -53,7 +63,7 @@ class Asteroid extends Entity with HasGameRef<SpaceGame> {
   }
 
   @override
-  void animate(double dt) {
+  void animateEntity(double dt) {
     move();
     rotate(dt);
   }
@@ -97,7 +107,7 @@ class AsteroidHelper {
     return typeName;
   }
 
-  static ObjectInitialInfo<double> getRandomStartValue({
+  static EntityInitialInfo<double> getAsteroidStartValue({
     required double maxWidth,
     required double maxHeight,
     required double randomAngle,
@@ -128,14 +138,6 @@ class AsteroidHelper {
       }
       width = random.nextInt(maxWidth.toInt()).toDouble();
     }
-    return ObjectInitialInfo<double>(x: width, y: height, angle: angle);
+    return EntityInitialInfo<double>(x: width, y: height, angle: angle);
   }
-}
-
-class ObjectInitialInfo<T> {
-  final T x;
-  final T y;
-  final T? angle;
-
-  ObjectInitialInfo({required this.x, required this.y, this.angle});
 }

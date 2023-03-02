@@ -3,14 +3,20 @@ import 'dart:async';
 import 'package:flame/components.dart' hide Timer;
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
+import 'package:flame/text.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:spacehero/elements/abs_entity.dart';
 import 'package:spacehero/elements/asteroid.dart';
+import 'package:spacehero/elements/black_hole.dart';
+import 'package:spacehero/elements/bullet.dart';
 import 'package:spacehero/flame/input/tap_button.dart';
 import 'package:spacehero/elements/player.dart';
 
-import '../elements/abs_entity.dart';
-
 class SpaceGame extends FlameGame with HasTappables, PanDetector {
   final _background = SpriteComponent();
+  final TextPaint scoreText = TextPaint(
+      style: GoogleFonts.pressStart2p(fontSize: 16, color: Colors.white60));
   late final TapButton _fireButton;
   late final TapButton _frizzButton;
   late final TapButton _speedButton;
@@ -21,6 +27,7 @@ class SpaceGame extends FlameGame with HasTappables, PanDetector {
   late final double _screenHeight;
 
   int _maxAsteroidCount = 1;
+  int score = 0;
 
   @override
   Future<void> onLoad() async {
@@ -57,25 +64,37 @@ class SpaceGame extends FlameGame with HasTappables, PanDetector {
       ..sprite = await loadSprite('background.png')
       ..size = size);
 
-//    add(_fireButton);
+    add(_fireButton);
 //    add(_frizzButton);
 //    add(_speedButton);
 
     add(_player);
 
-    final timer = Timer.periodic(
+    Timer.periodic(
       const Duration(seconds: 5),
       (_) => _maxAsteroidCount++,
     );
+    Timer.periodic(
+      const Duration(seconds: 15),
+      (_) => blackHoleManager(),
+    );
+  }
+
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+    scoreText.render(canvas, 'Score: $score', Vector2(10, 10));
   }
 
   // TODO заменить на изолят
   @override
   void update(double dt) {
     super.update(dt);
+    removeMarkedEntities();
+    manageEntities(dt);
+  }
 
-    _player.animate(dt);
-
+  void removeMarkedEntities() {
     entities.removeWhere((element) {
       if (!element.isVisible) {
         remove(element);
@@ -83,11 +102,30 @@ class SpaceGame extends FlameGame with HasTappables, PanDetector {
       }
       return false;
     });
-
-    checkEntityCount(dt);
   }
 
-  Future<void> checkEntityCount(double dt) async {
+  FutureOr<void> blackHoleManager() async {
+    bool blackHoleIsPresent = false;
+    for (Entity entity in entities) {
+      if (entity is BlackHole) {
+        blackHoleIsPresent = true;
+        entity.removeEntity();
+        _maxAsteroidCount--;
+      }
+    }
+    if (!blackHoleIsPresent) {
+      _maxAsteroidCount++;
+      Entity blackHole = BlackHole(
+        spriteName: 'black_hole.png',
+        screenWidth: _screenWidth,
+        screenHeight: _screenHeight,
+      );
+      entities.add(blackHole);
+      await add(blackHole);
+    }
+  }
+
+  Future<void> manageEntities(double dt) async {
     if (entities.length < _maxAsteroidCount) {
       Entity asteroid = Asteroid(
           spriteName: AsteroidHelper.getAsteroidSpriteName(),
@@ -96,16 +134,28 @@ class SpaceGame extends FlameGame with HasTappables, PanDetector {
       entities.add(asteroid);
       await add(asteroid);
     }
-
     for (Entity entity in entities) {
-      entity.animate(dt);
+      entity.animateEntity(dt);
       if (entity.x > _screenWidth + entity.size[0] ||
           entity.y > _screenHeight + entity.size[0] ||
           entity.x < 0 - entity.size[0] ||
           entity.y < 0 - entity.size[0]) {
-        entity.setVisible = false;
+        entity.removeEntity();
       }
     }
+  }
+
+  Future<void> createBullet() async {
+    Entity bullet = Bullet(
+        spriteName: 'bullet3.png',
+        screenWidth: _screenWidth,
+        screenHeight: _screenHeight,
+        shootAngle: _player.angleDirection,
+        startPositionX: _player.position.x,
+        startPositionY: _player.position.y);
+    entities.add(bullet);
+
+    await add(bullet);
   }
 
   @override
@@ -114,7 +164,7 @@ class SpaceGame extends FlameGame with HasTappables, PanDetector {
   }
 
   void onFireButtonTapped() {
-    print("Fire!");
+    createBullet();
   }
 
   void onFrizzButtonTapped() {

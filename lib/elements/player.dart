@@ -10,12 +10,15 @@ class Player extends Entity with HasGameRef<SpaceGame> {
   static const double _speed = 3;
   static const int _angleCoefficient = 80;
 
+  @override
+  double get angleDirection => angle;
+
   Player({
     required super.spriteName,
     required super.screenWidth,
     required super.screenHeight,
   }) {
-    size = Vector2(_shipSideSize, _shipSideSize);
+    initializeCoreVariables(speed: _speed, side: _shipSideSize);
     x = screenWidth / 2;
     y = screenHeight / 4 * 3;
   }
@@ -34,8 +37,8 @@ class Player extends Entity with HasGameRef<SpaceGame> {
   }
 
   void move() {
-    x += sin(angle) * _speed;
-    y -= cos(angle) * _speed;
+    x += sin(angle) * speed;
+    y -= cos(angle) * speed;
 
     if (x < 0) x = 0;
     if (y < 0) y = 0;
@@ -44,7 +47,13 @@ class Player extends Entity with HasGameRef<SpaceGame> {
   }
 
   @override
-  void animate(double dt) {
+  void update(double dt) {
+    super.update(dt);
+    animateEntity(dt);
+  }
+
+  @override
+  void animateEntity(double dt) {
     move();
   }
 }

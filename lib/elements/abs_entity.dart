@@ -6,11 +6,21 @@ abstract class Entity extends SpriteComponent {
   final String spriteName;
   final double screenWidth;
   final double screenHeight;
+
+  late final double _speed;
+  late final double _sideSize;
+
   bool _visible = true;
 
   bool get isVisible => _visible;
 
   set setVisible(bool value) => _visible = value;
+
+  double get speed => _speed;
+
+  double get sideSize => _sideSize;
+
+  double get angleDirection;
 
   Entity({
     required this.spriteName,
@@ -25,5 +35,16 @@ abstract class Entity extends SpriteComponent {
     return sResult;
   }
 
-  void animate(double dt);
+  void initializeCoreVariables({required double speed, required double side}) {
+    _speed = speed;
+    _sideSize = side;
+
+    size = Vector2(sideSize, sideSize);
+  }
+
+  void animateEntity(double dt);
+
+  void removeEntity() {
+    setVisible = false;
+  }
 }
