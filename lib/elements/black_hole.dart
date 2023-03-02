@@ -51,13 +51,13 @@ class BlackHole extends Entity with HasGameRef<SpaceGame> {
   void animateEntity(double dt) {
     rotate(dt);
     if (removeFlag) {
-      final currScale = scale.x - dt;
+      final currScale = scale.x - dt / 2;
       if (currScale <= 0) {
         removeEntity();
       }
       scale = Vector2(currScale, currScale);
     } else if (scale.x <= 1) {
-      scale = Vector2(scale.x + dt, scale.x + dt);
+      scale = Vector2(scale.x + dt / 2, scale.x + dt / 2);
     }
   }
 

@@ -8,6 +8,7 @@ import 'package:spacehero/elements/bullet.dart';
 import 'package:spacehero/elements/models/entity_move_parameters.dart';
 import 'package:spacehero/elements/models/entity_initial_info.dart';
 import 'package:spacehero/flame/space_game.dart';
+import 'package:spacehero/utils/math_helper.dart';
 
 class Asteroid extends Entity with HasGameRef<SpaceGame> {
   static const _minimumAsteroidSpeed = 2;
@@ -76,9 +77,12 @@ class Asteroid extends Entity with HasGameRef<SpaceGame> {
       asteroid.asteroidCollisionFlag = true;
       changeAsteroidParameters(other);
     } else if (other is BlackHole) {
+      final holePosition = other.position;
+      final newAngle = getAngle(position, holePosition);
+      _angleDirection = getShortAngle(_angleDirection, newAngle);
+      setAsteroidParameters(
+          EntityMoveParameters(angle: angleDirection, speed: 2));
       removeScaleFlag = true;
-      // TODO changeAngleDirection to center black hole
-      setAsteroidParameters(EntityMoveParameters(angle: angleDirection, speed: 1));
     } else if (other is Bullet) {
       removeExplosionFlag = true;
     }
@@ -86,8 +90,8 @@ class Asteroid extends Entity with HasGameRef<SpaceGame> {
 
   void changeAsteroidParameters(Asteroid other) {
     final otherParams = EntityMoveParameters.fromAsteroid(asteroid: other);
-    other
-        .setAsteroidParameters(EntityMoveParameters.fromAsteroid(asteroid: this));
+    other.setAsteroidParameters(
+        EntityMoveParameters.fromAsteroid(asteroid: this));
     setAsteroidParameters(otherParams);
   }
 
@@ -111,7 +115,7 @@ class Asteroid extends Entity with HasGameRef<SpaceGame> {
     move();
     rotate(dt);
     if (removeScaleFlag) {
-      final currScale = scale.x - dt;
+      final currScale = scale.x - dt * 1.5;
       if (currScale <= 0) {
         removeEntity();
       }

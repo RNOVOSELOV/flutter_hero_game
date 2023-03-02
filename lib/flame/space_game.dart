@@ -12,7 +12,8 @@ import 'package:spacehero/elements/bullet.dart';
 import 'package:spacehero/flame/input/tap_button.dart';
 import 'package:spacehero/elements/player.dart';
 
-class SpaceGame extends FlameGame with HasTappables, PanDetector, HasCollisionDetection {
+class SpaceGame extends FlameGame
+    with HasTappables, PanDetector, HasCollisionDetection {
   final _background = SpriteComponent();
   final TextPaint scoreText = TextPaint(
       style: GoogleFonts.pressStart2p(fontSize: 16, color: Colors.white60));
@@ -22,7 +23,6 @@ class SpaceGame extends FlameGame with HasTappables, PanDetector, HasCollisionDe
   late final TapButton _frizzButton;
   late final TapButton _speedButton;
   late final Player _player;
-
 
   late final double _screenWidth;
   late final double _screenHeight;
@@ -60,7 +60,6 @@ class SpaceGame extends FlameGame with HasTappables, PanDetector, HasCollisionDe
             _screenWidth - TapButton.buttonPadding - TapButton.buttonSide,
             TapButton.buttonPadding.toDouble()),
         onTapButton: onSpeedButtonTapped);
-
     add(_background
       ..sprite = await loadSprite('background.png')
       ..size = size);
@@ -70,12 +69,10 @@ class SpaceGame extends FlameGame with HasTappables, PanDetector, HasCollisionDe
 //    add(_speedButton);
 
     add(_player);
-
     Timer.periodic(
       const Duration(seconds: 5),
       (_) => _maxAsteroidCount++,
     );
-
 
     Timer.periodic(
       const Duration(seconds: 15),
