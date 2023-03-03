@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
+import 'package:flutter/material.dart';
 import 'package:spacehero/elements/abs_entity.dart';
-import 'package:spacehero/elements/asteroid.dart';
-import 'package:spacehero/elements/bullet.dart';
 import 'package:spacehero/flame/space_game.dart';
 
 class BlackHole extends Entity with HasGameRef<SpaceGame> {
@@ -18,7 +18,6 @@ class BlackHole extends Entity with HasGameRef<SpaceGame> {
   bool removeFlag = false;
 
   BlackHole({
-    required super.spriteName,
     required super.screenWidth,
     required super.screenHeight,
   }) {
@@ -32,13 +31,17 @@ class BlackHole extends Entity with HasGameRef<SpaceGame> {
     x = random.nextDouble() * (screenWidth - sideSize) + sideSize / 2;
     y = random.nextDouble() * (screenHeight - sideSize) + sideSize / 2;
     _angleRotationSpeed = random.nextDouble() + speed / 4;
-    scale = Vector2(0, 0);
+    scale = Vector2(0.3, 0.3);
   }
 
   @override
   FutureOr<void> onLoad() async {
     final sResult = await super.onLoad();
-    sprite = await gameRef.loadSprite(spriteName);
+    final sprites = [0].map((i) => Sprite.load('black_hole.png')).toList();
+    animation = SpriteAnimation.spriteList(
+      await Future.wait(sprites),
+      stepTime: 5,
+    );
     return sResult;
   }
 
@@ -51,22 +54,23 @@ class BlackHole extends Entity with HasGameRef<SpaceGame> {
   void animateEntity(double dt) {
     rotate(dt);
     if (removeFlag) {
-      final currScale = scale.x - dt / 2;
-      if (currScale <= 0) {
-        removeEntity();
-      }
-      scale = Vector2(currScale, currScale);
-    } else if (scale.x <= 1) {
+      return;
+    }
+    if (scale.x <= 1) {
       scale = Vector2(scale.x + dt / 2, scale.x + dt / 2);
     }
   }
 
   @override
   void removeEntity() {
-    if (removeFlag) {
-      super.removeEntity();
-    } else {
-      removeFlag = true;
-    }
+    removeFlag = true;
+    add(ScaleEffect.by(
+      Vector2.all(0.1),
+      onComplete: () => super.removeEntity(),
+      EffectController(
+        curve: Curves.bounceIn,
+        duration: 2,
+      ),
+    ));
   }
 }

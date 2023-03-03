@@ -7,14 +7,13 @@ import 'package:spacehero/elements/black_hole.dart';
 import 'package:spacehero/flame/space_game.dart';
 
 class Bullet extends Entity with HasGameRef<SpaceGame> {
-  static const _bulletSideSize = 10.0;
-  static const _bulletSpeed = 12.0;
+  static const _bulletSideSize = 20.0;
+  static const _bulletSpeed = 9.0;
 
   final double shootAngle;
 
   Bullet(
-      {required super.spriteName,
-      required super.screenWidth,
+      {required super.screenWidth,
       required super.screenHeight,
       required double startPositionX,
       required double startPositionY,
@@ -23,12 +22,19 @@ class Bullet extends Entity with HasGameRef<SpaceGame> {
     initializeCoreVariables(speed: _bulletSpeed, side: _bulletSideSize);
     x = startPositionX;
     y = startPositionY;
+    angle = shootAngle;
   }
 
   @override
   FutureOr<void> onLoad() async {
     final sResult = await super.onLoad();
-    sprite = await gameRef.loadSprite(spriteName);
+    final sprites = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+        .map((i) => Sprite.load('bullet_$i.png'))
+        .toList();
+    animation = SpriteAnimation.spriteList(
+      await Future.wait(sprites),
+      stepTime: 0.5,
+    );
     return sResult;
   }
 

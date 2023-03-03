@@ -1,10 +1,8 @@
 import 'dart:async';
-
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 
-abstract class Entity extends SpriteComponent with CollisionCallbacks {
-  final String spriteName;
+abstract class Entity extends SpriteAnimationComponent with CollisionCallbacks {
   final double screenWidth;
   final double screenHeight;
 

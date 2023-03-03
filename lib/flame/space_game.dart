@@ -36,7 +36,6 @@ class SpaceGame extends FlameGame
     _screenWidth = size[0];
     _screenHeight = size[1];
     _player = Player(
-        spriteName: 'player0.png',
         screenWidth: _screenWidth,
         screenHeight: _screenHeight);
 
@@ -121,7 +120,6 @@ class SpaceGame extends FlameGame
     if (!blackHoleIsPresent) {
       _maxAsteroidCount++;
       Entity blackHole = BlackHole(
-        spriteName: 'black_hole.png',
         screenWidth: _screenWidth,
         screenHeight: _screenHeight,
       );
@@ -133,7 +131,6 @@ class SpaceGame extends FlameGame
   Future<void> manageEntities(double dt) async {
     if (entities.length < _maxAsteroidCount) {
       Entity asteroid = Asteroid(
-          spriteName: AsteroidHelper.getAsteroidSpriteName(),
           screenWidth: _screenWidth,
           screenHeight: _screenHeight);
       entities.add(asteroid);
@@ -152,7 +149,6 @@ class SpaceGame extends FlameGame
 
   Future<void> createBullet() async {
     Entity bullet = Bullet(
-        spriteName: 'bullet3.png',
         screenWidth: _screenWidth,
         screenHeight: _screenHeight,
         shootAngle: _player.angle,

@@ -8,12 +8,12 @@ import 'package:spacehero/elements/black_hole.dart';
 import 'package:spacehero/flame/space_game.dart';
 
 class Player extends Entity with HasGameRef<SpaceGame> {
-  static const _shipSideSize = 50.0;
+  static const _shipSideSize = 80.0;
   static const double _speed = 1;
   static const int _angleCoefficient = 80;
 
   Player(
-      {required super.spriteName,
+      {
       required super.screenWidth,
       required super.screenHeight,
       super.placePriority = 4}) {
@@ -25,7 +25,12 @@ class Player extends Entity with HasGameRef<SpaceGame> {
   @override
   FutureOr<void> onLoad() async {
     final sResult = await super.onLoad();
-    sprite = await gameRef.loadSprite(spriteName);
+    final sprites =
+        [0, 1, 2, 3, 4, 5].map((i) => Sprite.load('plane_$i.png')).toList();
+    animation = SpriteAnimation.spriteList(
+      await Future.wait(sprites),
+      stepTime: 0.1,
+    );
     return sResult;
   }
 

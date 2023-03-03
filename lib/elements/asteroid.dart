@@ -31,7 +31,6 @@ class Asteroid extends Entity with HasGameRef<SpaceGame> {
   set setAngleDirection(double value) => _angleDirection = value;
 
   Asteroid({
-    required super.spriteName,
     required super.screenWidth,
     required super.screenHeight,
     super.placePriority = 2,
@@ -58,7 +57,11 @@ class Asteroid extends Entity with HasGameRef<SpaceGame> {
   @override
   FutureOr<void> onLoad() async {
     final sResult = await super.onLoad();
-    sprite = await gameRef.loadSprite(spriteName);
+    final sprites = [0].map((i) => Sprite.load(AsteroidHelper.getAsteroidSpriteName())).toList();
+    animation = SpriteAnimation.spriteList(
+      await Future.wait(sprites),
+      stepTime: 5,
+    );
     return sResult;
   }
 
