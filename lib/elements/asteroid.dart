@@ -4,7 +4,6 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:spacehero/elements/abs_entity.dart';
 import 'package:spacehero/elements/black_hole.dart';
-import 'package:spacehero/elements/bullet.dart';
 import 'package:spacehero/elements/models/entity_move_parameters.dart';
 import 'package:spacehero/elements/models/entity_initial_info.dart';
 import 'package:spacehero/flame/space_game.dart';
@@ -18,7 +17,7 @@ class Asteroid extends Entity with HasGameRef<SpaceGame> {
 
   bool asteroidCollisionFlag = false;
   bool removeScaleFlag = false;
-  bool removeExplosionFlag = false;
+  bool destroyedFlag = false;
 
   // Угол направления движения астороида
   late double _angleDirection;
@@ -29,6 +28,10 @@ class Asteroid extends Entity with HasGameRef<SpaceGame> {
   double get angleDirection => _angleDirection;
 
   set setAngleDirection(double value) => _angleDirection = value;
+
+  bool get isDestroyed => destroyedFlag;
+
+  set setDestroyed (bool flag) => destroyedFlag = flag;
 
   Asteroid({
     required super.screenWidth,
@@ -57,7 +60,9 @@ class Asteroid extends Entity with HasGameRef<SpaceGame> {
   @override
   FutureOr<void> onLoad() async {
     final sResult = await super.onLoad();
-    final sprites = [0].map((i) => Sprite.load(AsteroidHelper.getAsteroidSpriteName())).toList();
+    final sprites = [0]
+        .map((i) => Sprite.load(AsteroidHelper.getAsteroidSpriteName()))
+        .toList();
     animation = SpriteAnimation.spriteList(
       await Future.wait(sprites),
       stepTime: 5,
@@ -69,7 +74,13 @@ class Asteroid extends Entity with HasGameRef<SpaceGame> {
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
+    if (destroyedFlag) {
+      return;
+    }
     if (other is Asteroid) {
+      if (other.isDestroyed) {
+        return;
+      }
       final Asteroid asteroid = other;
       if (asteroidCollisionFlag) {
         asteroidCollisionFlag = false;
@@ -86,8 +97,6 @@ class Asteroid extends Entity with HasGameRef<SpaceGame> {
       setAsteroidParameters(
           EntityMoveParameters(angle: angleDirection, speed: 2));
       removeScaleFlag = true;
-    } else if (other is Bullet) {
-      removeExplosionFlag = true;
     }
   }
 
@@ -123,10 +132,6 @@ class Asteroid extends Entity with HasGameRef<SpaceGame> {
         removeEntity();
       }
       scale = Vector2(currScale, currScale);
-    } else if (removeExplosionFlag) {
-      // TODO animate explosion and remove
-      removeEntity();
-      gameRef.score++;
     }
   }
 }
