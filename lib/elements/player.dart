@@ -44,6 +44,9 @@ class Player extends Entity with HasGameRef<SpaceGame> {
       return;
     }
     if (other is Asteroid) {
+      if (other.isDestroyed) {
+        return;
+      }
       other.setSpeed = 0;
       changeAnimation();
     } else if (other is BlackHole) {

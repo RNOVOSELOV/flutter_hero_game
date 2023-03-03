@@ -42,9 +42,30 @@ class Bullet extends Entity with HasGameRef<SpaceGame> {
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
-    if (other is Asteroid || other is BlackHole) {
+    if (other is Asteroid) {
+      setSpeed = 0;
+      size = other.size * 3; // TODO анимировать увеличение размера
+      other.setSpeed = 0;
+      other.setDestroyed = true;
+      gameRef.score++;
+      changeAnimation(other);
+    } else if (other is BlackHole) {
       removeEntity();
     }
+  }
+
+  FutureOr<void> changeAnimation(Entity other) async {
+    final sprites = [1, 2, 3, 4, 5, 6, 7, 8]
+        .map((i) => Sprite.load('bullet_explosion_$i.png'))
+        .toList();
+    animation = SpriteAnimation.spriteList(await Future.wait(sprites),
+        stepTime: 0.2, loop: false)
+      ..onComplete = () {
+        removeEntity();
+      }
+      ..onFrame = (value) {
+        if (value == 5) other.removeEntity(); // TODO возможно анимировать opacity
+      };
   }
 
   void move() {
