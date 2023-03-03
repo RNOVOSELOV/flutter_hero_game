@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:spacehero/elements/abs_entity.dart';
 import 'package:spacehero/elements/asteroid.dart';
 import 'package:spacehero/elements/black_hole.dart';
@@ -12,9 +13,10 @@ class Player extends Entity with HasGameRef<SpaceGame> {
   static const double _speed = 1;
   static const int _angleCoefficient = 80;
 
+  bool gameOver = false;
+
   Player(
-      {
-      required super.screenWidth,
+      {required super.screenWidth,
       required super.screenHeight,
       super.placePriority = 4}) {
     initializeCoreVariables(speed: _speed, side: _shipSideSize);
@@ -38,12 +40,29 @@ class Player extends Entity with HasGameRef<SpaceGame> {
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
-    // TODO GAME OVER
-    if (other is Asteroid) {
-      setVisible = false;
-    } else if (other is BlackHole) {
-      setVisible = false;
+    if (gameOver) {
+      return;
     }
+    if (other is Asteroid) {
+      other.setSpeed = 0;
+      changeAnimation();
+    } else if (other is BlackHole) {
+      changeAnimation();
+    }
+  }
+
+  FutureOr<void> changeAnimation() async {
+    //TODO GAME OVER убрать
+//    gameOver = true;
+    final sprites = [0, 1, 2, 3, 4, 5, 6]
+        .map((i) => Sprite.load('plane_explosion_$i.png'))
+        .toList();
+    animation = SpriteAnimation.spriteList(await Future.wait(sprites),
+        stepTime: 0.3, loop: false)
+      ..onComplete = () {
+        print('Game Over');
+        removeEntity();
+      };
   }
 
   void rotate({double? dx}) {
@@ -65,7 +84,9 @@ class Player extends Entity with HasGameRef<SpaceGame> {
   @override
   void update(double dt) {
     super.update(dt);
-    animateEntity(dt);
+    if (!gameOver) {
+      animateEntity(dt);
+    }
   }
 
   @override
