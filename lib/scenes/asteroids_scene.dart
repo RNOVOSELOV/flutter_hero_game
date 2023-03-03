@@ -32,6 +32,9 @@ class AsteroidsScene extends AppScene {
     _currentAsteroidCount = _listAsteroids.length;
     Timer.periodic(const Duration(seconds: 5), (timer) {
       _currentAsteroidCount++;
+      if (_currentAsteroidCount >= _maxAsteroidCount && timer.isActive) {
+        timer.cancel();
+      }
     });
   }
 
@@ -46,7 +49,7 @@ class AsteroidsScene extends AppScene {
 
   @override
   void update() {
-    if (_listAsteroids.length < _currentAsteroidCount) {
+    if (_listAsteroids.length < _maxAsteroidCount) {
       final random = Random(DateTime.now().millisecondsSinceEpoch);
       _listAsteroids.add(Asteroid(
           traectoryAngle: random.nextDouble() + random.nextInt(10),

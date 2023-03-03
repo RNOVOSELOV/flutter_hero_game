@@ -1,8 +1,9 @@
+import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:spacehero/game_core/game.dart';
+import 'package:spacehero/flame/space_game.dart';
 import 'package:spacehero/game_core/game_bloc.dart';
 import 'package:spacehero/resources/app_images.dart';
 
@@ -16,7 +17,9 @@ void main() {
       SystemUiMode.manual,
       overlays: [SystemUiOverlay.bottom],
     );
-    runApp(MaterialApp(
+    runApp(GameWidget(game: SpaceGame()));
+
+/*    runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: _buildTheme(Brightness.dark),
       home: const SafeArea(
@@ -24,7 +27,7 @@ void main() {
           body: MyApp(),
         ),
       ),
-    ));
+    )); */
   });
 }
 
@@ -59,7 +62,7 @@ class _MyAppState extends State<MyApp> {
               image: DecorationImage(
                   image: AssetImage(AppImages.backgroundImage),
                   fit: BoxFit.cover)),
-          child: const Game()),
+          child: SizedBox.shrink()), //const Game()),
     );
   }
 
