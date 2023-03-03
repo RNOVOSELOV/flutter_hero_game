@@ -22,7 +22,6 @@ abstract class Entity extends SpriteAnimationComponent with CollisionCallbacks {
   double get sideSize => _sideSize;
 
   Entity({
-    required this.spriteName,
     required this.screenWidth,
     required this.screenHeight,
     int placePriority = 1,
