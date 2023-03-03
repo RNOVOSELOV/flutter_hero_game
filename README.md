@@ -1,6 +1,6 @@
 [<img src="https://storage.googleapis.com/cms-storage-bucket/a9d6ce81aee44ae017ee.png"  height="150">](https://flutter.dev/)  &nbsp;&nbsp;&nbsp;&nbsp;   [<img src="https://user-images.githubusercontent.com/6718144/101553774-3bc7b000-39ad-11eb-8a6a-de2daa31bd64.png"  height="150">](https://flame-engine.org/)   
 
-#  🚀&nbsp;&nbsp; Space armageddon - 8 bit cosmos game
+#  🚀&nbsp;&nbsp; Space cleaner - 8 bit cosmos game
 <br/>
 <br/>
 
