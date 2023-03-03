@@ -1,6 +1,4 @@
-[<img src="https://storage.googleapis.com/cms-storage-bucket/6a07d8a62f4308d2b854.svg"  width="150">](https://flutter.dev/)   
-
-[<img src="https://user-images.githubusercontent.com/6718144/101553774-3bc7b000-39ad-11eb-8a6a-de2daa31bd64.png"  height="100">](https://flame-engine.org/)   
+[<img src="https://storage.googleapis.com/cms-storage-bucket/6a07d8a62f4308d2b854.svg"  width="150">](https://flutter.dev/)     [<img src="https://user-images.githubusercontent.com/6718144/101553774-3bc7b000-39ad-11eb-8a6a-de2daa31bd64.png"  height="100">](https://flame-engine.org/)   
 
 #  🚀&nbsp;&nbsp; Space armageddon - 8 bit cosmos game
 <br/>
