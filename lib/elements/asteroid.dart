@@ -6,7 +6,7 @@ import 'package:spacehero/elements/abs_entity.dart';
 import 'package:spacehero/elements/black_hole.dart';
 import 'package:spacehero/elements/models/entity_move_parameters.dart';
 import 'package:spacehero/elements/models/entity_initial_info.dart';
-import 'package:spacehero/flame/space_game.dart';
+import 'package:spacehero/presentation/space_game/space_game.dart';
 import 'package:spacehero/utils/math_helper.dart';
 
 class Asteroid extends Entity with HasGameRef<SpaceGame> {

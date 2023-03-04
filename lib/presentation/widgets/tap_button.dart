@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flame/components.dart';
 import 'package:flame/input.dart';
-import 'package:spacehero/flame/space_game.dart';
+import 'package:spacehero/presentation/space_game/space_game.dart';
 
 class TapButton extends SpriteComponent with Tappable, HasGameRef<SpaceGame> {
   final VoidCallback onTapButton;

@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:spacehero/elements/abs_entity.dart';
 import 'package:spacehero/elements/asteroid.dart';
 import 'package:spacehero/elements/black_hole.dart';
-import 'package:spacehero/flame/space_game.dart';
+import 'package:spacehero/presentation/space_game/space_game.dart';
 
 class Player extends Entity with HasGameRef<SpaceGame> {
   static const _shipSideSize = 80.0;

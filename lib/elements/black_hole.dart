@@ -5,7 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
 import 'package:spacehero/elements/abs_entity.dart';
-import 'package:spacehero/flame/space_game.dart';
+import 'package:spacehero/presentation/space_game/space_game.dart';
 
 class BlackHole extends Entity with HasGameRef<SpaceGame> {
   static const _minimumHoleRotationSpeed = 2;

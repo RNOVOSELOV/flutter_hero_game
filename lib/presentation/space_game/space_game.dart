@@ -9,8 +9,8 @@ import 'package:spacehero/elements/abs_entity.dart';
 import 'package:spacehero/elements/asteroid.dart';
 import 'package:spacehero/elements/black_hole.dart';
 import 'package:spacehero/elements/bullet.dart';
-import 'package:spacehero/flame/input/tap_button.dart';
 import 'package:spacehero/elements/player.dart';
+import 'package:spacehero/presentation/widgets/tap_button.dart';
 
 class SpaceGame extends FlameGame
     with HasTappables, PanDetector, HasCollisionDetection {
@@ -35,9 +35,7 @@ class SpaceGame extends FlameGame
     super.onLoad();
     _screenWidth = size[0];
     _screenHeight = size[1];
-    _player = Player(
-        screenWidth: _screenWidth,
-        screenHeight: _screenHeight);
+    _player = Player(screenWidth: _screenWidth, screenHeight: _screenHeight);
 
     _fireButton = TapButton(
         spriteName: 'button_fire.png',
@@ -130,9 +128,8 @@ class SpaceGame extends FlameGame
 
   Future<void> manageEntities(double dt) async {
     if (entities.length < _maxAsteroidCount) {
-      Entity asteroid = Asteroid(
-          screenWidth: _screenWidth,
-          screenHeight: _screenHeight);
+      Entity asteroid =
+          Asteroid(screenWidth: _screenWidth, screenHeight: _screenHeight);
       entities.add(asteroid);
       await add(asteroid);
     }
