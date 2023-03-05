@@ -3,11 +3,9 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 
 abstract class Entity extends SpriteAnimationComponent with CollisionCallbacks {
-  final double screenWidth;
-  final double screenHeight;
 
   late double _speed;
-  late final double _sideSize;
+  late double _sideSize;
 
   bool _visible = true;
 
@@ -22,8 +20,6 @@ abstract class Entity extends SpriteAnimationComponent with CollisionCallbacks {
   double get sideSize => _sideSize;
 
   Entity({
-    required this.screenWidth,
-    required this.screenHeight,
     int placePriority = 1,
   }) : super(priority: placePriority) {
     debugMode = true;
@@ -41,13 +37,14 @@ abstract class Entity extends SpriteAnimationComponent with CollisionCallbacks {
   void initializeCoreVariables({required double speed, required double side}) {
     _speed = speed;
     _sideSize = side;
-
     size = Vector2(sideSize, sideSize);
   }
 
-  void animateEntity(double dt);
-
-  void removeEntity() {
-    setVisible = false;
+  @override
+  void update(double dt) {
+    super.update(dt);
+    animateEntity(dt);
   }
+
+  void animateEntity(double dt);
 }

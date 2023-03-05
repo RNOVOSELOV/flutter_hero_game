@@ -1,6 +1,6 @@
 import 'package:flame_splash_screen/flame_splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:spacehero/presentation/game_screen.dart';
+import 'package:spacehero/presentation/game_page.dart';
 import 'package:spacehero/resources/app_images.dart';
 
 class GameSplashScreen extends StatefulWidget {
@@ -55,8 +55,8 @@ class _GameSplashScreenState extends State<GameSplashScreen> {
         },
         theme: FlameSplashTheme.dark,
         onFinish: (context) => Navigator.of(context).push(
-            MaterialPageRoute<GameScreen>(
-                builder: (context) => const GameScreen())),
+            MaterialPageRoute<GamePage>(
+                builder: (context) => const GamePage())),
         controller: controller,
       ),
     );

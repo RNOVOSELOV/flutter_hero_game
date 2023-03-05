@@ -4,7 +4,7 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
-import 'package:spacehero/elements/abs_entity.dart';
+import 'package:spacehero/entities/abs_entity.dart';
 import 'package:spacehero/presentation/space_game/space_game.dart';
 
 class BlackHole extends Entity with HasGameRef<SpaceGame> {
@@ -18,8 +18,7 @@ class BlackHole extends Entity with HasGameRef<SpaceGame> {
   bool removeFlag = false;
 
   BlackHole({
-    required super.screenWidth,
-    required super.screenHeight,
+    super.placePriority = 1,
   }) {
     final random = Random(DateTime.now().microsecond);
     final double generatedSpeed = _minimumHoleRotationSpeed +
@@ -28,8 +27,8 @@ class BlackHole extends Entity with HasGameRef<SpaceGame> {
         random.nextDouble() * _additionalRandomHoleSideSize;
     initializeCoreVariables(speed: generatedSpeed, side: generatedSideSize);
 
-    x = random.nextDouble() * (screenWidth - sideSize) + sideSize / 2;
-    y = random.nextDouble() * (screenHeight - sideSize) + sideSize / 2;
+ //   x = random.nextDouble() * (screenWidth - sideSize) + sideSize / 2;
+ //   y = random.nextDouble() * (screenHeight - sideSize) + sideSize / 2;
     _angleRotationSpeed = random.nextDouble() + speed / 4;
     scale = Vector2(0.3, 0.3);
   }
@@ -66,7 +65,7 @@ class BlackHole extends Entity with HasGameRef<SpaceGame> {
     removeFlag = true;
     add(ScaleEffect.by(
       Vector2.all(0.1),
-      onComplete: () => super.removeEntity(),
+//      onComplete: () => super.removeEntity(),
       EffectController(
         curve: Curves.bounceIn,
         duration: 2,

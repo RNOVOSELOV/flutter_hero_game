@@ -1,60 +1,95 @@
+import 'dart:async';
 import 'dart:math';
 
-import 'package:flutter/material.dart';
-import 'package:spacehero/entities/entity.dart';
+import 'package:flame/components.dart';
+import 'package:spacehero/entities/abs_entity.dart';
+import 'package:spacehero/entities/asteroid.dart';
+import 'package:spacehero/entities/black_hole.dart';
+import 'package:spacehero/presentation/space_game/space_game.dart';
 
-class Player extends Entity {
-  final double screenWidth;
-  final double screenHeight;
+class Player extends Entity with HasGameRef<SpaceGame> {
+  static const _shipSideSize = 80.0;
+  static const double _speed = 1;
+  static const int _angleCoefficient = 80;
 
-  Player({
-    required this.screenWidth,
-    required this.screenHeight,
-  }) : super(spriteName: "player", x: screenWidth/2, y: screenHeight/2);
+  bool gameOver = false;
 
-  double _angle = 0;
-  double _degree = 0;
-  final double _speed = 3;
-  bool isMovedLeft = false;
-  bool isMovedRight = false;
-  bool _isAcceleration = false;
-
-  get getAngle => _angle;
-
-  void resetSpeed() {
-    _isAcceleration = !_isAcceleration;
+  Player({super.placePriority = 4}) {
+    initializeCoreVariables(speed: _speed, side: _shipSideSize);
+//    x = screenWidth / 2;
+//    y = screenHeight / 4 * 3;
   }
 
   @override
-  Widget build() {
-    return Positioned(
-      top: y,
-      left: x,
-      child: isVisible
-          ? Transform.rotate(
-              angle: _angle,
-              child: sprites[currentSprite],
-            )
-          : const SizedBox(),
+  FutureOr<void> onLoad() async {
+    final sResult = await super.onLoad();
+    final sprites =
+        [0, 1, 2, 3, 4, 5].map((i) => Sprite.load('plane_$i.png')).toList();
+    animation = SpriteAnimation.spriteList(
+      await Future.wait(sprites),
+      stepTime: 0.1,
     );
+    return sResult;
   }
 
   @override
-  void move() {
-    if (isMovedLeft) _degree -= 5;
-    if (isMovedRight) _degree += 5;
-    isMovedLeft = false;
-    isMovedRight = false;
-    _angle = (_degree * pi) / 180;
-    if (!_isAcceleration) {
+  void onCollisionStart(
+      Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollisionStart(intersectionPoints, other);
+    if (gameOver) {
       return;
     }
+    if (other is Asteroid) {
+      if (other.isDestroyed) {
+        return;
+      }
+      other.setSpeed = 0;
+      changeAnimation();
+    } else if (other is BlackHole) {
+      changeAnimation();
+    }
+  }
 
-    x += sin(_degree * 0.0175) * _speed;
-    y -= cos(_degree * 0.0175) * _speed;
+  FutureOr<void> changeAnimation() async {
+    //TODO GAME OVER убрать
+//    gameOver = true;
+    final sprites = [0, 1, 2, 3, 4, 5, 6]
+        .map((i) => Sprite.load('plane_explosion_$i.png'))
+        .toList();
+    animation = SpriteAnimation.spriteList(await Future.wait(sprites),
+        stepTime: 0.3, loop: false)
+      ..onComplete = () {
+        print('Game Over');
+//        removeEntity();
+      };
+  }
+
+  void rotate({double? dx}) {
+    if (dx != null) {
+      angle += dx / _angleCoefficient;
+    }
+  }
+
+  void move() {
+    x += sin(angle) * speed;
+    y -= cos(angle) * speed;
+
     if (x < 0) x = 0;
     if (y < 0) y = 0;
-    if (x > screenWidth - 50) x = screenWidth - 50;
-    if (y > screenHeight - 50) y = screenHeight - 50;
+    //   if (x > screenWidth) x = screenWidth;
+    //   if (y > screenHeight) y = screenHeight;
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    if (!gameOver) {
+      animateEntity(dt);
+    }
+  }
+
+  @override
+  void animateEntity(double dt) {
+    move();
   }
 }

@@ -1,27 +1,38 @@
 import 'dart:async';
 
-import 'package:flame/components.dart' hide Timer;
+import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
+import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:spacehero/elements/abs_entity.dart';
-import 'package:spacehero/elements/asteroid.dart';
-import 'package:spacehero/elements/black_hole.dart';
-import 'package:spacehero/elements/bullet.dart';
-import 'package:spacehero/elements/player.dart';
-import 'package:spacehero/presentation/widgets/tap_button.dart';
+import 'package:spacehero/entities/abs_entity.dart';
+import 'package:spacehero/entities/asteroid.dart';
+import 'package:spacehero/entities/black_hole.dart';
+import 'package:spacehero/entities/bullet.dart';
+import 'package:spacehero/entities/models/entity_initial_info.dart';
+import 'package:spacehero/entities/player.dart';
+import 'package:spacehero/entities_controllers/asteroid_controller.dart';
+import 'package:spacehero/entities_controllers/black_hole_controller.dart';
+import 'package:spacehero/presentation/space_game/bloc/space_game_bloc.dart';
 
 class SpaceGame extends FlameGame
-    with HasTappables, PanDetector, HasCollisionDetection {
+    with
+        HasTappables,
+        PanDetector,
+        HasCollisionDetection,
+        HasKeyboardHandlerComponents {
+  final SpaceGameBloc bloc;
+
   final _background = SpriteComponent();
-  final TextPaint scoreText = TextPaint(
-      style: GoogleFonts.pressStart2p(fontSize: 16, color: Colors.white60));
+
+//  final TextPaint scoreText = TextPaint(
+//      style: GoogleFonts.pressStart2p(fontSize: 16, color: Colors.white60));
   final entities = <Entity>[];
 
-  late final TapButton _fireButton;
-  late final TapButton _frizzButton;
-  late final TapButton _speedButton;
+//  late final TapButton _fireButton;
+//  late final TapButton _frizzButton;
+//  late final TapButton _speedButton;
   late final Player _player;
 
   late final double _screenWidth;
@@ -30,13 +41,23 @@ class SpaceGame extends FlameGame
   int _maxAsteroidCount = 1;
   int score = 0;
 
+  double get getScreenWidth => _screenWidth;
+  double get getScreenHeight => _screenHeight;
+
+  SpaceGame({required this.bloc});
+
   @override
   Future<void> onLoad() async {
     super.onLoad();
     _screenWidth = size[0];
     _screenHeight = size[1];
-    _player = Player(screenWidth: _screenWidth, screenHeight: _screenHeight);
-
+    _player = Player();
+    print('Game $_screenWidth $_screenHeight');
+    await add(FlameBlocProvider<SpaceGameBloc, SpaceGameState>.value(
+      value: bloc,
+      children: [],
+    ));
+/*
     _fireButton = TapButton(
         spriteName: 'button_fire.png',
         spritePosition: Vector2(
@@ -57,15 +78,18 @@ class SpaceGame extends FlameGame
             _screenWidth - TapButton.buttonPadding - TapButton.buttonSide,
             TapButton.buttonPadding.toDouble()),
         onTapButton: onSpeedButtonTapped);
+
+ */
     add(_background
       ..sprite = await loadSprite('background.png')
       ..size = size);
 
-    add(_fireButton);
+//    add(_fireButton);
 //    add(_frizzButton);
 //    add(_speedButton);
 
     add(_player);
+    /*
     Timer.periodic(
       const Duration(seconds: 5),
       (_) => _maxAsteroidCount++,
@@ -75,15 +99,20 @@ class SpaceGame extends FlameGame
       const Duration(seconds: 15),
       (_) => blackHoleManager(),
     );
+
+     */
+    add(BlackHoleController());
+    add(AsteroidController());
   }
 
   @override
   void render(Canvas canvas) {
     super.render(canvas);
-    scoreText.render(canvas, 'Score: $score', Vector2(10, 10));
+//    scoreText.render(canvas, 'Score: $score', Vector2(10, 10));
   }
 
-  // TODO заменить на изолят
+/*
+// TODO заменить на изолят
   @override
   void update(double dt) {
     super.update(dt);
@@ -95,7 +124,7 @@ class SpaceGame extends FlameGame
     removeMarkedEntities();
     manageEntities(dt);
   }
-
+*/
   void removeMarkedEntities() {
     entities.removeWhere((element) {
       if (!element.isVisible) {
@@ -118,8 +147,6 @@ class SpaceGame extends FlameGame
     if (!blackHoleIsPresent) {
       _maxAsteroidCount++;
       Entity blackHole = BlackHole(
-        screenWidth: _screenWidth,
-        screenHeight: _screenHeight,
       );
       entities.add(blackHole);
       await add(blackHole);
@@ -128,10 +155,10 @@ class SpaceGame extends FlameGame
 
   Future<void> manageEntities(double dt) async {
     if (entities.length < _maxAsteroidCount) {
-      Entity asteroid =
-          Asteroid(screenWidth: _screenWidth, screenHeight: _screenHeight);
-      entities.add(asteroid);
-      await add(asteroid);
+ //     Entity asteroid =
+ //         Asteroid();
+ //     entities.add(asteroid);
+ //     await add(asteroid);
     }
     for (Entity entity in entities) {
       entity.animateEntity(dt);
@@ -139,15 +166,13 @@ class SpaceGame extends FlameGame
           entity.y > _screenHeight + entity.size[0] ||
           entity.x < 0 - entity.size[0] ||
           entity.y < 0 - entity.size[0]) {
-        entity.removeEntity();
+//        entity.removeEntity();
       }
     }
   }
 
   Future<void> createBullet() async {
     Entity bullet = Bullet(
-        screenWidth: _screenWidth,
-        screenHeight: _screenHeight,
         shootAngle: _player.angle,
         startPositionX: _player.position.x,
         startPositionY: _player.position.y);
@@ -161,6 +186,7 @@ class SpaceGame extends FlameGame
     _player.rotate(dx: info.raw.delta.dx);
   }
 
+/*
   void onFireButtonTapped() {
     createBullet();
   }
@@ -172,4 +198,6 @@ class SpaceGame extends FlameGame
   void onSpeedButtonTapped() {
     print("Speed!");
   }
+
+   */
 }

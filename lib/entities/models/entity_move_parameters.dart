@@ -1,4 +1,4 @@
-import 'package:spacehero/elements/asteroid.dart';
+import 'package:spacehero/entities/asteroid.dart';
 
 class EntityMoveParameters {
   final double angle;
