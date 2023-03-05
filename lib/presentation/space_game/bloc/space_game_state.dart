@@ -4,6 +4,7 @@ abstract class SpaceGameState extends Equatable {
   const SpaceGameState();
 }
 
+// Game states
 class SpaceGameInitialState extends SpaceGameState {
   const SpaceGameInitialState();
 
@@ -20,6 +21,7 @@ class SpaceGameStatusChanged extends SpaceGameState {
   List<Object?> get props => [status];
 }
 
+// Game loop states
 class SpaceGameScoreState extends SpaceGameState {
   final int score;
 
@@ -27,4 +29,14 @@ class SpaceGameScoreState extends SpaceGameState {
 
   @override
   List<Object?> get props => [score];
+}
+
+// Player states
+class PlayerFireState extends SpaceGameState {
+  final int count;
+
+  const PlayerFireState(this.count);
+
+  @override
+  List<Object?> get props => [count];
 }

@@ -13,6 +13,13 @@ class ScoreAddEvent extends SpaceGameEvent {
   List<Object?> get props => [scoreDelta];
 }
 
+class PlayerFireEvent extends SpaceGameEvent {
+
+  @override
+  List<Object?> get props => [];
+
+}
+
 class PlayerDiedEvent extends SpaceGameEvent {
   const PlayerDiedEvent();
 

@@ -18,11 +18,14 @@ enum GameStatus {
 class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
   final Size screenSize;
 
+  int rocketCount = 50;
+
   SpaceGameBloc({required this.screenSize})
       : super(const SpaceGameInitialState()) {
     on<ScoreAddEvent>(_gameLoopAddScore);
     on<PlayerDiedEvent>(_gameLoopPlayerDied);
     on<PlayerRespawnedEvent>(_gameLoopPlayerRespawned);
+    on<PlayerFireEvent>(_gameLoopPlayerFire);
   }
 
   FutureOr<void> _gameLoopPlayerDied(
@@ -39,4 +42,11 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
     final PlayerRespawnedEvent event,
     final Emitter<SpaceGameState> emit,
   ) {}
+
+  FutureOr<void> _gameLoopPlayerFire(
+    final PlayerFireEvent event,
+    final Emitter<SpaceGameState> emit,
+  ) {
+    emit(PlayerFireState(rocketCount --));
+  }
 }

@@ -44,7 +44,7 @@ class Bullet extends Entity with HasGameRef<SpaceGame> {
       setSpeed = 0;
       other.setSpeed = 0;
       other.setDestroyed = true;
-      gameRef.score++;
+   //   gameRef.score++;
       changeAnimation(other);
     } else if (other is BlackHole) {
 //      removeEntity();

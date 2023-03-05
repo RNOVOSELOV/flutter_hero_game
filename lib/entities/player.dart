@@ -2,22 +2,29 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame_bloc/flame_bloc.dart';
 import 'package:spacehero/entities/abs_entity.dart';
 import 'package:spacehero/entities/asteroid.dart';
 import 'package:spacehero/entities/black_hole.dart';
+import 'package:spacehero/entities/bullet.dart';
+import 'package:spacehero/presentation/space_game/bloc/space_game_bloc.dart';
 import 'package:spacehero/presentation/space_game/space_game.dart';
+import 'package:spacehero/resources/app_constants_parameters.dart';
 
-class Player extends Entity with HasGameRef<SpaceGame> {
-  static const _shipSideSize = 80.0;
-  static const double _speed = 1;
-  static const int _angleCoefficient = 80;
-
+class Player extends Entity
+    with
+        HasGameRef<SpaceGame>,
+        FlameBlocListenable<SpaceGameBloc, SpaceGameState> {
   bool gameOver = false;
 
-  Player({super.placePriority = 4}) {
-    initializeCoreVariables(speed: _speed, side: _shipSideSize);
-//    x = screenWidth / 2;
-//    y = screenHeight / 4 * 3;
+  Player({
+    required Vector2 gameplayArea,
+    super.placePriority = 4,
+  }) {
+    initializeCoreVariables(
+        speed: AppConstants.playerSpeed, side: AppConstants.playerShipSideSize);
+    x = gameplayArea[0] / 2;
+    y = gameplayArea[1] / 4 * 3;
   }
 
   @override
@@ -30,6 +37,26 @@ class Player extends Entity with HasGameRef<SpaceGame> {
       stepTime: 0.1,
     );
     return sResult;
+  }
+
+  @override
+  bool listenWhen(SpaceGameState previousState, SpaceGameState newState) {
+    print('listenWhen $previousState $newState ${newState is PlayerFireState}');
+    return newState is PlayerFireState;
+  }
+
+  @override
+  void onNewState(SpaceGameState state) {
+    print('1 onNewState' );
+    super.onNewState(state);
+    print('2 onNewState' );
+    Entity bullet = Bullet(
+        shootAngle: angle,
+        startPositionX: position.x,
+        startPositionY: position.y);
+    print('3 onNewState' );
+    gameRef.add(bullet);
+    print('4 onNewState' );
   }
 
   @override
@@ -66,7 +93,7 @@ class Player extends Entity with HasGameRef<SpaceGame> {
 
   void rotate({double? dx}) {
     if (dx != null) {
-      angle += dx / _angleCoefficient;
+      angle += dx / AppConstants.playerAngleRotationCoefficient;
     }
   }
 
@@ -76,8 +103,8 @@ class Player extends Entity with HasGameRef<SpaceGame> {
 
     if (x < 0) x = 0;
     if (y < 0) y = 0;
-    //   if (x > screenWidth) x = screenWidth;
-    //   if (y > screenHeight) y = screenHeight;
+    if (x > gameRef.getScreenWidth) x = gameRef.getScreenWidth;
+    if (y > gameRef.getScreenHeight) y = gameRef.getScreenHeight;
   }
 
   @override
