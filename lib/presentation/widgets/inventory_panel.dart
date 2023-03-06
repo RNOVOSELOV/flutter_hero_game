@@ -50,7 +50,7 @@ class _InventoryPanelState extends State<InventoryPanel> {
             ControlButton(
               imageAssetPath: 'assets/images/buttons/fire.png',
               onTap: fireButtonClicked,
-              delayNextTapMilliseconds: 500,
+              delayNextTapMilliseconds: 250,
               value: inventDto.rocket,
             ),
             ControlButton(

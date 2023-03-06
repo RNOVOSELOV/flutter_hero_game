@@ -16,7 +16,7 @@ enum GameStatus {
   gameOver, // game result screen
   statistics, // statistics screen
 }
-
+// TODO add isolate loop
 class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
   StatisticDto statistic = const StatisticDto.initial();
   InventDto invent = const InventDto.initial();

@@ -106,14 +106,14 @@ class Player extends Entity
         removeFromParent();
       }
       ..onFrame = (value) {
-        if (value == 2) {
-          size = other.size * 3;
+        if (value == 3) {
+          size = other.size * 4;
           other.add(OpacityEffect.to(
             0,
             onComplete: () => other.removeFromParent(),
             EffectController(
               curve: Curves.ease,
-              duration: 0.3,
+              duration: 0.1,
             ),
           ));
         }
@@ -136,7 +136,7 @@ class Player extends Entity
         removeFromParent();
       },
       EffectController(
-        curve: Curves.easeInQuint,
+        curve: Curves.easeInOutCirc,
         duration: 2,
       ),
     ));

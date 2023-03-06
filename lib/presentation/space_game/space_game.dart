@@ -4,7 +4,6 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame_bloc/flame_bloc.dart';
-import 'package:flutter/material.dart';
 import 'package:spacehero/entities/player.dart';
 import 'package:spacehero/entities_controllers/asteroid_controller.dart';
 import 'package:spacehero/entities_controllers/black_hole_controller.dart';
@@ -53,14 +52,9 @@ class SpaceGame extends FlameGame
     }
   }
 
-  @override
-  void render(Canvas canvas) {
-    super.render(canvas);
-//    scoreText.render(canvas, 'Score: $score', Vector2(10, 10));
-  }
 
 /*
-// TODO заменить на изолят
+
   @override
   void update(double dt) {
     super.update(dt);

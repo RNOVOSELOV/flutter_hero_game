@@ -2,19 +2,15 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/animation.dart';
 import 'package:spacehero/entities/abs_entity.dart';
 import 'package:spacehero/entities/asteroid.dart';
 import 'package:spacehero/entities/black_hole.dart';
 import 'package:spacehero/presentation/space_game/bloc/space_game_bloc.dart';
 import 'package:spacehero/presentation/space_game/space_game.dart';
+import 'package:spacehero/resources/app_constants_parameters.dart';
 
-class Bullet extends Entity
-    with HasGameRef<SpaceGame> {
-  static const _bulletSideSize = 20.0;
-  static const _bulletSpeed = 9.0;
-
+class Bullet extends Entity with HasGameRef<SpaceGame> {
   final double shootAngle;
 
   Bullet(
@@ -22,7 +18,8 @@ class Bullet extends Entity
       required double startPositionY,
       required this.shootAngle,
       super.placePriority = 3}) {
-    initializeCoreVariables(speed: _bulletSpeed, side: _bulletSideSize);
+    initializeCoreVariables(
+        speed: AppConstants.bulletSpeed, side: AppConstants.bulletSideSize);
     x = startPositionX;
     y = startPositionY;
     angle = shootAngle;

@@ -144,11 +144,10 @@ class Asteroid extends Entity with HasGameRef<SpaceGame> {
   }
 
   bool asteroidIsAvailable() {
-    if (position.x > gameRef.getScreenWidth || //+ sideSize ||
-        position.y > gameRef.getScreenHeight || //+ sideSize ||
-        position.x < 0 || // - sideSize ||
-        position.y < 0) {
-      //- sideSize) {
+    if (position.x > gameRef.getScreenWidth + sideSize ||
+        position.y > gameRef.getScreenHeight + sideSize ||
+        position.x < 0 - sideSize ||
+        position.y < 0 - sideSize) {
       return false;
     }
     return true;

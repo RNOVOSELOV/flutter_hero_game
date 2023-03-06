@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flame/game.dart';
 
 class EntityInitialInfo {
@@ -7,7 +5,5 @@ class EntityInitialInfo {
   final double? angle;
 
   EntityInitialInfo({required double x, required double y, this.angle})
-      : position = Vector2(x, y) {
-
-  }
+      : position = Vector2(x, y);
 }
