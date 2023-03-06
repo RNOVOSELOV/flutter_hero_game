@@ -1,9 +1,8 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:spacehero/presentation/space_game/dto/invent_dto.dart';
+import 'package:spacehero/presentation/space_game/dto/statistic_dto.dart';
 import 'package:spacehero/resources/app_constants_parameters.dart';
 
 part 'space_game_event.dart';
@@ -19,17 +18,9 @@ enum GameStatus {
 }
 
 class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
-  final gameStatusSubject =
-      BehaviorSubject<GameStatus>.seeded(GameStatus.initial);
-
-  final inventInfoSubject =
-      BehaviorSubject<InventDto>.seeded(const InventDto.initial());
-
-  Stream<GameStatus> observeGameStatus() => gameStatusSubject;
-
-  Stream<InventDto> observeInvent() => inventInfoSubject;
-
-  int lives = 0;
+  StatisticDto statistic = const StatisticDto.initial();
+  InventDto invent = const InventDto.initial();
+  GameStatus gameStatus = GameStatus.initial;
 
   SpaceGameBloc() : super(const SpaceGameInitialState()) {
     on<ScoreAddEvent>(_gameLoopAddScore);
@@ -49,48 +40,44 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
     final PlayerDiedEvent event,
     final Emitter<SpaceGameState> emit,
   ) async {
-    lives++;
+    statistic = statistic.copyWith(brokenLives: statistic.brokenLives + 1);
+    emit(StatisticChangedState(statistic: statistic));
     await respawnPlayer(emit);
   }
 
   FutureOr<void> respawnPlayer(Emitter emit) async {
-    gameStatusSubject.add(GameStatus.respawn);
+    gameStatus = GameStatus.respawn;
     emit(const SpaceGameStatusChanged(status: GameStatus.respawn));
     await Future.delayed(
       const Duration(seconds: AppConstants.playerRespawnTime),
       () {
-        if (gameStatusSubject.value == GameStatus.respawn) {
-          gameStatusSubject.add(GameStatus.respawned);
+        if (gameStatus == GameStatus.respawn) {
+          gameStatus = GameStatus.respawned;
           emit(const SpaceGameStatusChanged(status: GameStatus.respawned));
         }
       },
     );
   }
 
-  /// BELOW NOT CHECKED
-
-  FutureOr<void> _gameLoopAddScore(
-    final ScoreAddEvent event,
-    final Emitter<SpaceGameState> emit,
-  ) {}
-
   FutureOr<void> _gameLoopPlayerFire(
     final PlayerFireEvent event,
     final Emitter<SpaceGameState> emit,
   ) {
-    final inventValues = inventInfoSubject.value;
-    int rocketCount = inventValues.rocket - 1;
+    int rocketCount = invent.rocket - 1;
     if (rocketCount >= 0) {
+      invent = invent.copyWith(rocket: rocketCount);
       emit(PlayerFireState(rocketCount));
-      inventInfoSubject.add(inventValues.copyWith(rocket: rocketCount));
+      emit(InventChangedState(invent: invent));
     } else {
       rocketCount = 0;
     }
   }
 
-  @override
-  Future<void> close() {
-    inventInfoSubject.close();
-    return super.close();
+  FutureOr<void> _gameLoopAddScore(
+    final ScoreAddEvent event,
+    final Emitter<SpaceGameState> emit,
+  ) {
+    statistic = statistic.copyWith(score: statistic.score + event.scoreDelta);
+    emit(StatisticChangedState(statistic: statistic));
   }
 }

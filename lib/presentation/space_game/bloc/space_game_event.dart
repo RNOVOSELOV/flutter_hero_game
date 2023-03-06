@@ -16,13 +16,6 @@ class PlayerDiedEvent extends SpaceGameEvent {
   List<Object?> get props => [];
 }
 
-/////// BELOW NOT CHECKED
-
-class PlayerFireEvent extends SpaceGameEvent {
-  @override
-  List<Object?> get props => [];
-}
-
 class ScoreAddEvent extends SpaceGameEvent {
   final int scoreDelta;
 
@@ -30,4 +23,11 @@ class ScoreAddEvent extends SpaceGameEvent {
 
   @override
   List<Object?> get props => [scoreDelta];
+}
+
+/////// BELOW NOT CHECKED
+
+class PlayerFireEvent extends SpaceGameEvent {
+  @override
+  List<Object?> get props => [];
 }

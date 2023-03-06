@@ -21,6 +21,24 @@ class SpaceGameStatusChanged extends SpaceGameState {
   List<Object?> get props => [status];
 }
 
+class InventChangedState extends SpaceGameState {
+  final InventDto invent;
+
+  const InventChangedState({required this.invent});
+
+  @override
+  List<Object?> get props => [invent];
+}
+
+class StatisticChangedState extends SpaceGameState {
+  final StatisticDto statistic;
+
+  const StatisticChangedState({required this.statistic});
+
+  @override
+  List<Object?> get props => [];
+}
+
 // Game loop states
 class SpaceGameScoreState extends SpaceGameState {
   final int score;

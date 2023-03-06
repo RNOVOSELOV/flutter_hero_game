@@ -2,13 +2,16 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
+import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/animation.dart';
 import 'package:spacehero/entities/abs_entity.dart';
 import 'package:spacehero/entities/asteroid.dart';
 import 'package:spacehero/entities/black_hole.dart';
+import 'package:spacehero/presentation/space_game/bloc/space_game_bloc.dart';
 import 'package:spacehero/presentation/space_game/space_game.dart';
 
-class Bullet extends Entity with HasGameRef<SpaceGame> {
+class Bullet extends Entity
+    with HasGameRef<SpaceGame> {
   static const _bulletSideSize = 20.0;
   static const _bulletSpeed = 9.0;
 
@@ -26,7 +29,7 @@ class Bullet extends Entity with HasGameRef<SpaceGame> {
   }
 
   @override
-  FutureOr<void> onLoad() async {
+  Future<void> onLoad() async {
     final sResult = await super.onLoad();
     final sprites = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
         .map((i) => Sprite.load('bullet_$i.png'))
@@ -46,8 +49,7 @@ class Bullet extends Entity with HasGameRef<SpaceGame> {
       setSpeed = 0;
       other.setSpeed = 0;
       other.setDestroying = true;
-      //TODO addScoreIncreasing;
-      //   gameRef.score++;
+      gameRef.bloc.add(const ScoreAddEvent(scoreDelta: 1));
       changeAnimation(other);
     } else if (other is BlackHole) {
       removeFromParent();

@@ -20,6 +20,5 @@ class BlackHoleController extends TimerComponent with HasGameRef<SpaceGame> {
       blackHole = BlackHole(gameplayArea: gameRef.size);
       parent?.add(blackHole!);
     }
-//    print('Black hole timer ticked! Elements: ${gameRef.children.toString()}');
   }
 }

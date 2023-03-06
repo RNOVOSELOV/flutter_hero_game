@@ -126,7 +126,7 @@ class Asteroid extends Entity with HasGameRef<SpaceGame> {
   void animateEntity(double dt) {
     if (!asteroidIsAvailable()) {
       loadSprites();
-      setAsteroidParameters(gameplayArea: gameRef.size);
+      removeFromParent();
       return;
     }
     move();

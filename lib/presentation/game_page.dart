@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spacehero/presentation/space_game/bloc/space_game_bloc.dart';
 import 'package:spacehero/presentation/space_game/space_game.dart';
 import 'package:spacehero/presentation/widgets/inventory_panel.dart';
+import 'package:spacehero/presentation/widgets/stats_panel.dart';
+import 'package:spacehero/resources/app_colors.dart';
 
 class GamePage extends StatelessWidget {
   const GamePage({Key? key}) : super(key: key);
@@ -28,6 +30,7 @@ class GameView extends StatelessWidget {
       children: [
         Positioned.fill(child: Game()),
         InventoryPanel(),
+        StatisticsPanel(),
       ],
     );
   }

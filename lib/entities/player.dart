@@ -126,7 +126,7 @@ class Player extends Entity
       position,
       EffectController(
         duration: 2,
-        curve: Curves.easeInQuint,
+        curve: Curves.easeInOutCirc,
       ),
     ));
     add(ScaleEffect.by(
