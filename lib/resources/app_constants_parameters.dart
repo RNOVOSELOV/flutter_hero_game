@@ -1,6 +1,11 @@
 class AppConstants {
   AppConstants._();
 
+  static const int defaultSpeedBonus = 0;
+  static const int defaultArmorBonus = 0;
+  static const int defaultRocketCount = 10;
+  static const int defaultBombCount = 1;
+
   static const asteroidMinimumSpeed = 2;
   static const asteroidAdditionalRandomSpeed = 3;
   static const asteroidMinimumSideSize = 30;

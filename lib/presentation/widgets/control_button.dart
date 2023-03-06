@@ -4,12 +4,14 @@ class ControlButton extends StatefulWidget {
   final void Function(BuildContext context) onTap;
   final String imageAssetPath;
   final int delayNextTapMilliseconds;
+  final int value;
 
   const ControlButton({
     super.key,
     required this.onTap,
     required this.imageAssetPath,
     required this.delayNextTapMilliseconds,
+    required this.value,
   });
 
   @override
@@ -21,6 +23,9 @@ class _ControlButtonState extends State<ControlButton> {
 
   @override
   Widget build(BuildContext context) {
+    if (widget.value == 0) {
+      _active = false;
+    }
     return GestureDetector(
       onTap: !_active
           ? null
@@ -46,12 +51,37 @@ class _ControlButtonState extends State<ControlButton> {
           borderRadius: BorderRadius.circular(8),
           color: Colors.white24,
         ),
-        child: ColorFiltered(
-          colorFilter: ColorFilter.mode(
-            _active ? Colors.transparent : Colors.grey,
-            BlendMode.saturation,
-          ),
-          child: Image.asset(widget.imageAssetPath),
+        child: Stack(
+          children: [
+            if (widget.value != 0)
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Container(
+                  height: 20,
+                  width: 20,
+                  margin: const EdgeInsets.all(2),
+                  decoration: const BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        "${widget.value}",
+                        textAlign: TextAlign.center,
+                        style:
+                            const TextStyle(color: Colors.black87, fontSize: 6),
+                      )),
+                ),
+              ),
+            ColorFiltered(
+              colorFilter: ColorFilter.mode(
+                _active ? Colors.transparent : Colors.grey,
+                BlendMode.saturation,
+              ),
+              child: Image.asset(widget.imageAssetPath),
+            ),
+          ],
         ),
       ),
     );

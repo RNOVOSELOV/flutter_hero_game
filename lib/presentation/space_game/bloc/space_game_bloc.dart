@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rxdart/rxdart.dart';
+import 'package:spacehero/presentation/space_game/dto/invent_dto.dart';
 
 part 'space_game_event.dart';
 
@@ -18,7 +20,10 @@ enum GameStatus {
 class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
   final Size screenSize;
 
-  int rocketCount = 50;
+  final inventInfoSubject =
+      BehaviorSubject<InventDto>.seeded(const InventDto.initial());
+
+  Stream<InventDto> observeInvent() => inventInfoSubject;
 
   SpaceGameBloc({required this.screenSize})
       : super(const SpaceGameInitialState()) {
@@ -47,6 +52,19 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
     final PlayerFireEvent event,
     final Emitter<SpaceGameState> emit,
   ) {
-    emit(PlayerFireState(rocketCount --));
+    final inventValues = inventInfoSubject.value;
+    int rocketCount = inventValues.rocket - 1;
+    if (rocketCount >= 0) {
+      emit(PlayerFireState(rocketCount));
+      inventInfoSubject.add(inventValues.copyWith(rocket: rocketCount));
+    } else {
+      rocketCount = 0;
+    }
+  }
+
+  @override
+  Future<void> close() {
+    inventInfoSubject.close();
+    return super.close();
   }
 }

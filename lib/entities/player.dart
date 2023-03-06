@@ -41,22 +41,17 @@ class Player extends Entity
 
   @override
   bool listenWhen(SpaceGameState previousState, SpaceGameState newState) {
-    print('listenWhen $previousState $newState ${newState is PlayerFireState}');
     return newState is PlayerFireState;
   }
 
   @override
   void onNewState(SpaceGameState state) {
-    print('1 onNewState' );
     super.onNewState(state);
-    print('2 onNewState' );
     Entity bullet = Bullet(
         shootAngle: angle,
         startPositionX: position.x,
         startPositionY: position.y);
-    print('3 onNewState' );
     gameRef.add(bullet);
-    print('4 onNewState' );
   }
 
   @override
