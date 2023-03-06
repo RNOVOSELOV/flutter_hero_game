@@ -1,20 +1,20 @@
-import 'dart:async';
 import 'dart:math';
 
 import 'package:flame/components.dart';
 import 'package:spacehero/entities/asteroid.dart';
 import 'package:spacehero/entities/models/entity_initial_info.dart';
 import 'package:spacehero/presentation/space_game/space_game.dart';
+import 'package:spacehero/resources/app_constants_parameters.dart';
 
 class AsteroidController extends TimerComponent with HasGameRef<SpaceGame> {
-  static const double _asteroidGenerationTimeInSeconds = 5;
+
 
   AsteroidController()
-      : super(period: _asteroidGenerationTimeInSeconds, repeat: true);
+      : super(period: AppConstants.asteroidGenerationTimeInSeconds, repeat: true);
 
   @override
   void onTick() {
- //   gameRef.add(Asteroid(gameplayArea: gameRef.size));
+    parent?.add(Asteroid(gameplayArea: gameRef.size));
   }
 }
 

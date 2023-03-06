@@ -6,29 +6,29 @@ import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
 import 'package:spacehero/entities/abs_entity.dart';
 import 'package:spacehero/presentation/space_game/space_game.dart';
+import 'package:spacehero/resources/app_constants_parameters.dart';
 
 class BlackHole extends Entity with HasGameRef<SpaceGame> {
-  static const _minimumHoleRotationSpeed = 2;
-  static const _additionalRandomHoleRotationSpeed = 2;
-  static const _minimumHoleSideSize = 100;
-  static const _additionalRandomHoleSideSize = 40;
-
   // Угол вращения вокруг собственной оси
   late final double _angleRotationSpeed;
   bool removeFlag = false;
 
   BlackHole({
+    required Vector2 gameplayArea,
     super.placePriority = 1,
   }) {
-    final random = Random(DateTime.now().microsecond);
-    final double generatedSpeed = _minimumHoleRotationSpeed +
-        random.nextDouble() * _additionalRandomHoleRotationSpeed;
-    final double generatedSideSize = _minimumHoleSideSize +
-        random.nextDouble() * _additionalRandomHoleSideSize;
+    final random = Random(DateTime
+        .now()
+        .microsecond);
+    final double generatedSpeed = AppConstants.blackHoleMinimumRotationSpeed +
+        random.nextDouble() *
+            AppConstants.blackHolAdditionalRandomRotationSpeed;
+    final double generatedSideSize = AppConstants.blackHolMinimumSideSize +
+        random.nextDouble() * AppConstants.blackHolAdditionalRandomSideSize;
     initializeCoreVariables(speed: generatedSpeed, side: generatedSideSize);
 
- //   x = random.nextDouble() * (screenWidth - sideSize) + sideSize / 2;
- //   y = random.nextDouble() * (screenHeight - sideSize) + sideSize / 2;
+    x = random.nextDouble() * (gameplayArea[0] - sideSize) + sideSize / 2;
+    y = random.nextDouble() * (gameplayArea[1] - sideSize) + sideSize / 2;
     _angleRotationSpeed = random.nextDouble() + speed / 4;
     scale = Vector2(0.3, 0.3);
   }
@@ -40,6 +40,7 @@ class BlackHole extends Entity with HasGameRef<SpaceGame> {
     animation = SpriteAnimation.spriteList(
       await Future.wait(sprites),
       stepTime: 5,
+      loop: false,
     );
     return sResult;
   }
@@ -60,16 +61,16 @@ class BlackHole extends Entity with HasGameRef<SpaceGame> {
     }
   }
 
-  @override
   void removeEntity() {
     removeFlag = true;
-    add(ScaleEffect.by(
+    final Effect effect = ScaleEffect.by(
       Vector2.all(0.1),
-//      onComplete: () => super.removeEntity(),
+      onComplete: () => removeFromParent(),
       EffectController(
         curve: Curves.bounceIn,
         duration: 2,
       ),
-    ));
+    );
+    add(effect);
   }
 }

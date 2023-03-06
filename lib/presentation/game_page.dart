@@ -10,10 +10,9 @@ class GamePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
     return Scaffold(
       body: BlocProvider(
-        create: (context) => SpaceGameBloc(screenSize: size),
+        create: (context) => SpaceGameBloc(),
         child: const GameView(),
       ),
     );

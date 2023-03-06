@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 
 abstract class Entity extends SpriteAnimationComponent with CollisionCallbacks {
 
@@ -20,7 +21,7 @@ abstract class Entity extends SpriteAnimationComponent with CollisionCallbacks {
   double get sideSize => _sideSize;
 
   Entity({
-    int placePriority = 1,
+    required int placePriority,
   }) : super(priority: placePriority) {
     debugMode = true;
   }

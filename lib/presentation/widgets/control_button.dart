@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spacehero/resources/app_colors.dart';
 
 class ControlButton extends StatefulWidget {
   final void Function(BuildContext context) onTap;
@@ -49,7 +50,7 @@ class _ControlButtonState extends State<ControlButton> {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          color: Colors.white24,
+          color: AppColors.colorInfoButtonEnabledColor,
         ),
         child: Stack(
           children: [
@@ -61,7 +62,7 @@ class _ControlButtonState extends State<ControlButton> {
                   width: 20,
                   margin: const EdgeInsets.all(2),
                   decoration: const BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.colorWhite,
                     shape: BoxShape.circle,
                   ),
                   child: Align(
@@ -70,13 +71,13 @@ class _ControlButtonState extends State<ControlButton> {
                         "${widget.value}",
                         textAlign: TextAlign.center,
                         style:
-                            const TextStyle(color: Colors.black87, fontSize: 6),
+                            const TextStyle(color: AppColors.colorInfoButtonTextColor, fontSize: 6),
                       )),
                 ),
               ),
             ColorFiltered(
               colorFilter: ColorFilter.mode(
-                _active ? Colors.transparent : Colors.grey,
+                _active ? AppColors.colorTransparent : AppColors.colorInfoButtonDisabledColor,
                 BlendMode.saturation,
               ),
               child: Image.asset(widget.imageAssetPath),

@@ -2,7 +2,9 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame_bloc/flame_bloc.dart';
+import 'package:flutter/animation.dart';
 import 'package:spacehero/entities/abs_entity.dart';
 import 'package:spacehero/entities/asteroid.dart';
 import 'package:spacehero/entities/black_hole.dart';
@@ -15,12 +17,16 @@ class Player extends Entity
     with
         HasGameRef<SpaceGame>,
         FlameBlocListenable<SpaceGameBloc, SpaceGameState> {
-  bool gameOver = false;
+  bool respawnModeIsActive = true;
 
   Player({
     required Vector2 gameplayArea,
     super.placePriority = 4,
   }) {
+    setPlayerParameters(gameplayArea: gameplayArea);
+  }
+
+  void setPlayerParameters({required Vector2 gameplayArea}) {
     initializeCoreVariables(
         speed: AppConstants.playerSpeed, side: AppConstants.playerShipSideSize);
     x = gameplayArea[0] / 2;
@@ -30,13 +36,28 @@ class Player extends Entity
   @override
   FutureOr<void> onLoad() async {
     final sResult = await super.onLoad();
+    await loadRespawnSprites();
+    return sResult;
+  }
+
+  FutureOr<void> loadRespawnSprites() async {
+    final sprites = [0, 1, 2, 3, 4, 5, 10, 10, 10]
+        .map((i) => Sprite.load('plane_$i.png'))
+        .toList();
+    animation = SpriteAnimation.spriteList(
+      await Future.wait(sprites),
+      stepTime: 0.1,
+    );
+  }
+
+  FutureOr<void> respawnModeEnd() async {
+    respawnModeIsActive = false;
     final sprites =
         [0, 1, 2, 3, 4, 5].map((i) => Sprite.load('plane_$i.png')).toList();
     animation = SpriteAnimation.spriteList(
       await Future.wait(sprites),
       stepTime: 0.1,
     );
-    return sResult;
   }
 
   @override
@@ -46,6 +67,7 @@ class Player extends Entity
 
   @override
   void onNewState(SpaceGameState state) {
+    print('Player. onNewState: $state');
     super.onNewState(state);
     Entity bullet = Bullet(
         shootAngle: angle,
@@ -58,32 +80,66 @@ class Player extends Entity
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
-    if (gameOver) {
+    if (respawnModeIsActive) {
       return;
     }
     if (other is Asteroid) {
-      if (other.isDestroyed) {
+      if (other.isDestroying) {
         return;
       }
+      setSpeed = 0;
       other.setSpeed = 0;
-      changeAnimation();
+      liveBrokenByAsteroid(other);
     } else if (other is BlackHole) {
-      changeAnimation();
+      liveBrokenByBlackHole(other.position);
     }
   }
 
-  FutureOr<void> changeAnimation() async {
-    //TODO GAME OVER убрать
-//    gameOver = true;
+  FutureOr<void> liveBrokenByAsteroid(Asteroid other) async {
     final sprites = [0, 1, 2, 3, 4, 5, 6]
         .map((i) => Sprite.load('plane_explosion_$i.png'))
         .toList();
     animation = SpriteAnimation.spriteList(await Future.wait(sprites),
-        stepTime: 0.3, loop: false)
+        stepTime: 0.2, loop: false)
       ..onComplete = () {
-        print('Game Over');
-//        removeEntity();
+        bloc.add(const PlayerDiedEvent());
+        removeFromParent();
+      }
+      ..onFrame = (value) {
+        if (value == 2) {
+          size = other.size * 3;
+          other.add(OpacityEffect.to(
+            0,
+            onComplete: () => other.removeFromParent(),
+            EffectController(
+              curve: Curves.ease,
+              duration: 0.3,
+            ),
+          ));
+        }
       };
+  }
+
+  FutureOr<void> liveBrokenByBlackHole(Vector2 position) async {
+    setSpeed = 0;
+    add(MoveToEffect(
+      position,
+      EffectController(
+        duration: 2,
+        curve: Curves.easeInQuint,
+      ),
+    ));
+    add(ScaleEffect.by(
+      Vector2.all(0.1),
+      onComplete: () {
+        bloc.add(const PlayerDiedEvent());
+        removeFromParent();
+      },
+      EffectController(
+        curve: Curves.easeInQuint,
+        duration: 2,
+      ),
+    ));
   }
 
   void rotate({double? dx}) {
@@ -100,14 +156,6 @@ class Player extends Entity
     if (y < 0) y = 0;
     if (x > gameRef.getScreenWidth) x = gameRef.getScreenWidth;
     if (y > gameRef.getScreenHeight) y = gameRef.getScreenHeight;
-  }
-
-  @override
-  void update(double dt) {
-    super.update(dt);
-    if (!gameOver) {
-      animateEntity(dt);
-    }
   }
 
   @override

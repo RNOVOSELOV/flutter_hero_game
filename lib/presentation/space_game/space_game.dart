@@ -15,7 +15,7 @@ class SpaceGame extends FlameGame
     with HasCollisionDetection, HasKeyboardHandlerComponents, PanDetector {
   final SpaceGameBloc bloc;
   final _background = SpriteComponent();
-  late final Player player;
+  Player? player;
 
   late final double _screenWidth;
   late final double _screenHeight;
@@ -39,18 +39,18 @@ class SpaceGame extends FlameGame
     await add(FlameBlocProvider<SpaceGameBloc, SpaceGameState>.value(
       value: bloc,
       children: [
-        player = Player(gameplayArea: size),
         PlayerController(),
+        BlackHoleController(),
+        AsteroidController(),
       ],
     ));
-
-    add(BlackHoleController());
-    add(AsteroidController());
   }
 
   @override
   void onPanUpdate(DragUpdateInfo info) {
-    player.rotate(dx: info.raw.delta.dx);
+    if (player != null) {
+      player!.rotate(dx: info.raw.delta.dx);
+    }
   }
 
   @override
@@ -73,45 +73,4 @@ class SpaceGame extends FlameGame
     manageEntities(dt);
   }
 */
-/*
-
-  FutureOr<void> blackHoleManager() async {
-    bool blackHoleIsPresent = false;
-    for (Entity entity in entities) {
-      if (entity is BlackHole) {
-        blackHoleIsPresent = true;
-        entity.removeEntity();
-        _maxAsteroidCount--;
-      }
-    }
-    if (!blackHoleIsPresent) {
-      _maxAsteroidCount++;
-      Entity blackHole = BlackHole();
-      entities.add(blackHole);
-      await add(blackHole);
-    }
-  }
-
-  Future<void> manageEntities(double dt) async {
-    if (entities.length < _maxAsteroidCount) {
-      //     Entity asteroid =
-      //         Asteroid();
-      //     entities.add(asteroid);
-      //     await add(asteroid);
-    }
-    for (Entity entity in entities) {
-      entity.animateEntity(dt);
-      if (entity.x > _screenWidth + entity.size[0] ||
-          entity.y > _screenHeight + entity.size[0] ||
-          entity.x < 0 - entity.size[0] ||
-          entity.y < 0 - entity.size[0]) {
-//        entity.removeEntity();
-      }
-    }
-  }
-
-
-
-
- */
 }

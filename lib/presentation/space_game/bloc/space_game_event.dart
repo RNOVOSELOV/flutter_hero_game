@@ -4,20 +4,9 @@ abstract class SpaceGameEvent extends Equatable {
   const SpaceGameEvent();
 }
 
-class ScoreAddEvent extends SpaceGameEvent {
-  final int scoreDelta;
-
-  const ScoreAddEvent({required this.scoreDelta});
-
-  @override
-  List<Object?> get props => [scoreDelta];
-}
-
-class PlayerFireEvent extends SpaceGameEvent {
-
+class GameLoadedEvent extends SpaceGameEvent {
   @override
   List<Object?> get props => [];
-
 }
 
 class PlayerDiedEvent extends SpaceGameEvent {
@@ -27,9 +16,18 @@ class PlayerDiedEvent extends SpaceGameEvent {
   List<Object?> get props => [];
 }
 
-class PlayerRespawnedEvent extends SpaceGameEvent {
-  const PlayerRespawnedEvent();
+/////// BELOW NOT CHECKED
 
+class PlayerFireEvent extends SpaceGameEvent {
   @override
   List<Object?> get props => [];
+}
+
+class ScoreAddEvent extends SpaceGameEvent {
+  final int scoreDelta;
+
+  const ScoreAddEvent({required this.scoreDelta});
+
+  @override
+  List<Object?> get props => [scoreDelta];
 }

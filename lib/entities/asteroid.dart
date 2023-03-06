@@ -13,8 +13,8 @@ import 'package:spacehero/resources/app_constants_parameters.dart';
 import 'package:spacehero/utils/math_helper.dart';
 
 class Asteroid extends Entity with HasGameRef<SpaceGame> {
-  bool asteroidCollisionFlag = false;
-  bool destroyedFlag = false;
+  bool anotherAsteroidCollisionFlag = false;
+  bool disableCollisionFlag = false;
 
   // Угол направления движения астороида
   late double _angleDirection;
@@ -26,9 +26,9 @@ class Asteroid extends Entity with HasGameRef<SpaceGame> {
 
   set setAngleDirection(double value) => _angleDirection = value;
 
-  bool get isDestroyed => destroyedFlag;
+  bool get isDestroying => disableCollisionFlag;
 
-  set setDestroyed(bool flag) => destroyedFlag = flag;
+  set setDestroying(bool flag) => disableCollisionFlag = flag;
 
   Asteroid({
     required Vector2 gameplayArea,
@@ -75,21 +75,21 @@ class Asteroid extends Entity with HasGameRef<SpaceGame> {
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
-    if (destroyedFlag) {
+    if (disableCollisionFlag) {
       return;
     }
     if (other is Asteroid) {
-      if (other.isDestroyed) {
+      if (other.isDestroying) {
         return;
       }
       final Asteroid asteroid = other;
-      if (asteroidCollisionFlag) {
-        asteroidCollisionFlag = false;
-        asteroid.asteroidCollisionFlag = false;
+      if (anotherAsteroidCollisionFlag) {
+        anotherAsteroidCollisionFlag = false;
+        asteroid.anotherAsteroidCollisionFlag = false;
         return;
       }
-      asteroidCollisionFlag = true;
-      asteroid.asteroidCollisionFlag = true;
+      anotherAsteroidCollisionFlag = true;
+      asteroid.anotherAsteroidCollisionFlag = true;
       changeAsteroidParameters(other);
     } else if (other is BlackHole) {
       final holePosition = other.position;
@@ -130,13 +130,6 @@ class Asteroid extends Entity with HasGameRef<SpaceGame> {
     }
     move();
     rotate(dt);
-    // if (removeScaleFlag) {
-    //   final currScale = scale.x - dt * 1.5;
-    //   if (currScale <= 0) {
-    //     removeEntity();
-    //   }
-    //   scale = Vector2(currScale, currScale);
-    // }
   }
 
   void move() {
@@ -153,7 +146,8 @@ class Asteroid extends Entity with HasGameRef<SpaceGame> {
     if (position.x > gameRef.getScreenWidth || //+ sideSize ||
         position.y > gameRef.getScreenHeight || //+ sideSize ||
         position.x < 0 || // - sideSize ||
-        position.y < 0 ){//- sideSize) {
+        position.y < 0) {
+      //- sideSize) {
       return false;
     }
     return true;

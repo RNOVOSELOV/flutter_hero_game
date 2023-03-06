@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
+import 'package:flutter/animation.dart';
 import 'package:spacehero/entities/abs_entity.dart';
 import 'package:spacehero/entities/asteroid.dart';
 import 'package:spacehero/entities/black_hole.dart';
@@ -43,11 +45,12 @@ class Bullet extends Entity with HasGameRef<SpaceGame> {
     if (other is Asteroid) {
       setSpeed = 0;
       other.setSpeed = 0;
-      other.setDestroyed = true;
-   //   gameRef.score++;
+      other.setDestroying = true;
+      //TODO addScoreIncreasing;
+      //   gameRef.score++;
       changeAnimation(other);
     } else if (other is BlackHole) {
-//      removeEntity();
+      removeFromParent();
     }
   }
 
@@ -58,13 +61,20 @@ class Bullet extends Entity with HasGameRef<SpaceGame> {
     animation = SpriteAnimation.spriteList(await Future.wait(sprites),
         stepTime: 0.2, loop: false)
       ..onComplete = () {
-        //removeEntity();
+        removeFromParent();
       }
       ..onFrame = (value) {
         if (value == 1) {
-          size = other.size * 3; // TODO анимировать увеличение размера
-        } else if (value == 5) {
-          //other.removeEntity(); // TODO возможно анимировать opacity
+          size = other.size * 3;
+        } else if (value == 3) {
+          other.add(OpacityEffect.to(
+            0,
+            onComplete: () => other.removeFromParent(),
+            EffectController(
+              curve: Curves.ease,
+              duration: 0.5,
+            ),
+          )); // TODO возможно анимировать opacity
         }
       };
   }
@@ -77,5 +87,18 @@ class Bullet extends Entity with HasGameRef<SpaceGame> {
   @override
   void animateEntity(double dt) {
     move();
+    if (!bulletIsAvailable()) {
+      removeFromParent();
+    }
+  }
+
+  bool bulletIsAvailable() {
+    if (position.x > gameRef.getScreenWidth + sideSize ||
+        position.y > gameRef.getScreenHeight + sideSize ||
+        position.x < 0 - sideSize ||
+        position.y < 0 - sideSize) {
+      return false;
+    }
+    return true;
   }
 }
