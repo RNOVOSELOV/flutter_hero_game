@@ -10,7 +10,6 @@ import 'package:spacehero/entities/models/entity_move_parameters.dart';
 import 'package:spacehero/entities_controllers/asteroid_controller.dart';
 import 'package:spacehero/presentation/space_game/space_game.dart';
 import 'package:spacehero/resources/app_constants_parameters.dart';
-import 'package:spacehero/utils/math_helper.dart';
 
 class Asteroid extends Entity with HasGameRef<SpaceGame> {
   bool anotherAsteroidCollisionFlag = false;
@@ -92,18 +91,20 @@ class Asteroid extends Entity with HasGameRef<SpaceGame> {
       asteroid.anotherAsteroidCollisionFlag = true;
       changeAsteroidParameters(other);
     } else if (other is BlackHole) {
-      final holePosition = other.position;
-      final newAngle = getAngle(position, holePosition);
-      _angleDirection = getShortAngle(_angleDirection, newAngle);
-      setAsteroidMovingParameters(
-          EntityMoveParameters(angle: angleDirection, speed: 2));
-
+      setSpeed = 0;
       add(ScaleEffect.by(
         Vector2.all(0.1),
         onComplete: () => removeFromParent(),
         EffectController(
           curve: Curves.easeOutQuad,
           duration: 2,
+        ),
+      ));
+      add(MoveToEffect(
+        other.position,
+        EffectController(
+          duration: 2,
+          curve: Curves.ease,
         ),
       ));
     }
