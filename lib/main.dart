@@ -1,11 +1,7 @@
-import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:provider/provider.dart';
-import 'package:spacehero/flame/space_game.dart';
-import 'package:spacehero/game_core/game_bloc.dart';
-import 'package:spacehero/resources/app_images.dart';
+import 'package:spacehero/presentation/game_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,60 +13,14 @@ void main() {
       SystemUiMode.manual,
       overlays: [SystemUiOverlay.bottom],
     );
-    runApp(GameWidget(game: SpaceGame()));
-
-/*    runApp(MaterialApp(
+    runApp(MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: _buildTheme(Brightness.dark),
       home: const SafeArea(
-        child: Scaffold(
-          body: MyApp(),
-        ),
+        child: GamePage(),
       ),
-    )); */
+    ));
   });
-}
-
-class MyApp extends StatefulWidget {
-  const MyApp({super.key});
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  late GameBloc bloc;
-
-  @override
-  void initState() {
-    super.initState();
-    bloc = GameBloc();
-
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      final screenHeight = MediaQuery.of(context).size.height;
-      final screenWidth = MediaQuery.of(context).size.width;
-      bloc.initBloc(width: screenWidth, height: screenHeight);
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Provider.value(
-      value: bloc,
-      child: Container(
-          decoration: const BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage(AppImages.backgroundImage),
-                  fit: BoxFit.cover)),
-          child: SizedBox.shrink()), //const Game()),
-    );
-  }
-
-  @override
-  void dispose() {
-    bloc.dispose();
-    super.dispose();
-  }
 }
 
 ThemeData _buildTheme(brightness) {

@@ -1,60 +1,165 @@
+import 'dart:async';
 import 'dart:math';
 
-import 'package:flutter/material.dart';
-import 'package:spacehero/entities/entity.dart';
+import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
+import 'package:flame_bloc/flame_bloc.dart';
+import 'package:flutter/animation.dart';
+import 'package:spacehero/entities/abs_entity.dart';
+import 'package:spacehero/entities/asteroid.dart';
+import 'package:spacehero/entities/black_hole.dart';
+import 'package:spacehero/entities/bullet.dart';
+import 'package:spacehero/presentation/space_game/bloc/space_game_bloc.dart';
+import 'package:spacehero/presentation/space_game/space_game.dart';
+import 'package:spacehero/resources/app_constants_parameters.dart';
 
-class Player extends Entity {
-  final double screenWidth;
-  final double screenHeight;
+class Player extends Entity
+    with
+        HasGameRef<SpaceGame>,
+        FlameBlocListenable<SpaceGameBloc, SpaceGameState> {
+  bool respawnModeIsActive = true;
 
   Player({
-    required this.screenWidth,
-    required this.screenHeight,
-  }) : super(spriteName: "player", x: screenWidth/2, y: screenHeight/2);
+    required Vector2 gameplayArea,
+    super.placePriority = 4,
+  }) {
+    setPlayerParameters(gameplayArea: gameplayArea);
+  }
 
-  double _angle = 0;
-  double _degree = 0;
-  final double _speed = 3;
-  bool isMovedLeft = false;
-  bool isMovedRight = false;
-  bool _isAcceleration = false;
-
-  get getAngle => _angle;
-
-  void resetSpeed() {
-    _isAcceleration = !_isAcceleration;
+  void setPlayerParameters({required Vector2 gameplayArea}) {
+    initializeCoreVariables(
+        speed: AppConstants.playerSpeed, side: AppConstants.playerShipSideSize);
+    x = gameplayArea[0] / 2;
+    y = gameplayArea[1] / 4 * 3;
   }
 
   @override
-  Widget build() {
-    return Positioned(
-      top: y,
-      left: x,
-      child: isVisible
-          ? Transform.rotate(
-              angle: _angle,
-              child: sprites[currentSprite],
-            )
-          : const SizedBox(),
+  FutureOr<void> onLoad() async {
+    final sResult = await super.onLoad();
+    await loadRespawnSprites();
+    return sResult;
+  }
+
+  FutureOr<void> loadRespawnSprites() async {
+    final sprites = [0, 1, 2, 3, 4, 5, 10, 10, 10]
+        .map((i) => Sprite.load('plane_$i.png'))
+        .toList();
+    animation = SpriteAnimation.spriteList(
+      await Future.wait(sprites),
+      stepTime: 0.1,
+    );
+  }
+
+  FutureOr<void> respawnModeEnd() async {
+    respawnModeIsActive = false;
+    final sprites =
+        [0, 1, 2, 3, 4, 5].map((i) => Sprite.load('plane_$i.png')).toList();
+    animation = SpriteAnimation.spriteList(
+      await Future.wait(sprites),
+      stepTime: 0.1,
     );
   }
 
   @override
-  void move() {
-    if (isMovedLeft) _degree -= 5;
-    if (isMovedRight) _degree += 5;
-    isMovedLeft = false;
-    isMovedRight = false;
-    _angle = (_degree * pi) / 180;
-    if (!_isAcceleration) {
+  bool listenWhen(SpaceGameState previousState, SpaceGameState newState) {
+    return newState is PlayerFireState;
+  }
+
+  @override
+  void onNewState(SpaceGameState state) {
+    print('Player. onNewState: $state');
+    super.onNewState(state);
+    Entity bullet = Bullet(
+        shootAngle: angle,
+        startPositionX: position.x,
+        startPositionY: position.y);
+    gameRef.add(bullet);
+  }
+
+  @override
+  void onCollisionStart(
+      Set<Vector2> intersectionPoints, PositionComponent other) {
+    super.onCollisionStart(intersectionPoints, other);
+    if (respawnModeIsActive) {
       return;
     }
+    if (other is Asteroid) {
+      if (other.isDestroying) {
+        return;
+      }
+      setSpeed = 0;
+      other.setSpeed = 0;
+      liveBrokenByAsteroid(other);
+    } else if (other is BlackHole) {
+      liveBrokenByBlackHole(other.position);
+    }
+  }
 
-    x += sin(_degree * 0.0175) * _speed;
-    y -= cos(_degree * 0.0175) * _speed;
+  FutureOr<void> liveBrokenByAsteroid(Asteroid other) async {
+    final sprites = [0, 1, 2, 3, 4, 5, 6]
+        .map((i) => Sprite.load('plane_explosion_$i.png'))
+        .toList();
+    animation = SpriteAnimation.spriteList(await Future.wait(sprites),
+        stepTime: 0.2, loop: false)
+      ..onComplete = () {
+        bloc.add(const PlayerDiedEvent());
+        removeFromParent();
+      }
+      ..onFrame = (value) {
+        if (value == 2) {
+          size = other.size * 3;
+          other.add(OpacityEffect.to(
+            0,
+            onComplete: () => other.removeFromParent(),
+            EffectController(
+              curve: Curves.ease,
+              duration: 0.3,
+            ),
+          ));
+        }
+      };
+  }
+
+  FutureOr<void> liveBrokenByBlackHole(Vector2 position) async {
+    setSpeed = 0;
+    add(MoveToEffect(
+      position,
+      EffectController(
+        duration: 2,
+        curve: Curves.easeInQuint,
+      ),
+    ));
+    add(ScaleEffect.by(
+      Vector2.all(0.1),
+      onComplete: () {
+        bloc.add(const PlayerDiedEvent());
+        removeFromParent();
+      },
+      EffectController(
+        curve: Curves.easeInQuint,
+        duration: 2,
+      ),
+    ));
+  }
+
+  void rotate({double? dx}) {
+    if (dx != null) {
+      angle += dx / AppConstants.playerAngleRotationCoefficient;
+    }
+  }
+
+  void move() {
+    x += sin(angle) * speed;
+    y -= cos(angle) * speed;
+
     if (x < 0) x = 0;
     if (y < 0) y = 0;
-    if (x > screenWidth - 50) x = screenWidth - 50;
-    if (y > screenHeight - 50) y = screenHeight - 50;
+    if (x > gameRef.getScreenWidth) x = gameRef.getScreenWidth;
+    if (y > gameRef.getScreenHeight) y = gameRef.getScreenHeight;
+  }
+
+  @override
+  void animateEntity(double dt) {
+    move();
   }
 }
