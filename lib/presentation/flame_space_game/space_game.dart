@@ -4,6 +4,8 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
 import 'package:flame_bloc/flame_bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:spacehero/entities/player.dart';
 import 'package:spacehero/entities_controllers/asteroid_controller.dart';
 import 'package:spacehero/entities_controllers/black_hole_controller.dart';
@@ -11,7 +13,7 @@ import 'package:spacehero/entities_controllers/player_controller.dart';
 import 'package:spacehero/presentation/game_page/bloc/space_game_bloc.dart';
 
 class SpaceGame extends FlameGame
-    with HasCollisionDetection, HasKeyboardHandlerComponents, PanDetector {
+    with HasCollisionDetection, PanDetector, KeyboardEvents {
   final SpaceGameBloc bloc;
   final _background = SpriteComponent();
   Player? player;
@@ -52,18 +54,18 @@ class SpaceGame extends FlameGame
     }
   }
 
-/*
-
   @override
-  void update(double dt) {
-    super.update(dt);
+  KeyEventResult onKeyEvent(
+      RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    final isKeyDown = event is RawKeyDownEvent;
 
-    if (!_player.isVisible) {
-      print('Emd game !!!');
-      _player.setVisible = true;
+    final isSpace = keysPressed.contains(LogicalKeyboardKey.space);
+    print('key Space pressed $isKeyDown $isSpace');
+
+    if (isSpace && isKeyDown) {
+      bloc.add(PlayerFireEvent());
+      return KeyEventResult.handled;
     }
-    removeMarkedEntities();
-    manageEntities(dt);
+    return super.onKeyEvent(event, keysPressed);
   }
-*/
 }

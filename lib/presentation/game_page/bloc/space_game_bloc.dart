@@ -16,17 +16,20 @@ enum GameStatus {
   gameOver, // game result screen
   statistics, // statistics screen
 }
+
 // TODO add isolate loop
 class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
   StatisticDto statistic = const StatisticDto.initial();
   InventDto invent = const InventDto.initial();
   GameStatus gameStatus = GameStatus.initial;
 
-  SpaceGameBloc() : super(const SpaceGameInitialState()) {
+  SpaceGameBloc()
+      : super(const SpaceGameStatusChanged(status: GameStatus.initial)) {
     on<ScoreAddEvent>(_gameLoopAddScore);
     on<PlayerDiedEvent>(_gameLoopPlayerDied);
     on<PlayerFireEvent>(_gameLoopPlayerFire);
     on<GameLoadedEvent>(_gameLoopGameLoaded);
+    on<OpenInitialScreenEvent>(_gameLoopOpenInitialScreen);
   }
 
   FutureOr<void> _gameLoopGameLoaded(
@@ -42,7 +45,13 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
   ) async {
     statistic = statistic.copyWith(brokenLives: statistic.brokenLives + 1);
     emit(StatisticChangedState(statistic: statistic));
-    await respawnPlayer(emit);
+    print('_gameLoopPlayerDied ${statistic} $gameStatus');
+    if (statistic.brokenLives >= statistic.maxLivesCount) {
+      emit(SpaceGameStatusChanged(
+          status: GameStatus.gameOver, score: statistic.score));
+    } else {
+      await respawnPlayer(emit);
+    }
   }
 
   FutureOr<void> respawnPlayer(Emitter emit) async {
@@ -63,13 +72,16 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
     final PlayerFireEvent event,
     final Emitter<SpaceGameState> emit,
   ) {
-    int rocketCount = invent.rocket - 1;
-    if (rocketCount >= 0) {
-      invent = invent.copyWith(rocket: rocketCount);
-      emit(PlayerFireState(rocketCount));
-      emit(InventChangedState(invent: invent));
-    } else {
-      rocketCount = 0;
+    if (gameStatus == GameStatus.respawned ||
+        gameStatus == GameStatus.respawn) {
+      int rocketCount = invent.rocket - 1;
+      if (rocketCount >= 0) {
+        invent = invent.copyWith(rocket: rocketCount);
+        emit(PlayerFireState(rocketCount));
+        emit(InventChangedState(invent: invent));
+      } else {
+        rocketCount = 0;
+      }
     }
   }
 
@@ -79,5 +91,14 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
   ) {
     statistic = statistic.copyWith(score: statistic.score + event.scoreDelta);
     emit(StatisticChangedState(statistic: statistic));
+  }
+
+  FutureOr<void> _gameLoopOpenInitialScreen(
+      final OpenInitialScreenEvent event, final Emitter<SpaceGameState> emit) {
+    statistic = const StatisticDto.initial();
+    invent = const InventDto.initial();
+    gameStatus = GameStatus.initial;
+
+    emit(const SpaceGameStatusChanged(status: GameStatus.initial));
   }
 }

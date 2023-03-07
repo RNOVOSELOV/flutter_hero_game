@@ -5,7 +5,7 @@ import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flutter/material.dart';
 import 'package:spacehero/entities/abs_entity.dart';
-import 'package:spacehero/presentation/space_game/space_game.dart';
+import 'package:spacehero/presentation/flame_space_game/space_game.dart';
 import 'package:spacehero/resources/app_constants_parameters.dart';
 
 class BlackHole extends Entity with HasGameRef<SpaceGame> {

@@ -1,19 +1,14 @@
 import 'package:flame/components.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 import 'package:spacehero/entities/player.dart';
+import 'package:spacehero/presentation/flame_space_game/space_game.dart';
 import 'package:spacehero/presentation/game_page/bloc/space_game_bloc.dart';
-import 'package:spacehero/presentation/space_game/space_game.dart';
 
 class PlayerController extends Component
     with
         HasGameRef<SpaceGame>,
         FlameBlocListenable<SpaceGameBloc, SpaceGameState>,
         FlameBlocReader<SpaceGameBloc, SpaceGameState> {
-  @override
-  void onMount() {
-    super.onMount();
-//    bloc.add(GameLoadedEvent());
-  }
 
   @override
   bool listenWhen(SpaceGameState previousState, SpaceGameState newState) {

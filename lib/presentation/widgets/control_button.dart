@@ -70,14 +70,17 @@ class _ControlButtonState extends State<ControlButton> {
                       child: Text(
                         "${widget.value}",
                         textAlign: TextAlign.center,
-                        style:
-                            const TextStyle(color: AppColors.colorInfoButtonTextColor, fontSize: 6),
+                        style: const TextStyle(
+                            color: AppColors.colorInfoButtonTextColor,
+                            fontSize: 6),
                       )),
                 ),
               ),
             ColorFiltered(
               colorFilter: ColorFilter.mode(
-                _active ? AppColors.colorTransparent : AppColors.colorInfoButtonDisabledColor,
+                _active
+                    ? AppColors.colorTransparent
+                    : AppColors.colorInfoButtonDisabledColor,
                 BlendMode.saturation,
               ),
               child: Image.asset(widget.imageAssetPath),

@@ -25,5 +25,5 @@ class StatisticDto extends Equatable {
   }
 
   @override
-  List<Object?> get props => [score, brokenLives];
+  List<Object?> get props => [score, brokenLives, maxLivesCount];
 }

@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flame/components.dart';
 import 'package:spacehero/entities/asteroid.dart';
 import 'package:spacehero/entities/models/entity_initial_info.dart';
-import 'package:spacehero/presentation/space_game/space_game.dart';
+import 'package:spacehero/presentation/flame_space_game/space_game.dart';
 import 'package:spacehero/resources/app_constants_parameters.dart';
 
 class AsteroidController extends TimerComponent with HasGameRef<SpaceGame> {
@@ -14,8 +14,7 @@ class AsteroidController extends TimerComponent with HasGameRef<SpaceGame> {
   @override
   void onTick() {
     parent?.add(Asteroid(gameplayArea: gameRef.size));
-    print(
-        'Asteroid timer ticked! Elements: ${parent?.children.whereType<Asteroid>().toList().length}');
+    print('Asteroid timer ticked! Elements: ${parent?.children.whereType<Asteroid>().toList().length}');
   }
 }
 

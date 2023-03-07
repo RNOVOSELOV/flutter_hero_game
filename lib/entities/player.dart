@@ -9,8 +9,8 @@ import 'package:spacehero/entities/abs_entity.dart';
 import 'package:spacehero/entities/asteroid.dart';
 import 'package:spacehero/entities/black_hole.dart';
 import 'package:spacehero/entities/bullet.dart';
+import 'package:spacehero/presentation/flame_space_game/space_game.dart';
 import 'package:spacehero/presentation/game_page/bloc/space_game_bloc.dart';
-import 'package:spacehero/presentation/space_game/space_game.dart';
 import 'package:spacehero/resources/app_constants_parameters.dart';
 
 class Player extends Entity
@@ -67,7 +67,6 @@ class Player extends Entity
 
   @override
   void onNewState(SpaceGameState state) {
-    print('Player. onNewState: $state');
     super.onNewState(state);
     Entity bullet = Bullet(
         shootAngle: angle,
@@ -113,7 +112,7 @@ class Player extends Entity
             onComplete: () => other.removeFromParent(),
             EffectController(
               curve: Curves.ease,
-              duration: 0.1,
+              duration: 0.01,
             ),
           ));
         }

@@ -4,21 +4,14 @@ abstract class SpaceGameState extends Equatable {
   const SpaceGameState();
 }
 
-// Game states
-class SpaceGameInitialState extends SpaceGameState {
-  const SpaceGameInitialState();
-
-  @override
-  List<Object> get props => [];
-}
-
 class SpaceGameStatusChanged extends SpaceGameState {
   final GameStatus status;
+  final int score;
 
-  const SpaceGameStatusChanged({required this.status});
+  const SpaceGameStatusChanged({required this.status, this.score = 0});
 
   @override
-  List<Object?> get props => [status];
+  List<Object?> get props => [status, score];
 }
 
 class InventChangedState extends SpaceGameState {

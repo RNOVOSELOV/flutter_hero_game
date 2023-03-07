@@ -1,6 +1,6 @@
 import 'package:flame/components.dart';
 import 'package:spacehero/entities/black_hole.dart';
-import 'package:spacehero/presentation/space_game/space_game.dart';
+import 'package:spacehero/presentation/flame_space_game/space_game.dart';
 import 'package:spacehero/resources/app_constants_parameters.dart';
 
 class BlackHoleController extends TimerComponent with HasGameRef<SpaceGame> {
