@@ -22,11 +22,11 @@ class EndGameWidget extends StatelessWidget {
             style: TextStyle(fontSize: 32),
           ),
           const SizedBox(
-            height: 24,
+            height: 16,
           ),
           Text(
             "YOU RESULT: $scoreValue",
-            style: const TextStyle(fontSize: 22),
+            style: const TextStyle(fontSize: 14),
           ),
           const SizedBox(
             height: 16,
