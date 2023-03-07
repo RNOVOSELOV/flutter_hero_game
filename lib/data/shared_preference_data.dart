@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferenceData {
-  static const _gameResultsKey = "game_results_key";
+  static const _gameResultsKey = "space_game_results_key";
 
   static SharedPreferenceData? _instance;
 

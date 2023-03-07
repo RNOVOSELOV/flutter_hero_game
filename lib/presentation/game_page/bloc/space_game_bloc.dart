@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:spacehero/data/models/game_result.dart';
+import 'package:spacehero/data/repositories/results_repository.dart';
 import 'package:spacehero/presentation/game_page/dto/invent_dto.dart';
 import 'package:spacehero/presentation/game_page/dto/statistic_dto.dart';
 import 'package:spacehero/resources/app_constants_parameters.dart';
@@ -30,6 +32,7 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
     on<PlayerFireEvent>(_gameLoopPlayerFire);
     on<GameLoadedEvent>(_gameLoopGameLoaded);
     on<OpenInitialScreenEvent>(_gameLoopOpenInitialScreen);
+    on<OpenStatisticScreenEvent>(_gameLoopOpenStatisticsScreen);
   }
 
   FutureOr<void> _gameLoopGameLoaded(
@@ -43,20 +46,26 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
     final PlayerDiedEvent event,
     final Emitter<SpaceGameState> emit,
   ) async {
+    print('\nBLoC: gameLoopPlayerDied statistic: $statistic gs: $gameStatus START');
     statistic = statistic.copyWith(brokenLives: statistic.brokenLives + 1);
-    emit(StatisticChangedState(statistic: statistic));
-    print('_gameLoopPlayerDied ${statistic} $gameStatus');
+
+    print('BLoC: gameLoopPlayerDied statistic: $statistic gs: $gameStatus');
     if (statistic.brokenLives >= statistic.maxLivesCount) {
       emit(SpaceGameStatusChanged(
-          status: GameStatus.gameOver, score: statistic.score));
+          status: GameStatus.gameOver, data: statistic.score));
+      await ResultsRepository.getInstance()
+          .addItem(Result(score: statistic.score, dt: DateTime.now()));
+      emit(StatisticChangedState(statistic: statistic));
     } else {
-      await respawnPlayer(emit);
+      await Future.delayed(
+          const Duration(seconds: 1), () => respawnPlayer(emit));
     }
   }
 
   FutureOr<void> respawnPlayer(Emitter emit) async {
     gameStatus = GameStatus.respawn;
     emit(const SpaceGameStatusChanged(status: GameStatus.respawn));
+    emit(StatisticChangedState(statistic: statistic));
     await Future.delayed(
       const Duration(seconds: AppConstants.playerRespawnTime),
       () {
@@ -100,5 +109,12 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
     gameStatus = GameStatus.initial;
 
     emit(const SpaceGameStatusChanged(status: GameStatus.initial));
+  }
+
+  FutureOr<void> _gameLoopOpenStatisticsScreen(
+      final OpenStatisticScreenEvent event,
+      final Emitter<SpaceGameState> emit) async {
+    var results = await ResultsRepository.getInstance().getItems();
+    emit(SpaceGameStatusChanged(status: GameStatus.statistics, data: results));
   }
 }

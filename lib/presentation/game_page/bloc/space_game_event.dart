@@ -14,6 +14,11 @@ class OpenInitialScreenEvent extends SpaceGameEvent {
   List<Object?> get props => [];
 }
 
+class OpenStatisticScreenEvent extends SpaceGameEvent {
+  @override
+  List<Object?> get props => [];
+}
+
 class PlayerDiedEvent extends SpaceGameEvent {
   const PlayerDiedEvent();
 

@@ -25,7 +25,8 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
           listener: (context, state) {
             if (state is StatisticChangedState) {
               statisticDto = state.statistic;
-              print ('Statistic panel. Statistic score: ${statisticDto.score}; live: ${statisticDto.brokenLives}; max lives: ${statisticDto.maxLivesCount}');
+              print(
+                  'Statistic panel. Statistic score: ${statisticDto.score}; live: ${statisticDto.brokenLives}; max lives: ${statisticDto.maxLivesCount}');
               setState(() {});
             }
           },

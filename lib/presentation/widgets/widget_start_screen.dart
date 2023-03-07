@@ -27,7 +27,7 @@ class _StartScreenWidgetState extends State<StartScreenWidget> {
           const SizedBox(
             height: 16,
           ),
-          Image.asset(AppImages.rocketImage,width: 100),
+          Image.asset(AppImages.rocketImage, width: 100),
           const SizedBox(
             height: 16,
           ),
@@ -39,7 +39,8 @@ class _StartScreenWidgetState extends State<StartScreenWidget> {
                 style: TextStyle(fontSize: 22, color: Colors.lightBlueAccent),
               )),
           TextButton(
-              onPressed: () {},
+              onPressed: () =>
+                  context.read<SpaceGameBloc>().add(OpenStatisticScreenEvent()),
               child: const Text(
                 "BEST RESULTS",
                 style: TextStyle(fontSize: 22, color: Colors.lightBlueAccent),

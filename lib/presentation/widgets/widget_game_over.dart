@@ -17,9 +17,16 @@ class EndGameWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
+          const Text(
+            "GAME OVER",
+            style: TextStyle(fontSize: 32),
+          ),
+          const SizedBox(
+            height: 24,
+          ),
           Text(
             "YOU RESULT: $scoreValue",
-            style: const TextStyle(fontSize: 32),
+            style: const TextStyle(fontSize: 22),
           ),
           const SizedBox(
             height: 16,

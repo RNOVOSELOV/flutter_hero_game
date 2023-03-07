@@ -74,7 +74,7 @@ class Asteroid extends Entity with HasGameRef<SpaceGame> {
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
-    if (disableCollisionFlag) {
+    if (isDestroying) {
       return;
     }
     if (other is Asteroid) {
@@ -91,6 +91,7 @@ class Asteroid extends Entity with HasGameRef<SpaceGame> {
       asteroid.anotherAsteroidCollisionFlag = true;
       changeAsteroidParameters(other);
     } else if (other is BlackHole) {
+      setDestroying = true;
       setSpeed = 0;
       add(ScaleEffect.by(
         Vector2.all(0.1),

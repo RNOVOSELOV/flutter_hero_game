@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:spacehero/data/models/game_result.dart';
 import 'package:spacehero/presentation/game_page/bloc/space_game_bloc.dart';
 import 'package:spacehero/presentation/widgets/inventory_panel.dart';
 import 'package:spacehero/presentation/widgets/stats_panel.dart';
 import 'package:spacehero/presentation/widgets/widget_game_over.dart';
 import 'package:spacehero/presentation/widgets/widget_start_screen.dart';
 import 'package:spacehero/presentation/flame_space_game/space_game_instance.dart';
+import 'package:spacehero/presentation/widgets/widget_statistics.dart';
 
 class GamePage extends StatelessWidget {
   const GamePage({Key? key}) : super(key: key);
@@ -30,7 +32,7 @@ class GameView extends StatefulWidget {
 
 class _GameViewState extends State<GameView> {
   GameStatus gameStatus = GameStatus.initial;
-  int resultScore = 0;
+  dynamic additionalData = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +41,7 @@ class _GameViewState extends State<GameView> {
       listener: (context, state) {
         if (state is SpaceGameStatusChanged) {
           gameStatus = state.status;
-          resultScore = state.score;
+          additionalData = state.data;
           setState(() {});
         }
       },
@@ -51,11 +53,13 @@ class _GameViewState extends State<GameView> {
               gameStatus == GameStatus.respawned)
             const InventoryPanel(),
           if (gameStatus == GameStatus.respawn ||
-              gameStatus == GameStatus.respawned)
+              gameStatus == GameStatus.respawned ||
+              gameStatus == GameStatus.gameOver)
             const StatisticsPanel(),
           if (gameStatus == GameStatus.gameOver)
-            EndGameWidget(scoreValue: resultScore),
-          if (gameStatus == GameStatus.statistics) SizedBox.shrink(),
+            EndGameWidget(scoreValue: additionalData as int),
+          if (gameStatus == GameStatus.statistics)
+            BestResultsWidget(results: additionalData as List<Result>),
         ],
       ),
     );

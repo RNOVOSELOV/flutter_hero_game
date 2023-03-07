@@ -14,7 +14,7 @@ class AsteroidController extends TimerComponent with HasGameRef<SpaceGame> {
   @override
   void onTick() {
     parent?.add(Asteroid(gameplayArea: gameRef.size));
-    print('Asteroid timer ticked! Elements: ${parent?.children.whereType<Asteroid>().toList().length}');
+//    print('Asteroid timer ticked! Elements: ${parent?.children.whereType<Asteroid>().toList().length}');
   }
 }
 

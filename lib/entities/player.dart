@@ -86,6 +86,7 @@ class Player extends Entity
       if (other.isDestroying) {
         return;
       }
+      other.setDestroying = true;
       setSpeed = 0;
       other.setSpeed = 0;
       liveBrokenByAsteroid(other);

@@ -6,12 +6,12 @@ abstract class SpaceGameState extends Equatable {
 
 class SpaceGameStatusChanged extends SpaceGameState {
   final GameStatus status;
-  final int score;
+  final dynamic data;
 
-  const SpaceGameStatusChanged({required this.status, this.score = 0});
+  const SpaceGameStatusChanged({required this.status, this.data});
 
   @override
-  List<Object?> get props => [status, score];
+  List<Object?> get props => [status];
 }
 
 class InventChangedState extends SpaceGameState {
