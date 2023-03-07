@@ -12,7 +12,7 @@ class PlayerController extends Component
   @override
   void onMount() {
     super.onMount();
-    bloc.add(GameLoadedEvent());
+//    bloc.add(GameLoadedEvent());
   }
 
   @override
