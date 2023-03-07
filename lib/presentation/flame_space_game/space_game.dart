@@ -8,7 +8,7 @@ import 'package:spacehero/entities/player.dart';
 import 'package:spacehero/entities_controllers/asteroid_controller.dart';
 import 'package:spacehero/entities_controllers/black_hole_controller.dart';
 import 'package:spacehero/entities_controllers/player_controller.dart';
-import 'package:spacehero/presentation/space_game/bloc/space_game_bloc.dart';
+import 'package:spacehero/presentation/game_page/bloc/space_game_bloc.dart';
 
 class SpaceGame extends FlameGame
     with HasCollisionDetection, HasKeyboardHandlerComponents, PanDetector {
@@ -51,7 +51,6 @@ class SpaceGame extends FlameGame
       player!.rotate(dx: info.raw.delta.dx);
     }
   }
-
 
 /*
 

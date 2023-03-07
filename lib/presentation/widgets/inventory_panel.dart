@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spacehero/presentation/space_game/bloc/space_game_bloc.dart';
-import 'package:spacehero/presentation/space_game/dto/invent_dto.dart';
+import 'package:spacehero/presentation/game_page/bloc/space_game_bloc.dart';
+import 'package:spacehero/presentation/game_page/dto/invent_dto.dart';
 import 'package:spacehero/presentation/widgets/control_button.dart';
 
 class InventoryPanel extends StatefulWidget {

@@ -1,7 +1,7 @@
 import 'package:flame/components.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 import 'package:spacehero/entities/player.dart';
-import 'package:spacehero/presentation/space_game/bloc/space_game_bloc.dart';
+import 'package:spacehero/presentation/game_page/bloc/space_game_bloc.dart';
 import 'package:spacehero/presentation/space_game/space_game.dart';
 
 class PlayerController extends Component

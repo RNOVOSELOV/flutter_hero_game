@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spacehero/presentation/space_game/bloc/space_game_bloc.dart';
-import 'package:spacehero/presentation/space_game/dto/statistic_dto.dart';
+import 'package:spacehero/presentation/game_page/bloc/space_game_bloc.dart';
+import 'package:spacehero/presentation/game_page/dto/statistic_dto.dart';
 import 'package:spacehero/resources/app_colors.dart';
 
 class StatisticsPanel extends StatefulWidget {

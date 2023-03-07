@@ -9,7 +9,7 @@ import 'package:spacehero/entities/abs_entity.dart';
 import 'package:spacehero/entities/asteroid.dart';
 import 'package:spacehero/entities/black_hole.dart';
 import 'package:spacehero/entities/bullet.dart';
-import 'package:spacehero/presentation/space_game/bloc/space_game_bloc.dart';
+import 'package:spacehero/presentation/game_page/bloc/space_game_bloc.dart';
 import 'package:spacehero/presentation/space_game/space_game.dart';
 import 'package:spacehero/resources/app_constants_parameters.dart';
 
