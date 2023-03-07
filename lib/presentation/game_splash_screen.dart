@@ -1,6 +1,6 @@
 import 'package:flame_splash_screen/flame_splash_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:spacehero/presentation/game_page.dart';
+import 'package:spacehero/presentation/game_page/game_page.dart';
 import 'package:spacehero/resources/app_images.dart';
 
 class GameSplashScreen extends StatefulWidget {

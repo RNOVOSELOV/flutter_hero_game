@@ -8,7 +8,7 @@ import 'package:spacehero/entities/abs_entity.dart';
 import 'package:spacehero/entities/black_hole.dart';
 import 'package:spacehero/entities/models/entity_move_parameters.dart';
 import 'package:spacehero/entities_controllers/asteroid_controller.dart';
-import 'package:spacehero/presentation/space_game/space_game.dart';
+import 'package:spacehero/presentation/flame_space_game/space_game.dart';
 import 'package:spacehero/resources/app_constants_parameters.dart';
 
 class Asteroid extends Entity with HasGameRef<SpaceGame> {
@@ -74,7 +74,7 @@ class Asteroid extends Entity with HasGameRef<SpaceGame> {
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
-    if (disableCollisionFlag) {
+    if (isDestroying) {
       return;
     }
     if (other is Asteroid) {
@@ -91,6 +91,7 @@ class Asteroid extends Entity with HasGameRef<SpaceGame> {
       asteroid.anotherAsteroidCollisionFlag = true;
       changeAsteroidParameters(other);
     } else if (other is BlackHole) {
+      setDestroying = true;
       setSpeed = 0;
       add(ScaleEffect.by(
         Vector2.all(0.1),
@@ -126,7 +127,7 @@ class Asteroid extends Entity with HasGameRef<SpaceGame> {
   void animateEntity(double dt) {
     if (!asteroidIsAvailable()) {
       loadSprites();
-      setAsteroidParameters(gameplayArea: gameRef.size);
+      removeFromParent();
       return;
     }
     move();
@@ -144,11 +145,10 @@ class Asteroid extends Entity with HasGameRef<SpaceGame> {
   }
 
   bool asteroidIsAvailable() {
-    if (position.x > gameRef.getScreenWidth || //+ sideSize ||
-        position.y > gameRef.getScreenHeight || //+ sideSize ||
-        position.x < 0 || // - sideSize ||
-        position.y < 0) {
-      //- sideSize) {
+    if (position.x > gameRef.getScreenWidth + sideSize ||
+        position.y > gameRef.getScreenHeight + sideSize ||
+        position.x < 0 - sideSize ||
+        position.y < 0 - sideSize) {
       return false;
     }
     return true;

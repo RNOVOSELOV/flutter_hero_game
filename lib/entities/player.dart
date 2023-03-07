@@ -9,8 +9,8 @@ import 'package:spacehero/entities/abs_entity.dart';
 import 'package:spacehero/entities/asteroid.dart';
 import 'package:spacehero/entities/black_hole.dart';
 import 'package:spacehero/entities/bullet.dart';
-import 'package:spacehero/presentation/space_game/bloc/space_game_bloc.dart';
-import 'package:spacehero/presentation/space_game/space_game.dart';
+import 'package:spacehero/presentation/flame_space_game/space_game.dart';
+import 'package:spacehero/presentation/game_page/bloc/space_game_bloc.dart';
 import 'package:spacehero/resources/app_constants_parameters.dart';
 
 class Player extends Entity
@@ -67,7 +67,6 @@ class Player extends Entity
 
   @override
   void onNewState(SpaceGameState state) {
-    print('Player. onNewState: $state');
     super.onNewState(state);
     Entity bullet = Bullet(
         shootAngle: angle,
@@ -87,6 +86,7 @@ class Player extends Entity
       if (other.isDestroying) {
         return;
       }
+      other.setDestroying = true;
       setSpeed = 0;
       other.setSpeed = 0;
       liveBrokenByAsteroid(other);
@@ -106,14 +106,14 @@ class Player extends Entity
         removeFromParent();
       }
       ..onFrame = (value) {
-        if (value == 2) {
-          size = other.size * 3;
+        if (value == 3) {
+          size = other.size * 4;
           other.add(OpacityEffect.to(
             0,
             onComplete: () => other.removeFromParent(),
             EffectController(
               curve: Curves.ease,
-              duration: 0.3,
+              duration: 0.01,
             ),
           ));
         }
@@ -126,7 +126,7 @@ class Player extends Entity
       position,
       EffectController(
         duration: 2,
-        curve: Curves.easeInQuint,
+        curve: Curves.easeInOutCirc,
       ),
     ));
     add(ScaleEffect.by(
@@ -136,7 +136,7 @@ class Player extends Entity
         removeFromParent();
       },
       EffectController(
-        curve: Curves.easeInQuint,
+        curve: Curves.easeInOutCirc,
         duration: 2,
       ),
     ));

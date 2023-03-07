@@ -9,16 +9,19 @@ class GameLoadedEvent extends SpaceGameEvent {
   List<Object?> get props => [];
 }
 
-class PlayerDiedEvent extends SpaceGameEvent {
-  const PlayerDiedEvent();
-
+class OpenInitialScreenEvent extends SpaceGameEvent {
   @override
   List<Object?> get props => [];
 }
 
-/////// BELOW NOT CHECKED
+class OpenStatisticScreenEvent extends SpaceGameEvent {
+  @override
+  List<Object?> get props => [];
+}
 
-class PlayerFireEvent extends SpaceGameEvent {
+class PlayerDiedEvent extends SpaceGameEvent {
+  const PlayerDiedEvent();
+
   @override
   List<Object?> get props => [];
 }
@@ -30,4 +33,11 @@ class ScoreAddEvent extends SpaceGameEvent {
 
   @override
   List<Object?> get props => [scoreDelta];
+}
+
+/////// BELOW NOT CHECKED
+
+class PlayerFireEvent extends SpaceGameEvent {
+  @override
+  List<Object?> get props => [];
 }

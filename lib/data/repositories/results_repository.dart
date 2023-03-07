@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:spacehero/data/models/game_result.dart';
-import 'package:spacehero/data/repositories/list_with_ids_reactive_repository.dart';
+import 'package:spacehero/data/repositories/list_reactive_repository.dart';
 import 'package:spacehero/data/shared_preference_data.dart';
 
-class ResultsRepository extends ListWithIdsReactiveRepository<Result> {
+class ResultsRepository extends ListReactiveRepository<Result> {
   final int _maxItemsCount = 10;
   final SharedPreferenceData spData;
 
