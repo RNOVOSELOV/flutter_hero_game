@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spacehero/presentation/space_game/bloc/space_game_bloc.dart';
 import 'package:spacehero/presentation/space_game/dto/statistic_dto.dart';
@@ -27,7 +27,6 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
               statisticDto = state.statistic;
               setState(() {});
             }
-            print('_StatisticsPanelState state changed $statisticDto');
           },
           child: Row(
             mainAxisSize: MainAxisSize.max,
@@ -42,11 +41,20 @@ class _StatisticsPanelState extends State<StatisticsPanel> {
                   child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  for (int i = 0; i < statisticDto.brokenLives; i++)
-                    Icon(
-                      Icons.heart_broken,
-                      color: AppColors.colorBrokenLivesCount,
-                    ),
+                  for (int i = 0; i < statisticDto.maxLivesCount; i++)
+                    i < statisticDto.brokenLives
+                        ? Icon(
+                            const IconData(0xf833,
+                                fontFamily: CupertinoIcons.iconFont,
+                                fontPackage: CupertinoIcons.iconFontPackage),
+                            color: AppColors.colorHeart,
+                          )
+                        : Icon(
+                            const IconData(0xf443,
+                                fontFamily: CupertinoIcons.iconFont,
+                                fontPackage: CupertinoIcons.iconFontPackage),
+                            color: AppColors.colorHeart,
+                          )
                 ],
               ))
             ],

@@ -11,5 +11,5 @@ class AppColors {
   static const Color colorInfoButtonEnabledColor = colorWhiteTransparent;
   static const Color colorInfoButtonDisabledColor = Color(0xAAFFFFFF);
   static const Color colorInfoButtonTextColor = Colors.black87;
-  static final Color colorBrokenLivesCount = (Colors.redAccent).withOpacity(0.7);
+  static final Color colorHeart = (Colors.redAccent).withOpacity(0.7);
 }
