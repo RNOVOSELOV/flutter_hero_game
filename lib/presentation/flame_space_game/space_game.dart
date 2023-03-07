@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
+import 'package:flame/parallax.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,7 +16,7 @@ import 'package:spacehero/presentation/game_page/bloc/space_game_bloc.dart';
 class SpaceGame extends FlameGame
     with HasCollisionDetection, PanDetector, KeyboardEvents {
   final SpaceGameBloc bloc;
-  final _background = SpriteComponent();
+  var _background = ParallaxComponent();
   Player? player;
 
   late final double _screenWidth;
@@ -33,9 +34,15 @@ class SpaceGame extends FlameGame
     _screenWidth = size[0];
     _screenHeight = size[1];
 
-    add(_background
-      ..sprite = await loadSprite('background.png')
-      ..size = size);
+    _background = await loadParallaxComponent(
+      [
+        ParallaxImageData('background_1.png'),
+        ParallaxImageData('background_2.png'),
+      ],
+      baseVelocity: Vector2(3, 0),
+      velocityMultiplierDelta: Vector2(1.1, 1.0),
+    );
+    add(_background);
 
     await add(FlameBlocProvider<SpaceGameBloc, SpaceGameState>.value(
       value: bloc,
@@ -60,7 +67,6 @@ class SpaceGame extends FlameGame
     final isKeyDown = event is RawKeyDownEvent;
 
     final isSpace = keysPressed.contains(LogicalKeyboardKey.space);
-    print('key Space pressed $isKeyDown $isSpace');
 
     if (isSpace && isKeyDown) {
       bloc.add(PlayerFireEvent());
