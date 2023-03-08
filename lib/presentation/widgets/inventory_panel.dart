@@ -58,12 +58,13 @@ class _InventoryPanelState extends State<InventoryPanel> {
               delayNextTapMilliseconds: 250,
               value: inventDto.rocket,
             ),
-            ControlButton(
+/*            ControlButton(
               imageAssetPath: 'assets/images/buttons/bomb.png',
               onTap: bombButtonClicked,
               delayNextTapMilliseconds: 4000,
               value: inventDto.bomb,
             ),
+ */
             const Spacer(),
           ],
         ),
@@ -84,7 +85,7 @@ class _InventoryPanelState extends State<InventoryPanel> {
   }
 
   void multiFireButtonClicked(BuildContext context) {
-    context.read<SpaceGameBloc>().add(PlayerFireEvent());
+    context.read<SpaceGameBloc>().add(PlayerMultiFireEvent());
     print('Fire button clicked');
   }
 

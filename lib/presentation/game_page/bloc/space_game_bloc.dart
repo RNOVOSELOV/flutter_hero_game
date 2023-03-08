@@ -37,7 +37,7 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
     on<PlayerArmorEvent>(_gameLoopPlayerArmor);
     on<BonusBombEvent>(_bonusBomb);
     on<BonusHpEvent>(_bonusHp);
-    on<BonusMultiRocketEvent>(_bonusMultiRocket);
+    on<PlayerMultiFireEvent>(_playerMultiRocket);
     on<BonusRocketEvent>(_bonusRocket);
     on<BonusSpeedEvent>(_bonusSpeed);
   }
@@ -171,8 +171,20 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
     emit(StatisticChangedState(statistic: statistic));
   }
 
-  FutureOr<void> _bonusMultiRocket(
-      final BonusMultiRocketEvent event, final Emitter<SpaceGameState> emit) {}
+  FutureOr<void> _playerMultiRocket(
+      final PlayerMultiFireEvent event, final Emitter<SpaceGameState> emit) {
+    if (gameStatus == GameStatus.respawned ||
+        gameStatus == GameStatus.respawn) {
+      int rocketCount = invent.rocket - 3;
+      if (rocketCount >= 0) {
+        invent = invent.copyWith(rocket: rocketCount);
+        emit(PlayerMultiFireState(rocketCount));
+        emit(InventChangedState(invent: invent));
+      } else {
+        rocketCount = 0;
+      }
+    }
+  }
 
   FutureOr<void> _bonusRocket(
       final BonusRocketEvent event, final Emitter<SpaceGameState> emit) {}

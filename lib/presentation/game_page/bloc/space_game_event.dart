@@ -73,8 +73,8 @@ class BonusRocketEvent extends SpaceGameEvent {
   List<Object?> get props => [];
 }
 
-class BonusMultiRocketEvent extends SpaceGameEvent {
-  const BonusMultiRocketEvent();
+class PlayerMultiFireEvent extends SpaceGameEvent {
+  const PlayerMultiFireEvent();
 
   @override
   List<Object?> get props => [];

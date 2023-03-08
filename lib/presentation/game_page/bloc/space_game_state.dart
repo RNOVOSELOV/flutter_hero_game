@@ -57,6 +57,15 @@ class PlayerFireState extends SpaceGameState {
   List<Object?> get props => [count];
 }
 
+class PlayerMultiFireState extends SpaceGameState {
+  final int count;
+
+  const PlayerMultiFireState(this.count);
+
+  @override
+  List<Object?> get props => [count];
+}
+
 class PlayerArmorState extends SpaceGameState {
   final bool armorIsActive;
 

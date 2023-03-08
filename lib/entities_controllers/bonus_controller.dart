@@ -87,12 +87,12 @@ class BonusParametersKeeper extends Equatable {
       spriteName: "_rocket.png",
       onBonusCollisionCallback: (bloc) => bloc.add(const BonusRocketEvent()));
   static final bonus5 = BonusParametersKeeper._(
-      spriteName: "_rockets.png",
-      onBonusCollisionCallback: (bloc) =>
-          bloc.add(const BonusMultiRocketEvent()));
-  static final bonus6 = BonusParametersKeeper._(
       spriteName: "_speed.png",
       onBonusCollisionCallback: (bloc) => bloc.add(const BonusSpeedEvent()));
+//  static final bonus6 = BonusParametersKeeper._(
+//      spriteName: "_rockets.png",
+//      onBonusCollisionCallback: (bloc) =>
+//          bloc.add(const BonusMultiRocketEvent()));
 
   static final values = [
     bonus1,
@@ -100,7 +100,7 @@ class BonusParametersKeeper extends Equatable {
     bonus3,
     bonus4,
     bonus5,
-    bonus6,
+//    bonus6,
   ];
 
   static BonusParametersKeeper getRandomBonusParameter() {

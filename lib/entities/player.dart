@@ -62,7 +62,9 @@ class Player extends Entity
 
   @override
   bool listenWhen(SpaceGameState previousState, SpaceGameState newState) {
-    return newState is PlayerFireState || newState is PlayerArmorState;
+    return newState is PlayerFireState ||
+        newState is PlayerArmorState ||
+        newState is PlayerMultiFireState;
   }
 
   @override
@@ -81,6 +83,22 @@ class Player extends Entity
       } else {
         respawnModeEnd();
       }
+    } else if (state is PlayerMultiFireState) {
+      Entity bullet = Bullet(
+          shootAngle: angle,
+          startPositionX: position.x,
+          startPositionY: position.y);
+      Entity bullet1 = Bullet(
+          shootAngle: angle + pi / 12,
+          startPositionX: position.x,
+          startPositionY: position.y);
+      Entity bullet2 = Bullet(
+          shootAngle: angle - pi / 12,
+          startPositionX: position.x,
+          startPositionY: position.y);
+      gameRef.add(bullet1);
+      gameRef.add(bullet);
+      gameRef.add(bullet2);
     }
   }
 
