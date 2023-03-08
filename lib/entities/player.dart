@@ -21,7 +21,7 @@ class Player extends Entity
 
   Player({
     required Vector2 gameplayArea,
-    super.placePriority = 4,
+    super.placePriority = 5,
   }) {
     setPlayerParameters(gameplayArea: gameplayArea);
   }
@@ -62,17 +62,26 @@ class Player extends Entity
 
   @override
   bool listenWhen(SpaceGameState previousState, SpaceGameState newState) {
-    return newState is PlayerFireState;
+    return newState is PlayerFireState || newState is PlayerArmorState;
   }
 
   @override
   void onNewState(SpaceGameState state) {
     super.onNewState(state);
-    Entity bullet = Bullet(
-        shootAngle: angle,
-        startPositionX: position.x,
-        startPositionY: position.y);
-    gameRef.add(bullet);
+    if (state is PlayerFireState) {
+      Entity bullet = Bullet(
+          shootAngle: angle,
+          startPositionX: position.x,
+          startPositionY: position.y);
+      gameRef.add(bullet);
+    } else if (state is PlayerArmorState) {
+      if (state.armorIsActive) {
+        respawnModeIsActive = true;
+        loadRespawnSprites();
+      } else {
+        respawnModeEnd();
+      }
+    }
   }
 
   @override

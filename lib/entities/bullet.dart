@@ -17,7 +17,7 @@ class Bullet extends Entity with HasGameRef<SpaceGame> {
       {required double startPositionX,
       required double startPositionY,
       required this.shootAngle,
-      super.placePriority = 3}) {
+      super.placePriority = 4}) {
     initializeCoreVariables(
         speed: AppConstants.bulletSpeed, side: AppConstants.bulletSideSize);
     x = startPositionX;

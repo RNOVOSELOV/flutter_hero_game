@@ -16,11 +16,11 @@ class StatisticDto extends Equatable {
         brokenLives = 0,
         maxLivesCount = AppConstants.maxLivesCount;
 
-  StatisticDto copyWith({int? score, int? brokenLives}) {
+  StatisticDto copyWith({int? score, int? brokenLives, int? maxLivesCount}) {
     return StatisticDto(
       score: score ?? this.score,
       brokenLives: brokenLives ?? this.brokenLives,
-      maxLivesCount: maxLivesCount,
+      maxLivesCount: maxLivesCount ?? this.maxLivesCount,
     );
   }
 

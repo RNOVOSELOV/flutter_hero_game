@@ -42,13 +42,19 @@ class _InventoryPanelState extends State<InventoryPanel> {
             ControlButton(
               imageAssetPath: 'assets/images/buttons/armor.png',
               onTap: armorButtonClicked,
-              delayNextTapMilliseconds: 2000,
+              delayNextTapMilliseconds: 250,
               value: inventDto.armor,
             ),
             const Spacer(),
             ControlButton(
               imageAssetPath: 'assets/images/buttons/fire.png',
               onTap: fireButtonClicked,
+              delayNextTapMilliseconds: 250,
+              value: inventDto.rocket,
+            ),
+            ControlButton(
+              imageAssetPath: 'assets/images/buttons/multi_fire.png',
+              onTap: multiFireButtonClicked,
               delayNextTapMilliseconds: 250,
               value: inventDto.rocket,
             ),
@@ -70,10 +76,14 @@ class _InventoryPanelState extends State<InventoryPanel> {
   }
 
   void armorButtonClicked(BuildContext context) {
-    print('Armor button clicked');
+    context.read<SpaceGameBloc>().add(PlayerArmorEvent());
   }
 
   void fireButtonClicked(BuildContext context) {
+    context.read<SpaceGameBloc>().add(PlayerFireEvent());
+  }
+
+  void multiFireButtonClicked(BuildContext context) {
     context.read<SpaceGameBloc>().add(PlayerFireEvent());
     print('Fire button clicked');
   }

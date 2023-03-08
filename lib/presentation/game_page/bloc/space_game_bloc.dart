@@ -33,6 +33,13 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
     on<GameLoadedEvent>(_gameLoopGameLoaded);
     on<OpenInitialScreenEvent>(_gameLoopOpenInitialScreen);
     on<OpenStatisticScreenEvent>(_gameLoopOpenStatisticsScreen);
+    on<BonusArmorEvent>(_bonusArmor);
+    on<PlayerArmorEvent>(_gameLoopPlayerArmor);
+    on<BonusBombEvent>(_bonusBomb);
+    on<BonusHpEvent>(_bonusHp);
+    on<BonusMultiRocketEvent>(_bonusMultiRocket);
+    on<BonusRocketEvent>(_bonusRocket);
+    on<BonusSpeedEvent>(_bonusSpeed);
   }
 
   FutureOr<void> _gameLoopGameLoaded(
@@ -46,7 +53,8 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
     final PlayerDiedEvent event,
     final Emitter<SpaceGameState> emit,
   ) async {
-    print('\nBLoC: gameLoopPlayerDied statistic: $statistic gs: $gameStatus START');
+    print(
+        '\nBLoC: gameLoopPlayerDied statistic: $statistic gs: $gameStatus START');
     statistic = statistic.copyWith(brokenLives: statistic.brokenLives + 1);
 
     print('BLoC: gameLoopPlayerDied statistic: $statistic gs: $gameStatus');
@@ -107,7 +115,6 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
     statistic = const StatisticDto.initial();
     invent = const InventDto.initial();
     gameStatus = GameStatus.initial;
-
     emit(const SpaceGameStatusChanged(status: GameStatus.initial));
   }
 
@@ -117,4 +124,59 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
     var results = await ResultsRepository.getInstance().getItems();
     emit(SpaceGameStatusChanged(status: GameStatus.statistics, data: results));
   }
+
+  FutureOr<void> _bonusArmor(
+      final BonusArmorEvent event, final Emitter<SpaceGameState> emit) {
+    invent = invent.copyWith(armor: invent.armor + 5);
+    print('_bonusArmor $invent');
+    emit(InventChangedState(invent: invent));
+  }
+
+  FutureOr<void> _gameLoopPlayerArmor(
+      final PlayerArmorEvent event, final Emitter<SpaceGameState> emit) async {
+    print('START: _gameLoopPlayerArmor');
+    emit(const PlayerArmorState(armorIsActive: true));
+    final tickCount = invent.armor;
+    final timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      int armorCount = invent.armor - 1;
+      if (armorCount < 0) {
+        armorCount = 0;
+      }
+      invent = invent.copyWith(armor: armorCount);
+      print('MIDDLE: _gameLoopPlayerArmor $armorCount');
+      emit(InventChangedState(invent: invent));
+    });
+
+    await Future.delayed(
+      Duration(seconds: tickCount + 1),
+      () {
+        timer.cancel();
+        emit(const PlayerArmorState(armorIsActive: false));
+        print('END: _gameLoopPlayerArmor');
+      },
+    );
+  }
+
+  Future<void> armorTimer() async {}
+
+  FutureOr<void> _bonusBomb(
+      final BonusBombEvent event, final Emitter<SpaceGameState> emit) {}
+
+  FutureOr<void> _bonusHp(
+      final BonusHpEvent event, final Emitter<SpaceGameState> emit) {
+    print ('BonusHp STAEFT $statistic');
+    final sts = statistic;
+    statistic = statistic.copyWith(maxLivesCount: statistic.maxLivesCount + 1);
+    print ('END BonusHp $statistic ${sts == statistic}');
+    emit(StatisticChangedState(statistic: statistic));
+  }
+
+  FutureOr<void> _bonusMultiRocket(
+      final BonusMultiRocketEvent event, final Emitter<SpaceGameState> emit) {}
+
+  FutureOr<void> _bonusRocket(
+      final BonusRocketEvent event, final Emitter<SpaceGameState> emit) {}
+
+  FutureOr<void> _bonusSpeed(
+      final BonusSpeedEvent event, final Emitter<SpaceGameState> emit) {}
 }

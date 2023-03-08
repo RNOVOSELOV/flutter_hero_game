@@ -35,9 +35,54 @@ class ScoreAddEvent extends SpaceGameEvent {
   List<Object?> get props => [scoreDelta];
 }
 
-/////// BELOW NOT CHECKED
-
 class PlayerFireEvent extends SpaceGameEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class BonusArmorEvent extends SpaceGameEvent {
+  const BonusArmorEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class PlayerArmorEvent extends SpaceGameEvent {
+  @override
+  List<Object?> get props => [];
+}
+
+class BonusBombEvent extends SpaceGameEvent {
+  const BonusBombEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class BonusHpEvent extends SpaceGameEvent {
+  const BonusHpEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class BonusRocketEvent extends SpaceGameEvent {
+  const BonusRocketEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class BonusMultiRocketEvent extends SpaceGameEvent {
+  const BonusMultiRocketEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class BonusSpeedEvent extends SpaceGameEvent {
+  const BonusSpeedEvent();
+
   @override
   List<Object?> get props => [];
 }

@@ -31,7 +31,7 @@ class ResultsRepository extends ListReactiveRepository<Result> {
   Future<bool> addItem(final Result item) async {
     final items = await getItems();
     items.add(item);
-    items.sort((a, b) => a.score.compareTo(b.score));
+    items.sort((a, b) => b.score.compareTo(a.score));
     if (items.length > _maxItemsCount) {
       items.removeRange(_maxItemsCount, items.length);
     }

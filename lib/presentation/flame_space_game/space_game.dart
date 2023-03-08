@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:spacehero/entities/player.dart';
 import 'package:spacehero/entities_controllers/asteroid_controller.dart';
 import 'package:spacehero/entities_controllers/black_hole_controller.dart';
+import 'package:spacehero/entities_controllers/bonus_controller.dart';
 import 'package:spacehero/entities_controllers/player_controller.dart';
 import 'package:spacehero/presentation/game_page/bloc/space_game_bloc.dart';
 
@@ -39,7 +40,7 @@ class SpaceGame extends FlameGame
         ParallaxImageData('background_1.png'),
         ParallaxImageData('background_2.png'),
       ],
-      baseVelocity: Vector2(3, 0),
+      baseVelocity: Vector2(2, 0),
       velocityMultiplierDelta: Vector2(1.1, 1.0),
     );
     add(_background);
@@ -50,6 +51,7 @@ class SpaceGame extends FlameGame
         PlayerController(),
         BlackHoleController(),
         AsteroidController(),
+        BonusController(),
       ],
     ));
   }

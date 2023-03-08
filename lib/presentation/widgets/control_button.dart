@@ -26,6 +26,8 @@ class _ControlButtonState extends State<ControlButton> {
   Widget build(BuildContext context) {
     if (widget.value == 0) {
       _active = false;
+    } else {
+      _active = true;
     }
     return GestureDetector(
       onTap: !_active
@@ -45,8 +47,8 @@ class _ControlButtonState extends State<ControlButton> {
       child: Container(
         clipBehavior: Clip.hardEdge,
         margin: const EdgeInsets.only(right: 12, top: 12),
-        width: 60,
-        height: 60,
+        width: 50,
+        height: 50,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
@@ -58,12 +60,13 @@ class _ControlButtonState extends State<ControlButton> {
               Align(
                 alignment: Alignment.bottomRight,
                 child: Container(
-                  height: 20,
-                  width: 20,
+                  height: 15,
+                  width: 15,
                   margin: const EdgeInsets.all(2),
                   decoration: const BoxDecoration(
                     color: AppColors.colorWhite,
-                    shape: BoxShape.circle,
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    shape: BoxShape.rectangle,
                   ),
                   child: Align(
                       alignment: Alignment.center,

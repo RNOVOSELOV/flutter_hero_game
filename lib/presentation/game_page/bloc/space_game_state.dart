@@ -24,9 +24,14 @@ class InventChangedState extends SpaceGameState {
 }
 
 class StatisticChangedState extends SpaceGameState {
-  final StatisticDto statistic;
+  final int score;
+  final int brokenLives;
+  final int maxLivesCount;
 
-  const StatisticChangedState({required this.statistic});
+  StatisticChangedState({required StatisticDto statistic})
+      : score = statistic.score,
+        brokenLives = statistic.brokenLives,
+        maxLivesCount = statistic.maxLivesCount;
 
   @override
   List<Object?> get props => [];
@@ -50,4 +55,13 @@ class PlayerFireState extends SpaceGameState {
 
   @override
   List<Object?> get props => [count];
+}
+
+class PlayerArmorState extends SpaceGameState {
+  final bool armorIsActive;
+
+  const PlayerArmorState({required this.armorIsActive});
+
+  @override
+  List<Object?> get props => [armorIsActive];
 }
