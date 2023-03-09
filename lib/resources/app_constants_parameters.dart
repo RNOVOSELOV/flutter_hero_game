@@ -3,9 +3,12 @@ class AppConstants {
 
   static const int defaultSpeedBonus = 0;
   static const int defaultArmorBonus = 0;
-  static const int defaultRocketCount = 999;
-  static const int defaultBombCount = 1;
+  static const int defaultRocketCount = 50;
+  static const int defaultBombCount = 3;
   static const int maxLivesCount = 5;
+
+  static const double bonusGenerationTimeInSeconds = 8;
+  static const double bonusSideSide = 50;
 
   static const double blackHoleGenerationTimeInSeconds = 12;
   static const blackHoleMinimumRotationSpeed = 2;
@@ -26,4 +29,6 @@ class AppConstants {
 
   static const bulletSideSize = 20.0;
   static const bulletSpeed = 10.0;
+
+  static const bombSideSize = 20.0;
 }

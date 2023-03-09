@@ -17,7 +17,7 @@ class Bullet extends Entity with HasGameRef<SpaceGame> {
       {required double startPositionX,
       required double startPositionY,
       required this.shootAngle,
-      super.placePriority = 3}) {
+      super.placePriority = 4}) {
     initializeCoreVariables(
         speed: AppConstants.bulletSpeed, side: AppConstants.bulletSideSize);
     x = startPositionX;
@@ -44,7 +44,6 @@ class Bullet extends Entity with HasGameRef<SpaceGame> {
     super.onCollisionStart(intersectionPoints, other);
     if (other is Asteroid) {
       setSpeed = 0;
-      other.setSpeed = 0;
       other.setDestroying = true;
       gameRef.bloc.add(const ScoreAddEvent(scoreDelta: 1));
       changeAnimation(other);
@@ -58,14 +57,15 @@ class Bullet extends Entity with HasGameRef<SpaceGame> {
         .map((i) => Sprite.load('bullet_explosion_$i.png'))
         .toList();
     animation = SpriteAnimation.spriteList(await Future.wait(sprites),
-        stepTime: 0.2, loop: false)
+        stepTime: 0.05, loop: false)
       ..onComplete = () {
         removeFromParent();
       }
       ..onFrame = (value) {
-        if (value == 1) {
-          size = other.size * 3;
-        } else if (value == 3) {
+        if (value <= 3) {
+          size = size * 2;
+        }
+        if (value == 2) {
           other.add(OpacityEffect.to(
             0,
             onComplete: () => other.removeFromParent(),

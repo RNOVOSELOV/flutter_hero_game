@@ -42,7 +42,7 @@ class _InventoryPanelState extends State<InventoryPanel> {
             ControlButton(
               imageAssetPath: 'assets/images/buttons/armor.png',
               onTap: armorButtonClicked,
-              delayNextTapMilliseconds: 2000,
+              delayNextTapMilliseconds: 250,
               value: inventDto.armor,
             ),
             const Spacer(),
@@ -53,11 +53,18 @@ class _InventoryPanelState extends State<InventoryPanel> {
               value: inventDto.rocket,
             ),
             ControlButton(
+              imageAssetPath: 'assets/images/buttons/multi_fire.png',
+              onTap: multiFireButtonClicked,
+              delayNextTapMilliseconds: 250,
+              value: inventDto.rocket,
+            ),
+            ControlButton(
               imageAssetPath: 'assets/images/buttons/bomb.png',
               onTap: bombButtonClicked,
               delayNextTapMilliseconds: 4000,
               value: inventDto.bomb,
             ),
+
             const Spacer(),
           ],
         ),
@@ -66,19 +73,22 @@ class _InventoryPanelState extends State<InventoryPanel> {
   }
 
   void speedButtonClicked(BuildContext context) {
-    print('Speed button clicked');
+    context.read<SpaceGameBloc>().add(const PlayerSpeedEvent());
   }
 
   void armorButtonClicked(BuildContext context) {
-    print('Armor button clicked');
+    context.read<SpaceGameBloc>().add(const PlayerArmorEvent());
   }
 
   void fireButtonClicked(BuildContext context) {
-    context.read<SpaceGameBloc>().add(PlayerFireEvent());
-    print('Fire button clicked');
+    context.read<SpaceGameBloc>().add(const PlayerFireEvent());
+  }
+
+  void multiFireButtonClicked(BuildContext context) {
+    context.read<SpaceGameBloc>().add(const PlayerMultiFireEvent());
   }
 
   void bombButtonClicked(BuildContext context) {
-    print('Bomb button clicked');
+    context.read<SpaceGameBloc>().add(const PlayerBombFireEvent());
   }
 }

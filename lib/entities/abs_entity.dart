@@ -22,7 +22,7 @@ abstract class Entity extends SpriteAnimationComponent with CollisionCallbacks {
   Entity({
     required int placePriority,
   }) : super(priority: placePriority) {
-    debugMode = true;
+    debugMode = false;
   }
 
   @override
