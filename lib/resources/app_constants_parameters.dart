@@ -5,7 +5,7 @@ class AppConstants {
   static const int defaultArmorBonus = 0;
   static const int defaultRocketCount = 50;
   static const int defaultBombCount = 3;
-  static const int maxLivesCount = 5;
+  static const int maxLivesCount = 3;
 
   static const double bonusGenerationTimeInSeconds = 8;
   static const double bonusSideSide = 50;

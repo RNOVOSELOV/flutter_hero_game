@@ -26,10 +26,15 @@ class BonusController extends TimerComponent
   @override
   void onNewState(SpaceGameState state) {
     if (state is SpaceGameStatusChanged) {
-      if (state.status == GameStatus.respawn || state.status == GameStatus.respawned) {
+      if (state.status == GameStatus.respawn ||
+          state.status == GameStatus.respawned) {
         isGameMode = true;
       } else {
         isGameMode = false;
+        if (bonus != null) {
+          bonus!.removeEntity();
+          bonus = null;
+        }
       }
     }
   }
@@ -86,6 +91,7 @@ class BonusParametersKeeper extends Equatable {
   static final bonus5 = BonusParametersKeeper._(
       spriteName: "_speed.png",
       onBonusCollisionCallback: (bloc) => bloc.add(const BonusSpeedEvent()));
+
 //  static final bonus6 = BonusParametersKeeper._(
 //      spriteName: "_rockets.png",
 //      onBonusCollisionCallback: (bloc) =>
