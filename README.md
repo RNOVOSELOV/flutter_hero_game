@@ -18,7 +18,7 @@
 
 ### Версия 2.0
 
-- Использование Flame
+- Переход на Flame
 - Возможность стрелять несколькими ракетами
 <p align="center">
   <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/gun.gif" height="280" />
@@ -29,7 +29,7 @@
   <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/bombs.gif" height="280" />
 </p>
 
-- Бонусы на скорость и защиту
+- Бонусы на скорость, а так же защиту от атак астероидов и черных дыр
 
 ### Версия 1.0
 
