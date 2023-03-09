@@ -36,6 +36,8 @@ class ScoreAddEvent extends SpaceGameEvent {
 }
 
 class PlayerFireEvent extends SpaceGameEvent {
+  const PlayerFireEvent();
+
   @override
   List<Object?> get props => [];
 }
@@ -48,6 +50,15 @@ class BonusArmorEvent extends SpaceGameEvent {
 }
 
 class PlayerArmorEvent extends SpaceGameEvent {
+  const PlayerArmorEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
+class PlayerSpeedEvent extends SpaceGameEvent {
+  const PlayerSpeedEvent();
+
   @override
   List<Object?> get props => [];
 }

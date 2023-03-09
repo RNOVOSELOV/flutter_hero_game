@@ -64,6 +64,7 @@ class Player extends Entity
   bool listenWhen(SpaceGameState previousState, SpaceGameState newState) {
     return newState is PlayerFireState ||
         newState is PlayerArmorState ||
+        newState is PlayerSpeedState ||
         newState is PlayerMultiFireState;
   }
 
@@ -99,6 +100,12 @@ class Player extends Entity
       gameRef.add(bullet1);
       gameRef.add(bullet);
       gameRef.add(bullet2);
+    } else if (state is PlayerSpeedState) {
+      if (state.speedIsActive) {
+        setSpeed = speed * 2;
+      } else {
+        setSpeed = AppConstants.playerSpeed;
+      }
     }
   }
 

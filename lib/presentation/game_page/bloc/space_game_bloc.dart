@@ -40,6 +40,7 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
     on<PlayerMultiFireEvent>(_playerMultiRocket);
     on<BonusRocketEvent>(_bonusRocket);
     on<BonusSpeedEvent>(_bonusSpeed);
+    on<PlayerSpeedEvent>(_playerSpeed);
   }
 
   FutureOr<void> _gameLoopGameLoaded(
@@ -189,16 +190,45 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
     emit(InventChangedState(invent: invent));
   }
 
+  FutureOr<void> _bonusBomb(
+      final BonusBombEvent event, final Emitter<SpaceGameState> emit) {
+    invent = invent.copyWith(
+      bomb: invent.bomb + 1,
+    );
+    emit(InventChangedState(invent: invent));
+  }
+
   FutureOr<void> _bonusSpeed(
       final BonusSpeedEvent event, final Emitter<SpaceGameState> emit) {
     invent = invent.copyWith(speed: invent.speed + 5);
     emit(InventChangedState(invent: invent));
   }
 
-  FutureOr<void> _bonusBomb(
-      final BonusBombEvent event, final Emitter<SpaceGameState> emit) {
-    invent = invent.copyWith(bomb: invent.bomb + 1,);
-    emit(InventChangedState(invent: invent));
+  FutureOr<void> _playerSpeed(
+      final PlayerSpeedEvent event, final Emitter<SpaceGameState> emit) async {
+
+
+    print('START: _gameLoopPlayerSpeed');
+    emit(const PlayerSpeedState(speedIsActive: true));
+    final tickCount = invent.speed;
+    final timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      int speedCount = invent.speed - 1;
+      if (speedCount < 0) {
+        speedCount = 0;
+      }
+      invent = invent.copyWith(speed: speedCount);
+      print('MIDDLE: _gameLoopPlayerSpeed $speedCount');
+      emit(InventChangedState(invent: invent));
+    });
+
+    await Future.delayed(
+      Duration(seconds: tickCount + 1),
+          () {
+        timer.cancel();
+        emit(const PlayerSpeedState(speedIsActive: false));
+        print('END: _gameLoopPlayerSpeed');
+      },
+    );
+
   }
 }
-

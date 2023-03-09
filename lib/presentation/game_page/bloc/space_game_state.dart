@@ -74,3 +74,12 @@ class PlayerArmorState extends SpaceGameState {
   @override
   List<Object?> get props => [armorIsActive];
 }
+
+class PlayerSpeedState extends SpaceGameState {
+  final bool speedIsActive;
+
+  const PlayerSpeedState({required this.speedIsActive});
+
+  @override
+  List<Object?> get props => [speedIsActive];
+}

@@ -73,20 +73,19 @@ class _InventoryPanelState extends State<InventoryPanel> {
   }
 
   void speedButtonClicked(BuildContext context) {
-    print('Speed button clicked');
+    context.read<SpaceGameBloc>().add(const PlayerSpeedEvent());
   }
 
   void armorButtonClicked(BuildContext context) {
-    context.read<SpaceGameBloc>().add(PlayerArmorEvent());
+    context.read<SpaceGameBloc>().add(const PlayerArmorEvent());
   }
 
   void fireButtonClicked(BuildContext context) {
-    context.read<SpaceGameBloc>().add(PlayerFireEvent());
+    context.read<SpaceGameBloc>().add(const PlayerFireEvent());
   }
 
   void multiFireButtonClicked(BuildContext context) {
-    context.read<SpaceGameBloc>().add(PlayerMultiFireEvent());
-    print('Fire button clicked');
+    context.read<SpaceGameBloc>().add(const PlayerMultiFireEvent());
   }
 
   void bombButtonClicked(BuildContext context) {
