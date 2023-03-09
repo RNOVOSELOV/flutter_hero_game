@@ -16,10 +16,6 @@ class Bonus extends Entity with HasGameRef<SpaceGame> {
   final String spriteName;
   final void Function(SpaceGameBloc bloc) onBonusCollisionCallback;
 
-  String getStringInfo() {
-    return 'Bonus: $spriteName; remove: $removeFlag scale:$scale X:$x Y:$y speed:$speed side:$sideSize';
-  }
-
   Bonus({
     required this.spriteName,
     required this.onBonusCollisionCallback,
@@ -69,16 +65,25 @@ class Bonus extends Entity with HasGameRef<SpaceGame> {
 
   void removeEntity() {
     removeFlag = true;
-    final Effect effect = OpacityEffect.by(
-      0,
-      onComplete: () {
-        removeFromParent();
-      },
-      EffectController(
-        curve: Curves.ease,
-        duration: 0.05,
+    final Effect effect = SequenceEffect([
+      ScaleEffect.by(
+        Vector2.all(1.5),
+        EffectController(
+          curve: Curves.ease,
+          duration: 0.5,
+        ),
       ),
-    );
+      ScaleEffect.by(
+        Vector2.all(0.4),
+        onComplete: () {
+          removeFromParent();
+        },
+        EffectController(
+          curve: Curves.ease,
+          duration: 1.5,
+        ),
+      ),
+    ]);
     add(effect);
   }
 }

@@ -109,9 +109,8 @@ class Player extends Entity
         setSpeed = AppConstants.playerSpeed;
       }
     } else if (state is PlayerBombState) {
-      Entity bomb = Bomb(
-          startPositionX: position.x,
-          startPositionY: position.y);
+      Entity bomb =
+          Bomb(startPositionX: position.x, startPositionY: position.y);
       parent?.add(bomb);
     }
   }
@@ -146,8 +145,8 @@ class Player extends Entity
         removeFromParent();
       }
       ..onFrame = (value) {
-        if (value <= 1) {
-          size = size * 2;
+        if (value >= 1 && value <= 4) {
+          size = size * 1.5;
         }
         if (value == 3) {
           other.add(OpacityEffect.to(

@@ -63,7 +63,7 @@ class Bullet extends Entity with HasGameRef<SpaceGame> {
       }
       ..onFrame = (value) {
         if (value <= 3) {
-          size = size * 2;
+          size = size + size;
         }
         if (value == 2) {
           other.add(OpacityEffect.to(
