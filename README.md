@@ -2,17 +2,14 @@
 
 #  🚀&nbsp;&nbsp; Space armageddon
 <br/>
-<br/>
-
-<p align="center">
-  <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/gameplay.gif" height="280" />
-</p>
-
-
 ## О проекте
 
 Простая игра из XX века о маленькой пилотируемой ракете, пробивающей себе путь через кольцо астероидов.
 Зарабатываем очки, уничтожая пролетающие мимо астероиды.
+
+<p align="center">
+  <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/gameplay.gif" height="280" />
+</p>
 
 ## Развитие проекта 
 
