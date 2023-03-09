@@ -5,7 +5,7 @@
 <br/>
 
 <p align="center">
-  <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/space_cleaner.gif" height="280" />
+  <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/gameplay.gif" height="280" />
 </p>
 
 
@@ -20,7 +20,13 @@
 
 - Использование Flame
 - Возможность стрелять несколькими ракетами
+<p align="center">
+  <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/gun.gif" height="280" />
+</p>
 - Использование бомб
+<p align="center">
+  <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/bombs.gif" height="280" />
+</p>
 - Бонусы на скорость и защиту
 
 ### Версия 1.0
