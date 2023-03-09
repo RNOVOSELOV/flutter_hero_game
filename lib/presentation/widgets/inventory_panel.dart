@@ -1,4 +1,3 @@
-import 'package:animated_widgets/widgets/shake_animated_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spacehero/presentation/game_page/bloc/space_game_bloc.dart';

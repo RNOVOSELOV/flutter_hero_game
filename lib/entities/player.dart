@@ -139,22 +139,22 @@ class Player extends Entity
         .map((i) => Sprite.load('plane_explosion_$i.png'))
         .toList();
     animation = SpriteAnimation.spriteList(await Future.wait(sprites),
-        stepTime: 0.1, loop: false)
+        stepTime: 0.2, loop: false)
       ..onComplete = () {
         bloc.add(const PlayerDiedEvent());
         removeFromParent();
       }
       ..onFrame = (value) {
-        if (value >= 1 && value <= 4) {
-          size = size * 1.5;
+        if (value > 1 && value <= 4) {
+          size = size + Vector2(AppConstants.playerShipSideSize, AppConstants.playerShipSideSize);
         }
-        if (value == 3) {
+        if (value == 1) {
           other.add(OpacityEffect.to(
             0,
             onComplete: () => other.removeFromParent(),
             EffectController(
               curve: Curves.ease,
-              duration: 0.5,
+              duration: 0.3,
             ),
           ));
         }
