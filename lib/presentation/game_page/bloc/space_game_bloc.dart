@@ -157,17 +157,12 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
     );
   }
 
-  Future<void> armorTimer() async {}
-
-  FutureOr<void> _bonusBomb(
-      final BonusBombEvent event, final Emitter<SpaceGameState> emit) {}
-
   FutureOr<void> _bonusHp(
       final BonusHpEvent event, final Emitter<SpaceGameState> emit) {
-    print ('BonusHp STAEFT $statistic');
+    print('BonusHp STAEFT $statistic');
     final sts = statistic;
     statistic = statistic.copyWith(maxLivesCount: statistic.maxLivesCount + 1);
-    print ('END BonusHp $statistic ${sts == statistic}');
+    print('END BonusHp $statistic ${sts == statistic}');
     emit(StatisticChangedState(statistic: statistic));
   }
 
@@ -188,10 +183,22 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
 
   FutureOr<void> _bonusRocket(
       final BonusRocketEvent event, final Emitter<SpaceGameState> emit) {
-    invent = invent.copyWith(rocket: invent.rocket + 50,);
+    invent = invent.copyWith(
+      rocket: invent.rocket + 50,
+    );
     emit(InventChangedState(invent: invent));
   }
 
   FutureOr<void> _bonusSpeed(
-      final BonusSpeedEvent event, final Emitter<SpaceGameState> emit) {}
+      final BonusSpeedEvent event, final Emitter<SpaceGameState> emit) {
+    invent = invent.copyWith(speed: invent.speed + 5);
+    emit(InventChangedState(invent: invent));
+  }
+
+  FutureOr<void> _bonusBomb(
+      final BonusBombEvent event, final Emitter<SpaceGameState> emit) {
+    invent = invent.copyWith(bomb: invent.bomb + 1,);
+    emit(InventChangedState(invent: invent));
+  }
 }
+

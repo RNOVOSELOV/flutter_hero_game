@@ -58,13 +58,13 @@ class _InventoryPanelState extends State<InventoryPanel> {
               delayNextTapMilliseconds: 250,
               value: inventDto.rocket,
             ),
-/*            ControlButton(
+            ControlButton(
               imageAssetPath: 'assets/images/buttons/bomb.png',
               onTap: bombButtonClicked,
               delayNextTapMilliseconds: 4000,
               value: inventDto.bomb,
             ),
- */
+
             const Spacer(),
           ],
         ),

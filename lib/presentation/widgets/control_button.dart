@@ -71,7 +71,7 @@ class _ControlButtonState extends State<ControlButton> {
                   child: Align(
                       alignment: Alignment.center,
                       child: Text(
-                        "${widget.value}",
+                        widget.value < 1000 ? '${widget.value}' : '...',
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                             color: AppColors.colorInfoButtonTextColor,
