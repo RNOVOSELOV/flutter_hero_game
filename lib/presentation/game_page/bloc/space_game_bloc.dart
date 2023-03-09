@@ -187,7 +187,10 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
   }
 
   FutureOr<void> _bonusRocket(
-      final BonusRocketEvent event, final Emitter<SpaceGameState> emit) {}
+      final BonusRocketEvent event, final Emitter<SpaceGameState> emit) {
+    invent = invent.copyWith(rocket: invent.rocket + 50,);
+    emit(InventChangedState(invent: invent));
+  }
 
   FutureOr<void> _bonusSpeed(
       final BonusSpeedEvent event, final Emitter<SpaceGameState> emit) {}

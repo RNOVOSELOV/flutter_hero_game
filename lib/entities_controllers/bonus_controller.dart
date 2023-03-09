@@ -46,7 +46,7 @@ class BonusController extends TimerComponent
       bonus = null;
     } else {
       final bonusParameter = BonusParametersKeeper
-          .bonus3; //BonusParametersKeeper.getRandomBonusParameter();
+          .bonus4; //BonusParametersKeeper.getRandomBonusParameter();
 
       bonus = Bonus(
           gameplayArea: gameRef.size,

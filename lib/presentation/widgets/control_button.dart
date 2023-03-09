@@ -61,7 +61,7 @@ class _ControlButtonState extends State<ControlButton> {
                 alignment: Alignment.bottomRight,
                 child: Container(
                   height: 15,
-                  width: 15,
+                  width: 20,
                   margin: const EdgeInsets.all(2),
                   decoration: const BoxDecoration(
                     color: AppColors.colorWhite,
