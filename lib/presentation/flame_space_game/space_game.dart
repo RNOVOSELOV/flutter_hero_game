@@ -71,7 +71,7 @@ class SpaceGame extends FlameGame
     final isSpace = keysPressed.contains(LogicalKeyboardKey.space);
 
     if (isSpace && isKeyDown) {
-      bloc.add(PlayerFireEvent());
+      bloc.add(const PlayerFireEvent());
       return KeyEventResult.handled;
     }
     return super.onKeyEvent(event, keysPressed);

@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
-import 'package:spacehero/entities/asteroid.dart';
 import 'package:spacehero/entities/models/entity_initial_info.dart';
 import 'package:spacehero/presentation/flame_space_game/space_game.dart';
 import 'package:spacehero/resources/app_constants_parameters.dart';

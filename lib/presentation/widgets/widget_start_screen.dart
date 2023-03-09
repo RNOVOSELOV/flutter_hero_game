@@ -27,7 +27,9 @@ class _StartScreenWidgetState extends State<StartScreenWidget> {
           const SizedBox(
             height: 16,
           ),
-          Image.asset(AppImages.rocketImage, width: 100),
+          SizedBox(
+            height: 100,
+              child: Image.asset(AppImages.rocketImage, height: 100)),
           const SizedBox(
             height: 16,
           ),

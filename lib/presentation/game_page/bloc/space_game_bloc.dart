@@ -54,11 +54,7 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
     final PlayerDiedEvent event,
     final Emitter<SpaceGameState> emit,
   ) async {
-    print(
-        '\nBLoC: gameLoopPlayerDied statistic: $statistic gs: $gameStatus START');
     statistic = statistic.copyWith(brokenLives: statistic.brokenLives + 1);
-
-    print('BLoC: gameLoopPlayerDied statistic: $statistic gs: $gameStatus');
     if (statistic.brokenLives >= statistic.maxLivesCount) {
       emit(SpaceGameStatusChanged(
           status: GameStatus.gameOver, data: statistic.score));
@@ -75,6 +71,8 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
     gameStatus = GameStatus.respawn;
     emit(const SpaceGameStatusChanged(status: GameStatus.respawn));
     emit(StatisticChangedState(statistic: statistic));
+    invent = const InventDto.initial();
+    emit(InventChangedState(invent: invent));
     await Future.delayed(
       const Duration(seconds: AppConstants.playerRespawnTime),
       () {
@@ -129,13 +127,11 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
   FutureOr<void> _bonusArmor(
       final BonusArmorEvent event, final Emitter<SpaceGameState> emit) {
     invent = invent.copyWith(armor: invent.armor + 5);
-    print('_bonusArmor $invent');
     emit(InventChangedState(invent: invent));
   }
 
   FutureOr<void> _gameLoopPlayerArmor(
       final PlayerArmorEvent event, final Emitter<SpaceGameState> emit) async {
-    print('START: _gameLoopPlayerArmor');
     emit(const PlayerArmorState(armorIsActive: true));
     final tickCount = invent.armor;
     final timer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -144,7 +140,6 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
         armorCount = 0;
       }
       invent = invent.copyWith(armor: armorCount);
-      print('MIDDLE: _gameLoopPlayerArmor $armorCount');
       emit(InventChangedState(invent: invent));
     });
 
@@ -153,17 +148,13 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
       () {
         timer.cancel();
         emit(const PlayerArmorState(armorIsActive: false));
-        print('END: _gameLoopPlayerArmor');
       },
     );
   }
 
   FutureOr<void> _bonusHp(
       final BonusHpEvent event, final Emitter<SpaceGameState> emit) {
-    print('BonusHp STAEFT $statistic');
-    final sts = statistic;
     statistic = statistic.copyWith(maxLivesCount: statistic.maxLivesCount + 1);
-    print('END BonusHp $statistic ${sts == statistic}');
     emit(StatisticChangedState(statistic: statistic));
   }
 
@@ -206,9 +197,6 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
 
   FutureOr<void> _playerSpeed(
       final PlayerSpeedEvent event, final Emitter<SpaceGameState> emit) async {
-
-
-    print('START: _gameLoopPlayerSpeed');
     emit(const PlayerSpeedState(speedIsActive: true));
     final tickCount = invent.speed;
     final timer = Timer.periodic(const Duration(seconds: 1), (timer) {
@@ -217,18 +205,15 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
         speedCount = 0;
       }
       invent = invent.copyWith(speed: speedCount);
-      print('MIDDLE: _gameLoopPlayerSpeed $speedCount');
       emit(InventChangedState(invent: invent));
     });
 
     await Future.delayed(
       Duration(seconds: tickCount + 1),
-          () {
+      () {
         timer.cancel();
         emit(const PlayerSpeedState(speedIsActive: false));
-        print('END: _gameLoopPlayerSpeed');
       },
     );
-
   }
 }

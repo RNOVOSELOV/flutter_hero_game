@@ -1,10 +1,8 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
 import 'package:flame/components.dart';
 import 'package:flame_bloc/flame_bloc.dart';
-import 'package:spacehero/entities/black_hole.dart';
 import 'package:spacehero/entities/bonus.dart';
 import 'package:spacehero/presentation/flame_space_game/space_game.dart';
 import 'package:spacehero/presentation/game_page/bloc/space_game_bloc.dart';
@@ -53,7 +51,7 @@ class BonusController extends TimerComponent
           spriteName: bonusParameter.getImageName,
           onBonusCollisionCallback: bonusParameter.getCallback);
       parent?.add(bonus!);
-      print('Bonus created! ${bonus!.getStringInfo()}');
+//      print('Bonus created! ${bonus!.getStringInfo()}');
     }
   }
 }

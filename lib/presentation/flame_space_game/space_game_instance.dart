@@ -5,7 +5,7 @@ import 'package:spacehero/presentation/flame_space_game/space_game.dart';
 import 'package:spacehero/presentation/game_page/bloc/space_game_bloc.dart';
 
 class GameContainer extends StatelessWidget {
-  const GameContainer._({super.key});
+  const GameContainer._();
 
   @override
   Widget build(BuildContext context) {
