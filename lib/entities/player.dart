@@ -8,6 +8,7 @@ import 'package:flutter/animation.dart';
 import 'package:spacehero/entities/abs_entity.dart';
 import 'package:spacehero/entities/asteroid.dart';
 import 'package:spacehero/entities/black_hole.dart';
+import 'package:spacehero/entities/bomb.dart';
 import 'package:spacehero/entities/bullet.dart';
 import 'package:spacehero/presentation/flame_space_game/space_game.dart';
 import 'package:spacehero/presentation/game_page/bloc/space_game_bloc.dart';
@@ -65,7 +66,8 @@ class Player extends Entity
     return newState is PlayerFireState ||
         newState is PlayerArmorState ||
         newState is PlayerSpeedState ||
-        newState is PlayerMultiFireState;
+        newState is PlayerMultiFireState ||
+        newState is PlayerBombState;
   }
 
   @override
@@ -76,7 +78,7 @@ class Player extends Entity
           shootAngle: angle,
           startPositionX: position.x,
           startPositionY: position.y);
-      gameRef.add(bullet);
+      parent?.add(bullet);
     } else if (state is PlayerArmorState) {
       if (state.armorIsActive) {
         respawnModeIsActive = true;
@@ -106,6 +108,11 @@ class Player extends Entity
       } else {
         setSpeed = AppConstants.playerSpeed;
       }
+    } else if (state is PlayerBombState) {
+      Entity bomb = Bomb(
+          startPositionX: position.x,
+          startPositionY: position.y);
+      parent?.add(bomb);
     }
   }
 
@@ -122,7 +129,6 @@ class Player extends Entity
       }
       other.setDestroying = true;
       setSpeed = 0;
-      other.setSpeed = 0;
       liveBrokenByAsteroid(other);
     } else if (other is BlackHole) {
       liveBrokenByBlackHole(other.position);
@@ -134,20 +140,22 @@ class Player extends Entity
         .map((i) => Sprite.load('plane_explosion_$i.png'))
         .toList();
     animation = SpriteAnimation.spriteList(await Future.wait(sprites),
-        stepTime: 0.2, loop: false)
+        stepTime: 0.1, loop: false)
       ..onComplete = () {
         bloc.add(const PlayerDiedEvent());
         removeFromParent();
       }
       ..onFrame = (value) {
+        if (value <= 1) {
+          size = size * 2;
+        }
         if (value == 3) {
-          size = other.size * 4;
           other.add(OpacityEffect.to(
             0,
             onComplete: () => other.removeFromParent(),
             EffectController(
               curve: Curves.ease,
-              duration: 0.01,
+              duration: 0.5,
             ),
           ));
         }
@@ -159,8 +167,8 @@ class Player extends Entity
     add(MoveToEffect(
       position,
       EffectController(
-        duration: 2,
-        curve: Curves.easeInOutCirc,
+        duration: 1,
+        curve: Curves.linear,
       ),
     ));
     add(ScaleEffect.by(

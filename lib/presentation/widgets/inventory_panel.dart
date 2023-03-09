@@ -89,6 +89,6 @@ class _InventoryPanelState extends State<InventoryPanel> {
   }
 
   void bombButtonClicked(BuildContext context) {
-    print('Bomb button clicked');
+    context.read<SpaceGameBloc>().add(const PlayerBombFireEvent());
   }
 }
