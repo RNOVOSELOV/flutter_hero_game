@@ -31,4 +31,6 @@ class AppConstants {
   static const bulletSpeed = 10.0;
 
   static const bombSideSize = 20.0;
+
+  static const maxStatisticsResultsCount = 10;
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spacehero/data/models/game_result.dart';
+import 'package:spacehero/data/models/result.dart';
 import 'package:spacehero/presentation/game_page/bloc/space_game_bloc.dart';
 import 'package:spacehero/presentation/widgets/inventory_panel.dart';
 import 'package:spacehero/presentation/widgets/stats_panel.dart';

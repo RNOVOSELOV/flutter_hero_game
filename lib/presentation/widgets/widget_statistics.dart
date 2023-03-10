@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:spacehero/data/models/game_result.dart';
+import 'package:spacehero/data/models/result.dart';
 import 'package:spacehero/presentation/game_page/bloc/space_game_bloc.dart';
 
 class BestResultsWidget extends StatelessWidget {
@@ -21,7 +21,7 @@ class BestResultsWidget extends StatelessWidget {
         .map((e) => Padding(
               padding: const EdgeInsets.symmetric(vertical: 2),
               child: Text(
-                "${e.score} - ${DateFormat('dd MMM yyyy').format(e.dt)}",
+                "${e.score} - ${DateFormat('dd MMM yyyy').format(e.dateTime)}",
                 style: const TextStyle(fontSize: 14),
               ),
             ))
