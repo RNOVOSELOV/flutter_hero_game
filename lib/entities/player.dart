@@ -146,7 +146,9 @@ class Player extends Entity
       }
       ..onFrame = (value) {
         if (value > 1 && value <= 4) {
-          size = size + Vector2(AppConstants.playerShipSideSize, AppConstants.playerShipSideSize);
+          size = size +
+              Vector2(AppConstants.playerShipSideSize,
+                  AppConstants.playerShipSideSize);
         }
         if (value == 1) {
           other.add(OpacityEffect.to(
@@ -189,18 +191,22 @@ class Player extends Entity
     }
   }
 
-  void move() {
+  @override
+  void animateEntity(double dt) {
+    if (gameRef.joystick!.direction != JoystickDirection.idle) {
+      angle = gameRef.joystick!.delta.screenAngle();
+    }
     x += sin(angle) * speed;
     y -= cos(angle) * speed;
+/*
+    position.add(gameRef.joystick!.delta *
+        speed /
+        AppConstants.playerAngleRotationCoefficient);
+ */
 
     if (x < 0) x = 0;
     if (y < 0) y = 0;
     if (x > gameRef.getScreenWidth) x = gameRef.getScreenWidth;
     if (y > gameRef.getScreenHeight) y = gameRef.getScreenHeight;
-  }
-
-  @override
-  void animateEntity(double dt) {
-    move();
   }
 }
