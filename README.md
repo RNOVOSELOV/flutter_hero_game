@@ -25,8 +25,9 @@
 - Использование бомб
 
 <p align="center">
-  <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/gun.gif" height="150" />
-  <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/bombs.gif" height="150" />
+  <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/gun.gif" height="200" />
+  &nbsp;&nbsp;
+  <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/bombs.gif" height="200" />
 </p>
 
 ### Версия 1.0
