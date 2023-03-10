@@ -124,12 +124,8 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
       final Emitter<SpaceGameState> emit) async {
     final results = await isarService.getPeoples();
     emit(SpaceGameStatusChanged(status: GameStatus.statistics, data: results));
-    //  print(
-    //      'BR ${results.length} ${AppConstants.maxStatisticsResultsCount} ${results.length > AppConstants.maxStatisticsResultsCount}');
-
-    //   final minScoreValue = results.last.score;
-    //   print('min: $minScoreValue');
-    //   await isarService.deleteResults(minScoreValue);
+    final minScoreValue = results.last.score;
+    await isarService.deleteResults(minScoreValue);
   }
 
   FutureOr<void> _bonusArmor(

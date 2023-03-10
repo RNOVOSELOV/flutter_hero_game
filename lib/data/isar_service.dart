@@ -23,20 +23,20 @@ class IsarService {
 
   Future<List<Result>> getPeoples() async {
     final isar = await db;
-    return isar.results.where().sortByScoreDesc()
+    return isar.results
+        .where()
+        .sortByScoreDesc()
         .limit(AppConstants.maxStatisticsResultsCount)
         .findAllSync();
   }
 
-  Future<void> deleteResults (int score) async {
+  Future<void> deleteResults(int score) async {
     final isar = await db;
 
-
-
-      final count = await isar.results.filter()
-          .scoreLessThan(score)
-          .deleteAll();
-      print('We deleted $count recipes');
-
+    final turplesId =
+        await isar.results.filter().scoreLessThan(score).idProperty().findAll();
+    await isar.writeTxn(() async {
+      await isar.results.deleteAll(turplesId);
+    });
   }
 }

@@ -32,5 +32,5 @@ class AppConstants {
 
   static const bombSideSize = 20.0;
 
-  static const maxStatisticsResultsCount = 3;
+  static const maxStatisticsResultsCount = 10;
 }
