@@ -13,9 +13,14 @@
 
 ## Развитие проекта 
 
+### Версия 2.1
+
+- Анимация для бонусов и элементов управления
+
 ### Версия 2.0
 
 - Переход на Flame
+- Бонусы на скорость, а так же защиту от атак астероидов и черных дыр
 - Возможность стрелять несколькими ракетами
 <p align="center">
   <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/gun.gif" height="280" />
@@ -26,16 +31,10 @@
   <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/bombs.gif" height="280" />
 </p>
 
-- Бонусы на скорость, а так же защиту от атак астероидов и черных дыр
-
 ### Версия 1.0
 
 - Полноценно работающая версия игры
 - Переход на BLoC 
-
-<p align="center">
-  <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/space_armaggedon.gif" height="280" />
-</p>
 
 ### Версия 0.1
 
@@ -43,6 +42,6 @@
 - Переход на BLoC 
 
 <p align="center">
-  <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/areas.png" height="280"/>
+  <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/space_armaggedon.gif" height="280" />
 </p>
 
