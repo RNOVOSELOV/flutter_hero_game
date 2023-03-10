@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spacehero/data/models/game_result.dart';
-import 'package:spacehero/data/repositories/results_repository.dart';
+import 'package:spacehero/data/isar_service.dart';
+import 'package:spacehero/data/models/result.dart';
 import 'package:spacehero/presentation/game_page/dto/invent_dto.dart';
 import 'package:spacehero/presentation/game_page/dto/statistic_dto.dart';
 import 'package:spacehero/resources/app_constants_parameters.dart';
@@ -19,11 +19,12 @@ enum GameStatus {
   statistics, // statistics screen
 }
 
-// TODO add isolate loop
 class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
   StatisticDto statistic = const StatisticDto.initial();
   InventDto invent = const InventDto.initial();
   GameStatus gameStatus = GameStatus.initial;
+
+  final isarService = IsarService();
 
   SpaceGameBloc()
       : super(const SpaceGameStatusChanged(status: GameStatus.initial)) {
@@ -59,8 +60,8 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
     if (statistic.brokenLives >= statistic.maxLivesCount) {
       emit(SpaceGameStatusChanged(
           status: GameStatus.gameOver, data: statistic.score));
-      await ResultsRepository.getInstance()
-          .addItem(Result(score: statistic.score, dt: DateTime.now()));
+      isarService
+          .addResult(Result(score: statistic.score, dateTime: DateTime.now()));
       emit(StatisticChangedState(statistic: statistic));
     } else {
       await Future.delayed(
@@ -121,8 +122,14 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
   FutureOr<void> _gameLoopOpenStatisticsScreen(
       final OpenStatisticScreenEvent event,
       final Emitter<SpaceGameState> emit) async {
-    var results = await ResultsRepository.getInstance().getItems();
+    final results = await isarService.getPeoples();
     emit(SpaceGameStatusChanged(status: GameStatus.statistics, data: results));
+    //  print(
+    //      'BR ${results.length} ${AppConstants.maxStatisticsResultsCount} ${results.length > AppConstants.maxStatisticsResultsCount}');
+
+    //   final minScoreValue = results.last.score;
+    //   print('min: $minScoreValue');
+    //   await isarService.deleteResults(minScoreValue);
   }
 
   FutureOr<void> _bonusArmor(
