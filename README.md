@@ -22,11 +22,12 @@
 - Переход на Flame
 - Бонусы на скорость, а так же защиту от атак астероидов и черных дыр
 - Возможность стрелять несколькими ракетами
+- Использование бомб
+
 <p align="center">
   <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/gun.gif" height="280" />
 </p>
 
-- Использование бомб
 <p align="center">
   <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/bombs.gif" height="280" />
 </p>
