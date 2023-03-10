@@ -1,4 +1,5 @@
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
 import 'package:flame/palette.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,15 @@ class PlayerController extends Component
         FlameBlocListenable<SpaceGameBloc, SpaceGameState>,
         FlameBlocReader<SpaceGameBloc, SpaceGameState> {
   @override
+  Future<void> onLoad() {
+    final value = super.onLoad();
+    gameRef.joystick.priority = 10;
+    parent?.add(gameRef.joystick);
+    gameRef.joystick.scale = Vector2(0, 0);
+    return value;
+  }
+
+  @override
   bool listenWhen(SpaceGameState previousState, SpaceGameState newState) {
     return newState is SpaceGameStatusChanged;
   }
@@ -20,29 +30,25 @@ class PlayerController extends Component
   void onNewState(SpaceGameState state) {
     if (state is SpaceGameStatusChanged) {
       if (state.status == GameStatus.respawn) {
+        gameRef.joystick.add(ScaleEffect.by(
+          Vector2.all(1.0),
+          EffectController(
+            curve: Curves.linear,
+            duration: 2,
+          ),
+          onComplete: () => gameRef.joystick.scale = Vector2(1, 1),
+        ));
         if (gameRef.player != null) {
           gameRef.player!.removeFromParent();
           gameRef.player = null;
         }
         parent?.add(gameRef.player = Player(gameplayArea: gameRef.size));
-
-        final knobPaint = BasicPalette.blue.withAlpha(200).paint();
-        final backgroundPaint = BasicPalette.blue.withAlpha(100).paint();
-        gameRef.joystick = JoystickComponent(
-          knob: CircleComponent(radius: 20, paint: knobPaint),
-          background: CircleComponent(radius: 50, paint: backgroundPaint),
-          margin: const EdgeInsets.only(left: 20, bottom: 20),
-        );
-        add(gameRef.joystick!);
       } else if (state.status == GameStatus.respawned) {
         if (gameRef.player != null) {
           gameRef.player!.respawnModeEnd();
         }
       } else {
-        if (gameRef.joystick != null) {
-          gameRef.joystick!.removeFromParent();
-          gameRef.joystick = null;
-        }
+        gameRef.joystick.scale = Vector2(0, 0);
       }
     }
   }

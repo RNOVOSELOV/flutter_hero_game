@@ -16,12 +16,12 @@ import 'package:spacehero/entities_controllers/player_controller.dart';
 import 'package:spacehero/presentation/game_page/bloc/space_game_bloc.dart';
 
 class SpaceGame extends FlameGame
-    with HasCollisionDetection, PanDetector, KeyboardEvents, HasDraggables {
+    with HasCollisionDetection, KeyboardEvents, HasDraggables {
   final SpaceGameBloc bloc;
   var _background = ParallaxComponent();
   Player? player;
 
-  JoystickComponent? joystick;
+  late JoystickComponent joystick;
 
   late final double _screenWidth;
   late final double _screenHeight;
@@ -48,6 +48,14 @@ class SpaceGame extends FlameGame
     );
     add(_background);
 
+    joystick = JoystickComponent(
+      knob: CircleComponent(
+          radius: 20, paint: BasicPalette.darkGray.withAlpha(200).paint()),
+      background: CircleComponent(
+          radius: 60, paint: BasicPalette.darkGray.withAlpha(80).paint()),
+      margin: const EdgeInsets.only(left: 30, bottom: 30),
+    )..anchor = Anchor.center;
+
     await add(FlameBlocProvider<SpaceGameBloc, SpaceGameState>.value(
       value: bloc,
       children: [
@@ -60,28 +68,27 @@ class SpaceGame extends FlameGame
   }
 
   @override
-  void onPanStart(DragStartInfo info) {
-    // TODO: implement onPanStart
-    super.onPanStart(info);
-  }
-
-  @override
-  void onPanUpdate(DragUpdateInfo info) {
-    if (player != null) {
-      player!.rotate(dx: info.raw.delta.dx);
-    }
-  }
-
-  @override
   KeyEventResult onKeyEvent(
       RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
     final isKeyDown = event is RawKeyDownEvent;
 
-    final isSpace = keysPressed.contains(LogicalKeyboardKey.space);
-
-    if (isSpace && isKeyDown) {
-      bloc.add(const PlayerFireEvent());
-      return KeyEventResult.handled;
+    if (isKeyDown) {
+      if (keysPressed.contains(LogicalKeyboardKey.keyA)) {
+        bloc.add(const PlayerArmorEvent());
+        return KeyEventResult.handled;
+      } else if (keysPressed.contains(LogicalKeyboardKey.keyS)) {
+        bloc.add(const PlayerSpeedEvent());
+        return KeyEventResult.handled;
+      } else if (keysPressed.contains(LogicalKeyboardKey.keyZ)) {
+        bloc.add(const PlayerFireEvent());
+        return KeyEventResult.handled;
+      } else if (keysPressed.contains(LogicalKeyboardKey.keyX)) {
+        bloc.add(const PlayerMultiFireEvent());
+        return KeyEventResult.handled;
+      } else if (keysPressed.contains(LogicalKeyboardKey.keyC)) {
+        bloc.add(const PlayerBombFireEvent());
+        return KeyEventResult.handled;
+      }
     }
     return super.onKeyEvent(event, keysPressed);
   }
