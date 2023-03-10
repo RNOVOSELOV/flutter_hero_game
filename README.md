@@ -26,8 +26,6 @@
 
 <p align="center">
   <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/gun.gif" height="150" />
-</p>
-<p align="center">
   <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/bombs.gif" height="150" />
 </p>
 
