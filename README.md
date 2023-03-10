@@ -39,7 +39,6 @@
 ### Версия 0.1
 
 - Реализован интерфейс, возможность управлять кораблем, стрелять.
-- Переход на BLoC 
 
 <p align="center">
   <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/space_armaggedon.gif" height="280" />
