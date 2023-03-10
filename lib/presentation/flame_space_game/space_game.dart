@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flame/input.dart';
+import 'package:flame/palette.dart';
 import 'package:flame/parallax.dart';
 import 'package:flame_bloc/flame_bloc.dart';
 import 'package:flutter/material.dart';
@@ -15,10 +16,12 @@ import 'package:spacehero/entities_controllers/player_controller.dart';
 import 'package:spacehero/presentation/game_page/bloc/space_game_bloc.dart';
 
 class SpaceGame extends FlameGame
-    with HasCollisionDetection, PanDetector, KeyboardEvents {
+    with HasCollisionDetection, PanDetector, KeyboardEvents, HasDraggables {
   final SpaceGameBloc bloc;
   var _background = ParallaxComponent();
   Player? player;
+
+  JoystickComponent? joystick;
 
   late final double _screenWidth;
   late final double _screenHeight;
@@ -54,6 +57,12 @@ class SpaceGame extends FlameGame
         BonusController(),
       ],
     ));
+  }
+
+  @override
+  void onPanStart(DragStartInfo info) {
+    // TODO: implement onPanStart
+    super.onPanStart(info);
   }
 
   @override

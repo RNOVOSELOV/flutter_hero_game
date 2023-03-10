@@ -146,7 +146,9 @@ class Player extends Entity
       }
       ..onFrame = (value) {
         if (value > 1 && value <= 4) {
-          size = size + Vector2(AppConstants.playerShipSideSize, AppConstants.playerShipSideSize);
+          size = size +
+              Vector2(AppConstants.playerShipSideSize,
+                  AppConstants.playerShipSideSize);
         }
         if (value == 1) {
           other.add(OpacityEffect.to(
@@ -201,6 +203,77 @@ class Player extends Entity
 
   @override
   void animateEntity(double dt) {
-    move();
+    double? rotateToAngle;
+    switch (gameRef.joystick!.direction) {
+      case JoystickDirection.up:
+        rotateToAngle = 0;
+        break;
+      case JoystickDirection.upLeft:
+        rotateToAngle = 7 * pi / 4;
+        break;
+      case JoystickDirection.upRight:
+        rotateToAngle = pi / 4;
+        break;
+      case JoystickDirection.right:
+        rotateToAngle = pi / 2;
+        break;
+      case JoystickDirection.down:
+        rotateToAngle = pi;
+        break;
+      case JoystickDirection.downRight:
+        rotateToAngle = 3 * pi / 4;
+        break;
+      case JoystickDirection.downLeft:
+        rotateToAngle = 5 * pi / 4;
+        break;
+      case JoystickDirection.left:
+        rotateToAngle = 3 * pi / 2;
+        break;
+      case JoystickDirection.idle:
+        rotateToAngle = null;
+        break;
+    }
+
+    if (rotateToAngle != null) {
+      double direction = rotateToAngle - angle;
+
+      if (direction < 0) {
+        direction = direction * -1;
+      }
+
+      if (direction >= pi) {
+        angle += (pi / 48);
+      } else {
+        angle -= (pi / 48);
+      }
+/*
+      if (direction > 0 && direction <= pi) {
+        angle += (pi / 48);
+      } else if (direction > 0 && (direction * -1) <= pi) {
+        angle -= (pi / 48);
+      } else if (direction < 0 && direction <= pi) {
+        angle -= (pi / 48);
+      } else if (direction > 0 && (direction * -1) <= pi) {
+        angle += (pi / 48);
+      }
+      */
+
+      print('Angle: ${angle} to: $rotateToAngle direction: $direction');
+    }
+
+    final vectorDelta = gameRef.joystick!.delta;
+    if (vectorDelta == Vector2.zero()) {
+      x += sin(angle) * speed;
+      y -= cos(angle) * speed;
+    } else {
+      position.add(gameRef.joystick!.delta *
+          speed /
+          AppConstants.playerAngleRotationCoefficient);
+    }
+
+    if (x < 0) x = 0;
+    if (y < 0) y = 0;
+    if (x > gameRef.getScreenWidth) x = gameRef.getScreenWidth;
+    if (y > gameRef.getScreenHeight) y = gameRef.getScreenHeight;
   }
 }
