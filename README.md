@@ -23,9 +23,9 @@
 - Добалены бонусы (увеличение скорости, защита от астероидов и черных дыр, бомбы, мультиракетный выстрел, hp)
 
 <p align="center">
-  <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/gun.gif" height="200" />
+  <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/gun.gif" height="180" />
   &nbsp;&nbsp;
-  <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/bombs.gif" height="200" />
+  <img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/bombs.gif" height="180" />
 </p>
 
 ### Версия 1.0
