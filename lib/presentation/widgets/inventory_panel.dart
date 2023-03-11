@@ -68,18 +68,18 @@ class _InventoryPanelState extends State<InventoryPanel> {
             ),
             const Spacer(),
             ControlButton(
-              imageAssetPath: 'assets/images/buttons/speed.png',
-              onTap: speedButtonClicked,
-              delayNextTapMilliseconds: 1000,
-              value: inventDto.speed,
-              isAnimationActive: _addedSpeed,
-            ),
-            ControlButton(
               imageAssetPath: 'assets/images/buttons/armor.png',
               onTap: armorButtonClicked,
               delayNextTapMilliseconds: 250,
               value: inventDto.armor,
               isAnimationActive: _addedArmor,
+            ),
+            ControlButton(
+              imageAssetPath: 'assets/images/buttons/speed.png',
+              onTap: speedButtonClicked,
+              delayNextTapMilliseconds: 1000,
+              value: inventDto.speed,
+              isAnimationActive: _addedSpeed,
             ),
             const Spacer(),
             ControlButton(

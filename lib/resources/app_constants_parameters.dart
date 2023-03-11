@@ -25,7 +25,7 @@ class AppConstants {
   static const playerRespawnTime = 4;
   static const playerShipSideSize = 80.0;
   static const double playerSpeed = 3;
-  static const int playerAngleRotationCoefficient = 80;
+  static const double playerAngleRotationCoefficient = 80;
 
   static const bulletSideSize = 20.0;
   static const bulletSpeed = 10.0;
