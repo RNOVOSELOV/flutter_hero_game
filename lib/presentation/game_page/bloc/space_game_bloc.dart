@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:spacehero/data/isar_service.dart';
+import 'package:spacehero/data/hive_service.dart';
 import 'package:spacehero/data/models/result.dart';
 import 'package:spacehero/presentation/game_page/dto/invent_dto.dart';
 import 'package:spacehero/presentation/game_page/dto/statistic_dto.dart';
@@ -24,7 +24,7 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
   InventDto invent = const InventDto.initial();
   GameStatus gameStatus = GameStatus.initial;
 
-  final isarService = IsarService();
+  final hiveService = HiveService();
 
   SpaceGameBloc()
       : super(const SpaceGameStatusChanged(status: GameStatus.initial)) {
@@ -60,7 +60,7 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
     if (statistic.brokenLives >= statistic.maxLivesCount) {
       emit(SpaceGameStatusChanged(
           status: GameStatus.gameOver, data: statistic.score));
-      isarService
+      hiveService
           .addResult(Result(score: statistic.score, dateTime: DateTime.now()));
       emit(StatisticChangedState(statistic: statistic));
     } else {
@@ -122,10 +122,8 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
   FutureOr<void> _gameLoopOpenStatisticsScreen(
       final OpenStatisticScreenEvent event,
       final Emitter<SpaceGameState> emit) async {
-    final results = await isarService.getPeoples();
+    final results = hiveService.getPeoples();
     emit(SpaceGameStatusChanged(status: GameStatus.statistics, data: results));
-    final minScoreValue = results.last.score;
-    await isarService.deleteResults(minScoreValue);
   }
 
   FutureOr<void> _bonusArmor(
@@ -234,5 +232,11 @@ class SpaceGameBloc extends Bloc<SpaceGameEvent, SpaceGameState> {
         emit(const PlayerSpeedState(speedIsActive: false));
       },
     );
+  }
+
+  @override
+  Future<void> close() async {
+    await hiveService.closeDb();
+    return super.close();
   }
 }
