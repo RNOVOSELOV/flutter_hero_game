@@ -193,8 +193,8 @@ class Player extends Entity
 
   @override
   void animateEntity(double dt) {
-    if (gameRef.joystick!.direction != JoystickDirection.idle) {
-      angle = gameRef.joystick!.delta.screenAngle();
+    if (gameRef.joystick.direction != JoystickDirection.idle) {
+      angle = gameRef.joystick.delta.screenAngle();
     }
     x += sin(angle) * speed;
     y -= cos(angle) * speed;

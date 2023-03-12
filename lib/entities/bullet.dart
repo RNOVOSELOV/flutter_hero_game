@@ -44,8 +44,10 @@ class Bullet extends Entity with HasGameRef<SpaceGame> {
     super.onCollisionStart(intersectionPoints, other);
     if (other is Asteroid) {
       setSpeed = 0;
+      if (!other.isDestroying) {
+        gameRef.bloc.add(const ScoreAddEvent(scoreDelta: 1));
+      }
       other.setDestroying = true;
-      gameRef.bloc.add(const ScoreAddEvent(scoreDelta: 1));
       changeAnimation(other);
     } else if (other is BlackHole) {
       removeFromParent();

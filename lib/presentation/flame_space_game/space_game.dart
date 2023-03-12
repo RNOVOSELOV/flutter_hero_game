@@ -53,7 +53,7 @@ class SpaceGame extends FlameGame
           radius: 20, paint: BasicPalette.darkGray.withAlpha(200).paint()),
       background: CircleComponent(
           radius: 60, paint: BasicPalette.darkGray.withAlpha(80).paint()),
-      margin: const EdgeInsets.only(left: 30, bottom: 30),
+      margin: const EdgeInsets.only(left: 80, bottom: 80),
     )..anchor = Anchor.center;
 
     await add(FlameBlocProvider<SpaceGameBloc, SpaceGameState>.value(
