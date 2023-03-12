@@ -1,13 +1,14 @@
-import 'package:isar/isar.dart';
+import 'package:hive/hive.dart';
 
 part 'result.g.dart';
 
-@collection
-class Result {
-  Id id = Isar.autoIncrement;
+@HiveType(typeId: 0)
+class Result extends HiveObject {
+  @HiveField(0)
   String? name;
-  @Index(type: IndexType.value)
+  @HiveField(1)
   int score;
+  @HiveField(2)
   DateTime dateTime;
 
   Result({
