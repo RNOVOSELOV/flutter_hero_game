@@ -37,7 +37,7 @@ class Asteroid extends Entity with HasGameRef<SpaceGame> {
   }
 
   void setAsteroidParameters({required Vector2 gameplayArea}) {
-    final random = Random(DateTime.now().microsecond);
+    final random = Random(DateTime.now().second);
     final double generatedSpeed = AppConstants.asteroidMinimumSpeed +
         random.nextDouble() * AppConstants.asteroidAdditionalRandomSpeed;
     final double generatedSideSize = AppConstants.asteroidMinimumSideSize +

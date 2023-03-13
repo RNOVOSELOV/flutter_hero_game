@@ -22,7 +22,7 @@ class Bonus extends Entity with HasGameRef<SpaceGame> {
     required Vector2 gameplayArea,
     super.placePriority = 3,
   }) {
-    final random = Random(DateTime.now().microsecond);
+    final random = Random(DateTime.now().second);
     initializeCoreVariables(speed: 0, side: AppConstants.bonusSideSide);
     x = random.nextDouble() * (gameplayArea[0] - sideSize) + sideSize / 2;
     y = random.nextDouble() * (gameplayArea[1] - sideSize) + sideSize / 2;
@@ -45,6 +45,9 @@ class Bonus extends Entity with HasGameRef<SpaceGame> {
   void onCollisionStart(
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
+    if (removeFlag) {
+      return;
+    }
     if (other is Player || other is Bullet) {
       onBonusCollisionCallback(gameRef.bloc);
       removeEntity();
@@ -74,7 +77,7 @@ class Bonus extends Entity with HasGameRef<SpaceGame> {
         ),
       ),
       ScaleEffect.by(
-        Vector2.all(0.4),
+        Vector2.all(0.2),
         onComplete: () {
           removeFromParent();
         },

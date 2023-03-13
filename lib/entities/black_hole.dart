@@ -19,7 +19,7 @@ class BlackHole extends Entity with HasGameRef<SpaceGame> {
   }) {
     final random = Random(DateTime
         .now()
-        .microsecond);
+        .second);
     final double generatedSpeed = AppConstants.blackHoleMinimumRotationSpeed +
         random.nextDouble() *
             AppConstants.blackHolAdditionalRandomRotationSpeed;

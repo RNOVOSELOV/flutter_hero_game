@@ -45,10 +45,11 @@ class Bomb extends Entity with HasGameRef<SpaceGame> {
       return;
     }
     if (other is Asteroid) {
-      _isDestroyingFlag = true;
-      if (!other.isDestroying) {
-        gameRef.bloc.add(const ScoreAddEvent(scoreDelta: 1));
+      if (other.isDestroying) {
+        return;
       }
+      gameRef.bloc.add(const ScoreAddEvent(scoreDelta: 1));
+      _isDestroyingFlag = true;
       other.setDestroying = true;
       changeAnimation(
         onStart: () {},

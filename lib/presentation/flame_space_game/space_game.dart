@@ -88,6 +88,12 @@ class SpaceGame extends FlameGame
       } else if (keysPressed.contains(LogicalKeyboardKey.keyC)) {
         bloc.add(const PlayerBombFireEvent());
         return KeyEventResult.handled;
+      } else if (keysPressed.contains(LogicalKeyboardKey.arrowRight)) {
+        player!.rotate(dx: 10);
+        return KeyEventResult.handled;
+      } else if (keysPressed.contains(LogicalKeyboardKey.arrowLeft)) {
+        player!.rotate(dx: -10);
+        return KeyEventResult.handled;
       }
     }
     return super.onKeyEvent(event, keysPressed);
