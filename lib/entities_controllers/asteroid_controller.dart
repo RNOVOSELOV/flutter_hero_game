@@ -48,7 +48,6 @@ class AsteroidHelper {
   static String getAsteroidSpriteName() {
     final randomIndex =
         Random(DateTime.now().second).nextInt(values.length);
-    print('Asteroid index: $randomIndex');
     return values.elementAt(randomIndex).typeName;
   }
 
