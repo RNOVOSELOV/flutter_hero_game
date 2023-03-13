@@ -47,7 +47,8 @@ class AsteroidHelper {
 
   static String getAsteroidSpriteName() {
     final randomIndex =
-        Random(DateTime.now().microsecond).nextInt(values.length);
+        Random(DateTime.now().second).nextInt(values.length);
+    print('Asteroid index: $randomIndex');
     return values.elementAt(randomIndex).typeName;
   }
 
@@ -61,7 +62,7 @@ class AsteroidHelper {
     required double maxHeight,
     required double asteroidSide,
   }) {
-    final random = Random(DateTime.now().microsecond);
+    final random = Random(DateTime.now().second);
     final isFixX = random.nextBool();
     double randomAngle = random.nextDouble() * pi;
 

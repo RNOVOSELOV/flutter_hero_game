@@ -13,7 +13,6 @@ import 'package:spacehero/presentation/game_page/bloc/space_game_bloc.dart';
 import 'package:spacehero/resources/app_constants_parameters.dart';
 
 class Bomb extends Entity with HasGameRef<SpaceGame> {
-
   bool _isDestroyingFlag = false;
 
   Bomb(
@@ -46,9 +45,12 @@ class Bomb extends Entity with HasGameRef<SpaceGame> {
       return;
     }
     if (other is Asteroid) {
+      if (other.isDestroying) {
+        return;
+      }
+      gameRef.bloc.add(const ScoreAddEvent(scoreDelta: 1));
       _isDestroyingFlag = true;
       other.setDestroying = true;
-      gameRef.bloc.add(const ScoreAddEvent(scoreDelta: 1));
       changeAnimation(
         onStart: () {},
         onFrame: (currentSpriteIndex) {
@@ -64,7 +66,9 @@ class Bomb extends Entity with HasGameRef<SpaceGame> {
           } else if (currentSpriteIndex == 3) {
             size = size * 8;
             add(CircleHitbox(
-                anchor: Anchor.center, radius: size.x * 0.8 / 2, position: size / 2));
+                anchor: Anchor.center,
+                radius: size.x * 0.8 / 2,
+                position: size / 2));
           }
         },
       );
@@ -74,9 +78,12 @@ class Bomb extends Entity with HasGameRef<SpaceGame> {
         onStart: () {},
         onFrame: (currentSpriteIndex) {
           if (currentSpriteIndex <= 5) {
-            size = size + Vector2(AppConstants.bombSideSize, AppConstants.bombSideSize);
+            size = size +
+                Vector2(AppConstants.bombSideSize, AppConstants.bombSideSize);
             add(CircleHitbox(
-                anchor: Anchor.center, radius: size.x * 0.8 / 2, position: size / 2));
+                anchor: Anchor.center,
+                radius: size.x * 0.8 / 2,
+                position: size / 2));
           }
         },
       );
@@ -88,7 +95,9 @@ class Bomb extends Entity with HasGameRef<SpaceGame> {
           if (currentSpriteIndex == 2) {
             size = size * 8;
             add(CircleHitbox(
-                anchor: Anchor.center, radius: size.x * 0.8 / 2, position: size / 2));
+                anchor: Anchor.center,
+                radius: size.x * 0.8 / 2,
+                position: size / 2));
           }
         },
       );

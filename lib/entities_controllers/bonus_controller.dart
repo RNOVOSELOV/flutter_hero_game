@@ -108,7 +108,7 @@ class BonusParametersKeeper extends Equatable {
 
   static BonusParametersKeeper getRandomBonusParameter() {
     final randomIndex =
-        Random(DateTime.now().microsecond).nextInt(values.length);
+        Random(DateTime.now().second).nextInt(values.length);
     return values.elementAt(randomIndex);
   }
 

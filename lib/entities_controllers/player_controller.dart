@@ -1,8 +1,5 @@
 import 'package:flame/components.dart';
-import 'package:flame/effects.dart';
-import 'package:flame/palette.dart';
 import 'package:flame_bloc/flame_bloc.dart';
-import 'package:flutter/material.dart';
 import 'package:spacehero/entities/player.dart';
 import 'package:spacehero/presentation/flame_space_game/space_game.dart';
 import 'package:spacehero/presentation/game_page/bloc/space_game_bloc.dart';
@@ -16,8 +13,8 @@ class PlayerController extends Component
   Future<void> onLoad() {
     final value = super.onLoad();
     gameRef.joystick.priority = 10;
-    parent?.add(gameRef.joystick);
     gameRef.joystick.scale = Vector2(0, 0);
+    parent?.add(gameRef.joystick);
     return value;
   }
 
@@ -30,14 +27,7 @@ class PlayerController extends Component
   void onNewState(SpaceGameState state) {
     if (state is SpaceGameStatusChanged) {
       if (state.status == GameStatus.respawn) {
-        gameRef.joystick.add(ScaleEffect.by(
-          Vector2.all(1.0),
-          EffectController(
-            curve: Curves.linear,
-            duration: 2,
-          ),
-          onComplete: () => gameRef.joystick.scale = Vector2(1, 1),
-        ));
+        gameRef.joystick.scale = Vector2(1, 1);
         if (gameRef.player != null) {
           gameRef.player!.removeFromParent();
           gameRef.player = null;

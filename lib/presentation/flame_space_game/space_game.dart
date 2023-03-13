@@ -53,7 +53,7 @@ class SpaceGame extends FlameGame
           radius: 20, paint: BasicPalette.darkGray.withAlpha(200).paint()),
       background: CircleComponent(
           radius: 60, paint: BasicPalette.darkGray.withAlpha(80).paint()),
-      margin: const EdgeInsets.only(left: 30, bottom: 30),
+      margin: const EdgeInsets.only(left: 80, bottom: 80),
     )..anchor = Anchor.center;
 
     await add(FlameBlocProvider<SpaceGameBloc, SpaceGameState>.value(
@@ -87,6 +87,12 @@ class SpaceGame extends FlameGame
         return KeyEventResult.handled;
       } else if (keysPressed.contains(LogicalKeyboardKey.keyC)) {
         bloc.add(const PlayerBombFireEvent());
+        return KeyEventResult.handled;
+      } else if (keysPressed.contains(LogicalKeyboardKey.arrowRight)) {
+        player!.rotate(dx: 10);
+        return KeyEventResult.handled;
+      } else if (keysPressed.contains(LogicalKeyboardKey.arrowLeft)) {
+        player!.rotate(dx: -10);
         return KeyEventResult.handled;
       }
     }
