@@ -32,10 +32,19 @@ dev_dependencies:
   hive_generator: ^2.0.0
   json_serializable: ^6.6.1
   build_runner: ^2.3.3
+  flutter_launcher_icons: ^0.12.0
+
+flutter_icons:
+  ios: true
+  android: true
+  image_path_ios: "assets/logo/icon.png"
+  image_path_android: "assets/logo/icon.png"
+  adaptive_icon_background: "assets/images/background_2.png"
 
 flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/logo/
     - assets/images/buttons/
     - google_fonts/
