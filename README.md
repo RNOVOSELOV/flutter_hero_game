@@ -1,7 +1,7 @@
 [<img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/flutter_logo.png"  height="80">](https://flutter.dev/)  &nbsp;&nbsp;&nbsp;&nbsp;   [<img src="https://github.com/RNOVOSELOV/flutter_space_armageddon/blob/main/resources/flame_logo.png"  height="80">](https://flame-engine.org/)   
 
 #  🚀&nbsp;&nbsp; Space armageddon
-
+ 
 ## О проекте
 
 Простая игра из XX века о маленькой пилотируемой ракете, пробивающей себе путь через кольцо астероидов.
